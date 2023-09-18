@@ -1,5 +1,9 @@
 <template>
   <div>
-    <NuxtWelcome />
+    <ClientOnly>
+        <LayoutHeaderVue :user="null" :loggedin="false" />
+        <router-view />
+        <LayoutFooterVue />
+    </ClientOnly>
   </div>
 </template>
