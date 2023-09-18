@@ -1,23 +1,15 @@
 <template>
   <div id="homepage">
-    <section class="text-center bg-image">
-      <div class="container">
+    <section class="text-center text-white bg-image backgroundImage">
+      <div class="container py-5">
         <h1 class="display-4">Ανταλλαξέ το</h1>
         <h2 class="subtitle">Δώσε ο,τι δεν χρειάζεσαι</h2>
         <div class="d-flex justify-content-center mt-4">
-          <nuxt-link v-if="loggedin" to="/p/create" class="btn btn-primary">ΠΡΟΣΘΗΚΗ ΑΓΓΕΛΙΑΣ</nuxt-link>
-          <nuxt-link v-else to="/login" class="btn btn-primary">ΠΡΟΣΘΗΚΗ ΑΓΓΕΛΙΑΣ</nuxt-link>
+          <nuxt-link v-if="loggedin" to="/p/create" class="btn btn-light">ΠΡΟΣΘΗΚΗ ΑΓΓΕΛΙΑΣ</nuxt-link>
+          <nuxt-link v-else to="/login" class="btn btn-light">ΠΡΟΣΘΗΚΗ ΑΓΓΕΛΙΑΣ</nuxt-link>
         </div>
         <div class="text-center mt-3">
-          <h2 class="text-white">Βρες ο,τι χρειαζεσαι</h2>
-        </div>
-        <div class="d-flex justify-content-center mt-4">
-          <form @submit.prevent="handleSearchSubmit" class="w-50">
-            <div class="input-group">
-              <input v-model="searchInputValue" class="form-control form-control-lg" type="text" placeholder="Αναζήτηση...">
-              <button type="submit" class="btn btn-primary">Αναζήτηση</button>
-            </div>
-          </form>
+          <h2>Βρες ο,τι χρειαζεσαι</h2>
         </div>
       </div>
     </section>
@@ -78,7 +70,15 @@
     </section>
   </div>
 </template>
-
+<style scoped>
+  .backgroundImage {
+    background-image: url("bg.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    height: 100%;
+  }
+</style>
 
 <script>
        export default {
@@ -89,14 +89,9 @@
             return {
                 premiumPosts: {},
                 categories: {},
-                searchInputValue: '',
             }
         },
         methods:{
-          handleSearchSubmit (e) {
-            e.preventDefault();
-            this.$router.push({ path: '/p' , query: { search: this.searchInputValue } });
-          },
           onClickCategory() {
             window.scrollTo(0, 0);
           },
