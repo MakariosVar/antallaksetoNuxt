@@ -17,20 +17,7 @@
     <section class="text-center">
       <div class="container">
         <h2 class="display-4">Κορυφαίες Κατηγορίες</h2>
-        <PreLoader v-if="Object.keys(categories).length === 0"></PreLoader>
-        <div v-else class="row">
-          <div v-for="category in categories" :key="category.id" class="col-md-4">
-            <nuxt-link @click="onClickCategory" :to="{ path: '/p', query: { category: category.title }}" class="text-decoration-none">
-              <div class="card mb-4">
-                <div class="card-body">
-                  <span class="text-primary" v-html="category.svg"></span>
-                  <h5 class="card-title">{{ category.title }}</h5>
-                  <p class="card-text">{{ category.count }} Αγγελίες</p>
-                </div>
-              </div>
-            </nuxt-link>
-          </div>
-        </div>
+        <CategoriesHorizontalList />
         <div class="text-center mt-3">
           <nuxt-link to="/posts/" class="btn btn-outline-secondary">ΔΕΙΤΕ ΟΛΕΣ ΤΙΣ ΑΓΓΕΛΙΕΣ</nuxt-link>
         </div>
@@ -46,7 +33,7 @@
           <div v-for="post in premiumPosts" :key="post.id" class="col-md-3 mb-4">
             <nuxt-link :to="'/p/' + post.id" class="text-decoration-none">
               <div class="card h-100">
-                <img :src="`/storage/${post.image0}`" class="card-img-top" alt="Post Image">
+                <img :src="`http://127.0.0.1:8000/storage/${post.image0}`" class="card-img-top" alt="Post Image">
                 <div class="card-body">
                   <h5 class="card-title">{{ post.title }}</h5>
                   <p class="card-text">{{ post.description }}</p>
@@ -81,37 +68,12 @@
 </style>
 
 <script>
-       export default {
-        
+      export default defineNuxtComponent({
         props:['loggedin'],
-
-        data() {
-            return {
-                premiumPosts: {},
-                categories: {},
-            }
-        },
-        methods:{
-          onClickCategory() {
-            window.scrollTo(0, 0);
-          },
-          getPremiumPosts(){
-            console.log('getPremiumPosts')
-
-                  // axios.get('/api/vue/premiumPosts').then((response) => {
-                  // this.premiumPosts = response.data
-                  // })
-          },
-          getCategories(){
-            console.log('getCategories')
-                  // axios.get('/api/vue/categories').then((response) => {
-                  // this.categories = response.data
-                  // })
+        async asyncData () {
+          return {
+            premiumPosts: await $fetch('http://127.0.0.1:8000/api/vue/premiumPosts')
           }
-          },
-          created(){
-                this.getPremiumPosts()
-                this.getCategories()
-          }
-        }
+        },      
+      })
 </script>
