@@ -4,7 +4,7 @@
                               <div :class="['carousel-item', index === 0 ? 'active' : '']" :key="index" v-for="(categoryChunk, index) in categoryChunks">
                                         <div class="row d-flex flex-nowrap">
                                                   <div v-for="category in categoryChunk" :key="category.id" class="col-sm-3 col-6  mb-3">
-                                                            <nuxt-link :to="{ path: '/p', query: { category: category.title }}" class="text-decoration-none">
+                                                            <nuxt-link :to="{ path: '/posts/', query: { category: category.title }}" class="text-decoration-none">
                                                                       <div class="card h-100 d-flex flex-column align-items-center py-2">
                                                                                 <span class="text-primary card-img-top" style="max-width:  5vw;" v-html="category.svg"></span>
                                                                                 <div class="card-body flex-grow-1">

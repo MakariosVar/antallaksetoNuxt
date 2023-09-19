@@ -33,10 +33,12 @@
           <div v-for="post in premiumPosts" :key="post.id" class="col-md-3 mb-4">
             <nuxt-link :to="'/p/' + post.id" class="text-decoration-none">
               <div class="card h-100">
-                <img :src="`http://127.0.0.1:8000/storage/${post.image0}`" class="card-img-top" alt="Post Image">
+                <img :src="`${$config.public.storageUrl }/${post.image0}`" class="card-img-top" alt="Post Image">
                 <div class="card-body">
                   <h5 class="card-title">{{ post.title }}</h5>
-                  <p class="card-text">{{ post.description }}</p>
+                  <p class="card-text">
+                    {{ truncatedDescription(post.description) }}
+                  </p>
                 </div>
               </div>
             </nuxt-link>
@@ -70,10 +72,20 @@
 <script>
       export default defineNuxtComponent({
         props:['loggedin'],
+        setup() {
+          const config = useRuntimeConfig();
+          return { config }
+        },
         async asyncData () {
           return {
             premiumPosts: await $fetch('http://127.0.0.1:8000/api/vue/premiumPosts')
           }
-        },      
+        },
+        methods: {
+          truncatedDescription(description) {
+            let n = 100;
+            return (description.length > n) ? description.slice(0, n-1) + '...' : description;
+          },
+        }
       })
 </script>

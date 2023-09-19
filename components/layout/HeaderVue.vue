@@ -58,12 +58,10 @@
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="user-dropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <span v-if="profileImage">
-              <img style="max-width: 35px;" :src="'/storage/' + profileImage" alt="User" class="rounded-circle">
+              <img style="max-width: 35px;" :src="$config.public.storageUrl +''+ profileImage" alt="User" class="rounded-circle" />
             </span>
             <span v-else>
             <font-awesome-icon icon="fa-solid fa-circle-user" />
-
-              <i class="fa fa-person-circle"></i>
             </span>
           </a>
           <div v-if="user" class="dropdown-menu dropdown-menu-end" aria-labelledby="user-dropdown">
@@ -78,7 +76,7 @@
             </nuxt-link>
             <a class="dropdown-item" @click="logout">Αποσύνδεση</a>
           </div>
-          <div v-else>
+          <div v-else class="dropdown-menu dropdown-menu-end"  aria-labelledby="user-dropdown">
             <nuxt-link to="/login" class="dropdown-item">
               <span class="text-dark">Σύνδεση</span>
             </nuxt-link>
@@ -98,10 +96,6 @@
       return{
           pending:0,
           searchInputValue: '',
-          user:{
-            name: 'mak',
-            role_id: 1
-          }
       }
     },
 

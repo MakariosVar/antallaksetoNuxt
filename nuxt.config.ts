@@ -3,10 +3,11 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   runtimeConfig: {
     // The private keys which are only available server-side
-    apiSecret: 'https://antallakseto.gr',
+    apiSecret: process.env.API_URL,
     // Keys within public are also exposed client-side
     public: {
-      apiBase: '/api'
+      apiUrl: process.env.API_URL+'/api',
+      storageUrl: process.env.API_URL+'/storage'
     }
   },
   css: [
