@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-md navbar-light bg-light">
+  <nav class="navbar navbar-expand-md navbar-light bg-light px-5">
 
     <nuxt-link to="/home" class="navbar-brand" title="Αρχική">
       <img style="max-height: 70px;" src="~assets/images/NewLogoPNG.png" alt="Logo">
