@@ -39,9 +39,10 @@
             };
         },
         async asyncData() {
-            const categories = await $fetch('http://127.0.0.1:8000/api/vue/categories');
+            const config = useRuntimeConfig();
+            const categories = await $fetch(config.public.apiUrl+'/vue/categories');
             return {
-                    categories,
+                categories
             };
         },
         methods: {
