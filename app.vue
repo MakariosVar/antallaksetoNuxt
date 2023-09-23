@@ -16,6 +16,9 @@
 </template>
 <script>
   export default defineNuxtComponent({
+    head: {
+      title: 'Ανταλλαξέ το',
+    },
     setup() {
       const config = useRuntimeConfig();
       const updating = ref(true);

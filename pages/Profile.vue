@@ -5,28 +5,7 @@
     </div>
     <div v-else class="row">
       <div class="col-md-4">
-        <div class="card text-center">
-          <div class="card-body">
-            <img :src="`${config.public.storageUrl}/${profile.image}`" class="rounded-circle" width="150">
-            <div class="mt-3">
-              <div v-if="user && user.id === profile.user_id">
-                <nuxt-link :to="'/EditProfile/' + this.$route.query.id">Διαμόρφωση Προφίλ</nuxt-link>
-              </div>
-              <div v-if="user && user.id !== profile.user_id" @click="followclick()">
-                <follow-button :userId="profileUser.id" :follows="profile.follows"></follow-button>
-              </div>
-              <div class="text-center">
-                <strong>Posts:</strong> {{ profile.postCount }}
-              </div>
-              <div class="text-center">
-                <strong>Followers:</strong> {{ profile.followersCount }}
-              </div>
-              <div class="text-center">
-                <strong>Following:</strong> {{ profile.followingCount }}
-              </div>
-            </div>
-          </div>
-        </div>
+        <ProfileInfo :profile="profile" :profileUser="profileUser" :user="user" :isMine="isMine" @updateProfileImage="updateProfileImage" />
         <div v-if="user && user.id !== profile.user_id" class="card text-center my-2">
           <div class="card-body">
             <h1>Αφήστε Σχόλιο</h1>
@@ -52,37 +31,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-8">
-        <div class="card mb-3 text-center">
-          <h1 class="m-3 pt-3">{{ profileUser.name }}</h1>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-md-3">
-                <h5>Περιγραφή:</h5>
-              </div>
-              <div class="col-md-9 text-secondary">
-                <div v-if="!profile.description">
-                  <div v-if="user && user.id === profile.user_id">
-                    <nuxt-link :to="'/EditProfile/' + this.$route.query.id">Προσθέστε Πληροφοριές</nuxt-link>
-                  </div>
-                </div>
-                <div v-else>
-                  {{ profile.description }}
-                </div>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-md-3">
-                <h5>Εmail:</h5>
-              </div>
-              <div class="col-md-9 text-secondary">
-                {{ profileUser.email }}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ProfileDescription :profileUser="profileUser" :profile="profile" :isMine="isMine" :user="user"/>
     </div>
     <div v-for="comment in comments" :key="comment.id" class="card mb-3 text-center">
         <nuxt-link :to="'/profile?id=' + comment.user_id"><h3 class="blue">{{ comment.commentersname }}</h3></nuxt-link>
@@ -115,7 +64,7 @@
           <nuxt-link to="/p/create">
             <img :src="`${config.public.storageUrl}/profile/default.png`" class="card-img-top" alt="Default Post Image">
             <div class="card-body">
-              <p class="card-text" style="color: white;">Προσθήκη Νέας Αγγελίας</p>
+              <h5 class="card-title">Προσθήκη Νέας Αγγελίας</h5>
             </div>
           </nuxt-link>
         </div>
@@ -140,7 +89,7 @@
 
 <script>
   export default {
-    props: [ 'user', 'csrfToken'],
+    props: [ 'user'],
     data() {
       return {
         commentInput: '',
@@ -182,6 +131,7 @@
 
           if (data.status === 'success') {
             this.profile = data.profile[0];
+            this.profileUser = data.profileUser;
 
             if (this.profile.image === null) {
               this.profile.image = '/profile/default.png';
@@ -190,24 +140,6 @@
           }
         } catch (error) {
           this.$router.push('/home');
-        }
-      },
-      async getProfileUser() {
-        try {
-          const response = await fetch(`${this.config.public.apiUrl}/vue/getuser/${this.$route.query.id}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
-
-          const data = await response.json();
-
-          if (data.status === 'success') {
-            this.profileUser = data.user[0];
-          }
-        } catch (error) {
-          console.error('An error occurred:', error);
         }
       },
       async getComments() {
@@ -258,11 +190,7 @@
               comment: this.commentInput,
               user_id: this.user.id,
               profile_id: this.profile.id
-            }),
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-              'X-CSRF-TOKEN': this.csrfToken, // Include the CSRF token in the headers
-            },
+            })
           });
 
             const data = await response.json();
@@ -285,9 +213,15 @@
           this.profile.follows = false;
           this.profile.followersCount -= 1; 
         } 
-      }, 
+      },
+      updateProfileImage (event) {
+        this.profile.image = event
+      }
     },
     computed: {
+      isMine() {
+        return this.user.id == this.profileUser.id;
+      },
       filteredPosts() {
         return this.posts.filter(post => {
           return this.user && (this.user.id === post.user_id || post.verified === 1);
@@ -303,7 +237,6 @@
             if (newId) {
               // Route query "id" has changed, fetch new data
               this.getProfileData();
-              this.getProfileUser();
               this.getPosts();
               this.getComments();
             }
@@ -313,7 +246,6 @@
 
       // Initial data fetch
       this.getProfileData();
-      this.getProfileUser();
       this.getPosts();
       this.getComments();
     }
