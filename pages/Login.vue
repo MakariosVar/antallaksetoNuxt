@@ -73,7 +73,6 @@
                         if (data.status === 'success') {
                             let user = data.user;
                             
-                            console.log(data)
                             this.$emit('userLogged', user);
                             if (process.client) {
                                 location.replace('/home');

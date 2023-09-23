@@ -72,7 +72,7 @@
             <nuxt-link to="/posts/create" class="dropdown-item">
               <span class="text-dark">Προσθήκη Αγγελίας</span>
             </nuxt-link>
-            <nuxt-link :to="'/myposts/' + user.id" class="dropdown-item">
+            <nuxt-link :to="{path: '/posts/mine', query: {id: user.id}}" class="dropdown-item">
               <span class="text-dark">Οι Αγγελίες μου</span>
             </nuxt-link>
             <a class="dropdown-item" @click="logout">Αποσύνδεση</a>

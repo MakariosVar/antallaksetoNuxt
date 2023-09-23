@@ -1,144 +1,180 @@
 <template>
-	<div v-if="((post && post.reEdit && !(post.verified)) && (loggeduserid() != post.user_id ))" v-bind="NotReady()" class="pageMinFit">
+	<div v-if="post && (post.reEdit || !post.verified) && user.id != post.user_id"
+	v-bind="NotReady()" class="pageMinFit">
 		<div class="d-flex justify-content-center">
-			<img src="~assets/images/NewLogoPNG.svg" class="imageNotFound">
+			<img src="~assets/images/NewLogoPNG.svg" class="imageNotFound" />
 		</div>
-    </div>   
-	<div v-else-if="post" class="container" > 
-		<div v-if="!(loaded)" class="pageMinFit d-flex flex-column text-center">
-			<p class="h2 loadingText"> Φόρτωση</p>
-			<PreLoader ></PreLoader>
-			<div>
-				<router-link class="h2" to="/home">Αρχική </router-link>
+	</div>
+	<div v-else-if="post" class="container">
+		<div v-if="!loaded" class="pageMinFit d-flex flex-column text-center">
+			<div class="spinner-border text-dark" role="status">
+				<span class="visually-hidden">Loading...</span>
 			</div>
-			<div>
-				<router-link class="h2" to="/p">Όλες οι Αγγελίες </router-link>
-			</div>
-			<div v-if="this.$attrs.loggedin">
-				<router-link class="h2" to="/p/create">Δημιουργήστε μια Αγγελία </router-link>
-			</div>
-			<div v-else>
-				<router-link class="h2" to="/login">Δημιουργήστε μια Αγγελία </router-link>
-			</div>
-		</div>    
+		</div>
 		<div v-else class="row m-2 rounded pageMinFit">
 			<div class="row">
 				<div class="col-md-12 col-lg-5 text-center">
-					<img v-if="post.image0" :src="`${$config.public.storageUrl }/${post.image0}`"  
-						style=" height: auto;
-						width: 299px;"
-					>
+					<img v-if="post.image0" :src="`${$config.public.storageUrl}/${post.image0}`"
+						style="height: auto; width: 299px" />
 					<div>
-						<img v-if="post.image1" :src="`${$config.public.storageUrl }/${post.image1}`"  
-							style=" height: auto;
-							width: 147px;"
-						>
-						<img v-if="post.image2" :src="`${$config.public.storageUrl }/${post.image2}`" 
-							style=" height: auto;
-							width: 147px;"
-						>
+						<img v-if="post.image1"
+							:src="`${$config.public.storageUrl}/${post.image1}`"
+							style="height: auto; width: 147px" />
+						<img v-if="post.image2"
+							:src="`${$config.public.storageUrl}/${post.image2}`"
+							style="height: auto; width: 147px" />
 					</div>
 					<div>
-						<img v-if="post.image3" :src="`${$config.public.storageUrl }/${post.image3}`" 
-							style=" height: auto;
-							width: 147px;"
-						>
-						<img v-if="post.image4" :src="`${$config.public.storageUrl }/${post.image4}`"
-							style=" height: auto;
-							width: 147px;"
-						>
+						<img v-if="post.image3"
+							:src="`${$config.public.storageUrl}/${post.image3}`"
+							style="height: auto; width: 147px" />
+						<img v-if="post.image4"
+							:src="`${$config.public.storageUrl}/${post.image4}`"
+							style="height: auto; width: 147px" />
 					</div>
-					<div v-if="this.$attrs.loggedin && this.$attrs.user.id == post.user_id" >
+					<div v-if="this.loggedin && this.user.id == post.user_id">
 						<p>
-							<router-link :to="'/p/'+this.post.id+'/imageEdit'">Επεξεργασία Φωτογραφιών</router-link>
+							<router-link
+								:to="'/p/' + this.post.id + '/imageEdit'">Επεξεργασία
+								Φωτογραφιών</router-link>
 						</p>
 					</div>
 				</div>
-				<div class="col-md-12 col-lg-7"> 
-					<p class="postText"> <strong>{{ post.title}}</strong><span v-if="post.verified == 0" class="text-danger"><i> (  ΔΕΝ ΕΧΕΙ ΕΓΚΡΙΘΕΙ ΑΚΟΜΑ  )</i></span></p>
+				<div class="col-md-12 col-lg-7">
+					<p class="postText">
+						<strong>{{ post.title }}</strong><span v-if="post.verified == 0"
+							class="text-danger"><i> ( ΔΕΝ ΕΧΕΙ ΕΓΚΡΙΘΕΙ ΑΚΟΜΑ
+								)</i></span>
+					</p>
 					<div v-if="post.reEdit == 1" class="border m-3 border-danger rounded">
-						<p class="text-center ">
-							Η Αγγελία σας δεν πληρεί τα κριτήρια για δημοσίευση,<br>
-							παρακαλούμε προβείτε σε διαμορφώσεις των πληροφορίων της αγγελίας και θα  την επαναξετάσουμε
+						<p class="text-center">
+							Η Αγγελία σας δεν πληρεί τα κριτήρια για δημοσίευση,<br />
+							παρακαλούμε προβείτε σε διαμορφώσεις των πληροφορίων της
+							αγγελίας
+							και θα την επαναξετάσουμε
 						</p>
-						<div v-if="this.$attrs.loggedin && this.$attrs.user.id == post.user_id" class="text-center"> 
+						<div v-if="this.loggedin && this.user.id == post.user_id"
+							class="text-center">
 							<p>
-								<router-link class="text-center" :to="'/p/'+this.post.id+'/edit'">Επεξεργασία Πληροφοριών</router-link>
+								<router-link class="text-center"
+									:to="'/p/' + this.post.id + '/edit'">Επεξεργασία
+									Πληροφοριών</router-link>
 							</p>
 						</div>
-						<div v-if="this.$attrs.loggedin && this.$attrs.user.id == post.user_id" class="text-center"> 
+						<div v-if="this.loggedin && this.user.id == post.user_id"
+							class="text-center">
 							<p>
-								<router-link :to="'/p/'+this.post.id+'/imageEdit'">Επεξεργασία Φωτογραφιών</router-link>
+								<router-link
+									:to="'/p/' + this.post.id + '/imageEdit'">Επεξεργασία
+									Φωτογραφιών</router-link>
 							</p>
-						</div>  
-						<p class="small text-center"><i>*Μετά απο μεγάλο χρονικό διάστημα χωρίς τροποποίηση πληροφοριών η αγγελία σας θα διαγραφεί</i></p>
-					</div>							
-					<p class="postText"><small><strong> Περιγραφή  : </strong>{{ post.description}}</small></p>
-					<p class="postText"><small><strong>Περιοχή:</strong> {{ post.adlocation}}</small></p>
-					<p class="postText"><small><strong>Κατηγορία:</strong> {{ post.category}}</small></p>
-					<p class="postText"><small><strong>Κατάσταση:</strong> {{ post.condition}}</small></p>
-					<p class="postText"><small><strong>Ανταλλαγή για:</strong> {{ post.transferPref }}</small></p>
-					<p class="postText"><small><strong>Του Χρήστη:</strong><router-link :to="'/profile?id='+post.user_id">  {{ post.username }}<img v-if="post.userimage" :src="`${$config.public.storageUrl }/${post.userimage}`" class="rounded-circle ml-2" style="width: 50px; height: auto;"></router-link></small></p>  
-					<p class="postText"><small><strong>Email:</strong>  {{ post.email }}</small></p>  
-					<p class="postText"><small><strong>Τηλέφωνο:</strong>  {{ post.phone }}</small></p>
-					<p class="postText"><small><strong>Ημερομηνία:</strong> {{ post.date }}</small></p>
-					<div v-if="this.$attrs.loggedin && this.$attrs.user.id == post.user_id" class="text-center"> 
-						<p ><router-link class="text-center" :to="'/p/'+this.post.id+'/edit'">Επεξεργασία Πληροφοριών</router-link></p>
+						</div>
+						<p class="small text-center">
+							<i>*Μετά απο μεγάλο χρονικό διάστημα χωρίς τροποποίηση
+								πληροφοριών
+								η αγγελία σας θα διαγραφεί</i>
+						</p>
 					</div>
-					<form  v-if="this.$attrs.loggedin && this.$attrs.user.id == post.user_id" @submit="DeletePost">
+					<p class="postText">
+						<small><strong> Περιγραφή : </strong>{{ post.description }}</small>
+					</p>
+					<p class="postText">
+						<small><strong>Περιοχή:</strong> {{ post.adlocation }}</small>
+					</p>
+					<p class="postText">
+						<small><strong>Κατηγορία:</strong> {{ post.category }}</small>
+					</p>
+					<p class="postText">
+						<small><strong>Κατάσταση:</strong> {{ post.condition }}</small>
+					</p>
+					<p class="postText">
+						<small><strong>Ανταλλαγή για:</strong> {{ post.transferPref }}</small>
+					</p>
+					<p class="postText">
+						<small><strong>Του Χρήστη:</strong><router-link
+								:to="'/profile?id=' + post.user_id">
+								{{ post.username
+								}}<img v-if="post.userimage"
+									:src="`${$config.public.storageUrl}/${post.userimage}`"
+									class="rounded-circle ml-2"
+									style="width: 50px; height: auto" /></router-link></small>
+					</p>
+					<p class="postText">
+						<small><strong>Email:</strong> {{ post.email }}</small>
+					</p>
+					<p class="postText">
+						<small><strong>Τηλέφωνο:</strong> {{ post.phone }}</small>
+					</p>
+					<p class="postText">
+						<small><strong>Ημερομηνία:</strong> {{ post.date }}</small>
+					</p>
+					<div v-if="this.loggedin && this.user.id == post.user_id"
+						class="text-center">
+						<p>
+							<router-link class="text-center"
+								:to="'/p/' + this.post.id + '/edit'">Επεξεργασία
+								Πληροφοριών</router-link>
+						</p>
+					</div>
+					<form v-if="this.loggedin && this.user.id == post.user_id"
+						@submit="DeletePost">
 						<div class="text-center">
-							<button type="submit" class="btn btn-danger ml-3">Διαγραφή Αγγελίας</button>
+							<button type="submit" class="btn btn-danger ml-3">
+								Διαγραφή Αγγελίας
+							</button>
 						</div>
 					</form>
 				</div>
 			</div>
-		</div>	
+		</div>
 	</div>
 </template>
 
 <script>
-	export default defineNuxtComponent({
-		data() {
-			return {
-				post: {},
-				loaded:false,
+export default defineNuxtComponent({
+	props: ['user', 'loggedin'],
+	data() {
+		return {
+			post: {},
+			loaded: false,
+		};
+	},
+	setup() {
+		const config = useRuntimeConfig();
+		return { config };
+	},
+	methods: {
+		async getPostData() {
+			const response = await fetch(
+				this.config.public.apiUrl + "/vue/post/" + this.$route.query.id
+			);
+			const data = await response.json();
+			if (data.status == "success") {
+				this.post = data.post[0];
+				this.loaded = true;
 			}
 		},
-		setup () {
-			const config = useRuntimeConfig();
-          	return { config }
+		// DeletePost: function (e) {
+		// 	if (
+		// 		confirm("Πατόντας ΟΚ η αγγελία θα διαγραφεί, είστε σίγουροι;") == true
+		// 	) {
+		// 		axios
+		// 			.delete("/api/p/" + this.$route.params.id)
+		// 			.then(this.$router.push("/p"));
+		// 	}
+		// 	e.preventDefault();
+		// },
+		NotReady() {
+			alert(this.user.id)
+			alert(this.post)
+			alert(
+				"\n\n Η αγγελία δεν είναι έτοιμη για δημοσιοποίηση  \n Μεταβείτε στις αγγελίες \n\n Εάν η αγγελία είναι δική σας κάντε σύνδεση στο λογαριασμό σας"
+			);
+			// this.$router.push("/p");
 		},
-		methods:{
-			loggeduserid(){
-		  		if	(this.$attrs.user)	{
-					return this.$attrs.user.id;
-				}	else	{
-					return 0
-				}
-			},
-			async getPostData(){ 
-				const response = await fetch(this.config.public.apiUrl+'/vue/post/'+this.$route.query.id )
-				const data = await response.json()
-				if(data.status == "success"){
-					this.post = data.post[0];
-					this.loaded = true
-				}
-			},  
-			DeletePost: function(e){
-				if (confirm("Πατόντας ΟΚ η αγγελία θα διαγραφεί, είστε σίγουροι;") == true) {
-					axios.delete('/api/p/'+this.$route.params.id).then(
-					this.$router.push('/p'));
-				}
-				e.preventDefault();
-			},
-			NotReady(){
-				alert('\n\n Η αγγελία δεν είναι έτοιμη για δημοσιοποίηση  \n Μεταβείτε στις αγγελίες \n\n Εάν η αγγελία είναι δική σας κάντε σύνδεση στο λογαριασμό σας')
-				this.$router.push('/p');
-			} 
-		},
-		created(){ 
-			this.getPostData()
-		}
-	});
- 
+	},
+	created() {
+		this.getPostData();
+	},
+});
 </script>

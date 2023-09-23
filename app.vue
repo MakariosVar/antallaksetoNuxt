@@ -3,7 +3,13 @@
     <ClientOnly>
         <span v-if="!updating">
           <LayoutHeaderVue :loggedin="loggedin" :user="user" />
-          <router-view @userLogged="setUser($event)" :loggedin="loggedin" :user="user" :key="$route.params.id"/>
+          <router-view 
+            @userLogged="setUser($event)"
+            @sessionExpired="sessionExpired"
+            :loggedin="loggedin"
+            :user="user"
+            :key="$route.params.id"
+          />
           <LayoutFooterVue />
         </span>
         <span v-else class="d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
@@ -18,6 +24,16 @@
   export default defineNuxtComponent({
     head: {
       title: 'Ανταλλαξέ το',
+    },
+    methods: {
+      sessionExpired () {
+        this.user = null;
+        this.loggedin = 0;
+        if (process.client) {
+          localStorage.clear();
+        }
+        this.$router.push({name: 'Login'})
+      }
     },
     setup() {
       const config = useRuntimeConfig();
@@ -49,6 +65,10 @@
                 user.value = response.user;
                 loggedin.value = 1;
                 updating.value = false;
+              } else if (response.expired) {
+                user.value = null;
+                loggedin.value = 0;
+                updating.value = false;
               }
             } else {
               user.value = null;
@@ -59,6 +79,7 @@
         } catch (error) {
           console.error('API request error:', error);
         }
+        
       };
 
       asyncData();

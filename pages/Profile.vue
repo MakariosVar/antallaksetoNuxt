@@ -33,6 +33,10 @@
       </div>
       <ProfileDescription :profileUser="profileUser" :profile="profile" :isMine="isMine" :user="user"/>
     </div>
+    <div class="mt-4 text-center">
+      <h1><strong>Σχόλια</strong></h1>
+      <hr>
+    </div>
     <div v-for="comment in comments" :key="comment.id" class="card mb-3 text-center">
         <nuxt-link :to="'/profile?id=' + comment.user_id"><h3 class="blue">{{ comment.commentersname }}</h3></nuxt-link>
         <p>
@@ -139,7 +143,6 @@
             this.Loaded = true;
           }
         } catch (error) {
-          this.$router.push('/home');
         }
       },
       async getComments() {
@@ -188,7 +191,7 @@
             method: 'POST',
             body: new URLSearchParams({
               comment: this.commentInput,
-              user_id: this.user.id,
+              auth_token: this.user.auth_token,
               profile_id: this.profile.id
             })
           });
@@ -196,6 +199,9 @@
             const data = await response.json();
             if (data.status === 'success') {
               this.getComments();
+            } else if (data.expired) {
+              alert('Συνδεθείτε ξανά για λόγους ασφαλείας');
+              this.$emit('sessionExpired', true);
             } else {
               alert('Προσπαθήστε ξανά');
             }
@@ -220,7 +226,7 @@
     },
     computed: {
       isMine() {
-        return this.user.id == this.profileUser.id;
+        return this.user && (this.user.id == this.profileUser.id);
       },
       filteredPosts() {
         return this.posts.filter(post => {

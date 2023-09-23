@@ -17,9 +17,6 @@
                 <img :src="`${config.public.storageUrl}/${profile.image}`" class="rounded-circle" width="150">
             </span>
             <div class="mt-3">
-                <div v-if="user && user.id === profile.user_id">
-                    <nuxt-link :to="'/EditProfile/' + this.$route.query.id">Διαμόρφωση Προφίλ</nuxt-link>
-                </div>
                 <div v-if="user && user.id !== profile.user_id" @click="followclick()">
                     <follow-button :userId="profileUser.id" :follows="profile.follows"></follow-button>
                 </div>
