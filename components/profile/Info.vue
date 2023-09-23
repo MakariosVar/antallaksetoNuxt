@@ -4,7 +4,9 @@
             <input type="file" ref="imageInput" class="d-none" @change="handleImageUpload">
             <span v-if="isMine" @click="selectImageToUpload" class="profile-image-container">
                 <span v-if="updating">
-
+                    <div class="spinner-border text-dark" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
                 </span>
                 <span v-else>
                     <img :src="`${config.public.storageUrl}/${profile.image}`" class="rounded-circle mine-profile-image" width="150">
