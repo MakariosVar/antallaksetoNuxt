@@ -1,4 +1,5 @@
 <template>
+  <div>
   <nav class="navbar navbar-expand-md navbar-light bg-light px-5">
 
     <nuxt-link to="/home" class="navbar-brand" title="Αρχική">
@@ -40,7 +41,7 @@
 
         <li class="nav-item dropdown" v-if="user && (user.role_id == 1 || user.role_id == 3)">
           <a class="nav-link dropdown-toggle" href="#" id="admin-dropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <font-awesome-icon icon="fa fa-gear" />
+            <font-awesome-icon icon="fa fa-gear" size="2x" />
           </a>
           <div class="dropdown-menu dropdown-menu-end" aria-labelledby="admin-dropdown">
             <nuxt-link to="/admin-panel" class="dropdown-item">
@@ -58,17 +59,17 @@
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="user-dropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <span v-if="profileImage">
-              <img style="max-width: 35px;" :src="$config.public.storageUrl +''+ profileImage" alt="User" class="rounded-circle" />
+              <img style="max-width: 35px;" :src="`${$config.public.storageUrl}/${profileImage}`" alt="User" class="rounded-circle" />
             </span>
             <span v-else>
-            <font-awesome-icon icon="fa-solid fa-circle-user" />
+            <font-awesome-icon icon="fa-solid fa-circle-user"  size="2x"/>
             </span>
           </a>
           <div v-if="user" class="dropdown-menu dropdown-menu-end" aria-labelledby="user-dropdown">
-            <nuxt-link :to="'/profile/' + user.id" class="dropdown-item">
+            <nuxt-link :to="{name: 'Profile', query: {id: user.id}}" class="dropdown-item">
               <span class="text-dark">Προφίλ / {{ user.name }}</span>
             </nuxt-link>
-            <nuxt-link to="/p/create" class="dropdown-item">
+            <nuxt-link to="/posts/create" class="dropdown-item">
               <span class="text-dark">Προσθήκη Αγγελίας</span>
             </nuxt-link>
             <nuxt-link :to="'/myposts/' + user.id" class="dropdown-item">
@@ -86,6 +87,15 @@
       </ul>
     </div>
   </nav>
+  <div class="container-fluid" v-if="user && user.verification_token">
+    <div class="row">
+      <div class="col-12 bg-warning text-center text-muted">
+        Έχει σταλεί ένα email στη διεύθυνση που παραχωρήσατε, 
+        προκειμένου να επαληθευτεί η διεύθυνση email και να ενεργοποιηθεί ο λογαριασμός σας.
+      </div>
+    </div>
+  </div>
+  </div>
 </template>
 
 <script>
@@ -98,7 +108,12 @@
           searchInputValue: '',
       }
     },
-
+    setup() {
+      const config = useRuntimeConfig();
+      return {
+        config
+      }
+    },
     methods: {
       toAdminPanel () {
         window.location.replace('/admin')
@@ -107,12 +122,17 @@
         // Change the router's view programmatically
         this.$router.push({ path: '/posts/' , query: { search: this.searchInputValue } });
       },
-      logout() {
-          // axios.post('/api/vuelogout').then((response) => {
-          //     localStorage.setItem('user', null)
-          //     location.replace('/home');
-          // });
-        },
+      async logout() {
+        const response = await fetch(`${this.config.public.apiUrl}/vuelogout`, {
+          method: 'GET',
+        })
+        const data = await response.json();
+        if (data.status == 'success' && process.client) {
+          console.log(data)
+          localStorage.setItem('user', null)
+          location.replace('/home');
+        }
+      },
       getPendingPosts(){ 
           // axios.get('/api/vue/toverificate').then((response) => {
                       

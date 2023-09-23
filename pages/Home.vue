@@ -1,15 +1,18 @@
 <template>
   <div id="homepage">
     <section class="text-center text-white bg-image backgroundImage">
-      <div class="container py-5">
-        <h1 class="display-4">Ανταλλαξέ το</h1>
-        <h2 class="subtitle">Δώσε ο,τι δεν χρειάζεσαι</h2>
+      <div class="container home-container">
+        <h1 class="display-1">Ανταλλαξέ το</h1>
+        <h2 class="subtitle display-5">Δώσε ο,τι δεν χρειάζεσαι</h2>
         <div class="d-flex justify-content-center mt-4">
           <nuxt-link v-if="loggedin" to="/p/create" class="btn btn-light">ΠΡΟΣΘΗΚΗ ΑΓΓΕΛΙΑΣ</nuxt-link>
           <nuxt-link v-else to="/login" class="btn btn-light">ΠΡΟΣΘΗΚΗ ΑΓΓΕΛΙΑΣ</nuxt-link>
         </div>
-        <div class="text-center mt-3">
-          <h2>Βρες ο,τι χρειαζεσαι</h2>
+        <div class="d-flex flex-column align-items-center mt-3">
+          <h2 class="display-5">Βρες ο,τι χρειαζεσαι</h2>
+          <div class="input-group mb-3 w-50">
+            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+          </div>
         </div>
       </div>
     </section>
@@ -31,7 +34,7 @@
         <h2 class="text-center">Προωθημένες Αγγελίες</h2>
         <div class="row">
           <div v-for="post in premiumPosts" :key="post.id" class="col-md-3 mb-4">
-            <nuxt-link :to="'/p/' + post.id" class="text-decoration-none">
+            <nuxt-link :to="{ path: '/posts/view', query: { id: post.id } }" class="text-decoration-none">
               <div class="card h-100">
                 <img :src="`${$config.public.storageUrl }/${post.image0}`" class="card-img-top" alt="Post Image">
                 <div class="card-body">
@@ -61,11 +64,15 @@
 </template>
 <style scoped>
   .backgroundImage {
-    background-image: url("bg.jpg");
+    background-image: url("/bg.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
     height: 100%;
+  }
+
+  .home-container {
+    padding: 6% 0 6% 0;
   }
 </style>
 

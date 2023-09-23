@@ -29,7 +29,7 @@
       <PreLoader></PreLoader>
     </div>
     <div v-else class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-      <router-link v-for="post in ListResult" :key="post.id" :to="'/p/'+post.id" class="col post">
+      <nuxt-link v-for="post in ListResult" :key="post.id" :to="{ path: '/posts/view', query: { id: post.id } }" class="col post">
         <div class="card h-100">
           <img :src="`${$config.public.storageUrl}/${post.image0}`" class="card-img-top" alt="Post Image">
           <div class="card-body">
@@ -37,7 +37,7 @@
             <p class="card-text">Περιοχή: {{ post.adlocation }}</p>
           </div>
         </div>
-      </router-link>
+      </nuxt-link>
     </div>
   </div>
 </template>

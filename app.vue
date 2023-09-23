@@ -1,57 +1,76 @@
 <template>
   <div>
     <ClientOnly>
-        <LayoutHeaderVue :loggedin="loggedin" :user="user" />
-        <router-view @userLogged="getUser($event)" :loggedin="loggedin" :user="user" :key="$route.params.id" />
-        <LayoutFooterVue />
+        <span v-if="!updating">
+          <LayoutHeaderVue :loggedin="loggedin" :user="user" />
+          <router-view @userLogged="setUser($event)" :loggedin="loggedin" :user="user" :key="$route.params.id"/>
+          <LayoutFooterVue />
+        </span>
+        <span v-else class="d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
+          <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </span>
     </ClientOnly>
   </div>
 </template>
-<style>
-
-/* If the screen size is 1200px wide or more, set the font-size to 80px */
-  @media (min-width: 1200px) {
-    .responsive-font {
-      font-size: 30x;
-    }
-  }
-/* If the screen size is smaller than 1200px, set the font-size to 80px */
-  @media (max-width: 1199.98px) {
-    .responsive-font {
-      font-size: 13px;
-    }
-  }
-</style>
 <script>
-  export default {
-    data() {
+  export default defineNuxtComponent({
+    setup() {
+      const config = useRuntimeConfig();
+      const updating = ref(true);
+      const user = ref(null);
+      const loggedin = ref(0);
+
+      const setUser = (newUser) => {
+        if (newUser) {
+          loggedin.value = 1;
+          if (process.client) {
+            localStorage.setItem('user', JSON.stringify(newUser));
+          }
+        }
+      };
+      const asyncData = async () => {
+        try {
+          if (process.client) {
+            var storageUser = localStorage.getItem('user');
+
+            if (storageUser && storageUser !== 'null') {
+              storageUser = JSON.parse(storageUser);
+              const config = useRuntimeConfig();
+              const response = await $fetch(`${config.public.apiUrl}/vue/getuser/${storageUser.auth_token}`);
+              if (response.status === 'success') {
+                if (process.client) {
+                  localStorage.setItem('user', JSON.stringify(response.user));
+                }
+                user.value = response.user;
+                loggedin.value = 1;
+                updating.value = false;
+              }
+            } else {
+              user.value = null;
+              loggedin.value = 0;
+              updating.value = false;
+            }
+          }
+        } catch (error) {
+          console.error('API request error:', error);
+        }
+      };
+
+      asyncData();
+
       return {
-        loggedin: 0,
-        user:  null,
-      }
+        updating,
+        user,
+        loggedin,
+        setUser,
+      };
     },
-    methods: {
-      getUser(User)
-      {
-        this.user = User
-        this.loggedin = 1
-        if(process.client) {
-          localStorage.setItem('user', JSON.stringify(User))
-        }
-      },
-            
-    },
-    created(){
-      this.loggedin =  0;
-      if(process.client) {
-          var storageUser = localStorage.getItem('user');
-        if (storageUser && storageUser != 'null') {
-          this.user = JSON.parse(storageUser)
-          this.loggedin =  1;
-        }
-        // console.log(this.user)
+    created() {
+      if (process.client) {
         window.scrollTo(0, 0);
       }
     }
-  }
+  });
 </script>

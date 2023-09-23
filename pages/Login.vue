@@ -1,10 +1,5 @@
 <template>
-    <div v-if="loggedin" v-bind="islogged()" class="pageMinFit">
-        <div class="d-flex justify-content-center">
-            <img src="/images/NewLogoPNG.svg" class="imageNotFound">
-        </div>
-    </div>
-    <div v-else class="container p-5 pageMinFit">
+    <div class="container p-5 pageMinFit">
         <div class="row justify-content-center py-5">
             <div class="col-md-8 py-5">
                 <div class="card">
@@ -53,7 +48,10 @@
     export default {
         props:['loggedin'], 
         mounted() {
-           
+            if (this.loggedin) {
+                alert('Είστε ήδη συνδεδεμένος/η \n Μεταβείτε στην αρχική');
+                location.replace('/home');
+            } 
         },
         setup () {
             const config = useRuntimeConfig();
@@ -62,44 +60,38 @@
         methods:{
             async checkForm(e) {
                 e.preventDefault();
-                if (this.loggedin) {
-                    alert('Είστε ήδη συνδεδεμένος/η \n Μεταβείτε στην αρχική');
-                    location.replace('/home');
-                } else {
-                    var formContents = new FormData(document.getElementById('Login'));
+                var formContents = new FormData(document.getElementById('Login'));
 
-                    try {
-                        const response = await fetch(this.config.public.apiUrl+'/vuelogin', {
-                            method: 'POST',
-                            body: formContents,
-                        });
+                try {
+                    const response = await fetch(this.config.public.apiUrl+'/vuelogin', {
+                        method: 'POST',
+                        body: formContents,
+                    });
 
-                        if (response.status === 200) {
-                            const data = await response.json();
-
-                            if (data.status === 'success') {
-                                let User = data.user;
-
-                                this.$emit('userLogged', User);
-                                this.$router.push('/home');
-                            } else if (data.status === 'error') {
-                                alert('Το email και ο κωδικός δεν ταιριάζουν, Προσπαθήστε ξανά');
-                            } else {
-                                await fetch('/api/vuelogout');
-                                this.checkForm();
+                    if (response.status === 200) {
+                        const data = await response.json();
+                        if (data.status === 'success') {
+                            let user = data.user;
+                            
+                            console.log(data)
+                            this.$emit('userLogged', user);
+                            if (process.client) {
+                                location.replace('/home');
                             }
+                        } else if (data.status === 'error') {
+                            alert('Το email και ο κωδικός δεν ταιριάζουν, Προσπαθήστε ξανά');
                         } else {
-                            console.error('Failed to fetch');
+                            await fetch(this.config.public.apiUrl+'/vuelogout');
+                            this.checkForm();
                         }
-                    } catch (error) {
-                        console.error('Error:', error);
+                    } else {
+                        console.error('Failed to fetch');
                     }
+                } catch (error) {
+                    console.error('Error:', error);
                 }
+
             },
-            islogged(){
-                alert('η/η \n Μεταβείτε στην αρχική')
-                location.replace('/home');
-            }
         }
     }
     

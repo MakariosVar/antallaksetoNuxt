@@ -1,7 +1,7 @@
 <template>
 <div v-if="this.loggedin" v-bind="islogged()" class="pageMinFit">
         <div class="d-flex justify-content-center">
-            <img src="/images/NewLogoPNG.svg" class="imageNotFound"> 
+            <img src="~assets/images/NewLogoPNG.svg" class="imageNotFound"> 
         </div>
     </div>
 <div v-else class="container py-5" style="height:700px;">
@@ -11,7 +11,7 @@
                 <div class="card-header text-center">{{ 'Εγγραφή' }}</div>
 
                 <div class="card-body">
-                    <form @submit="checkForm" id="Register"  class="col">
+                    <form @submit.prevent="checkForm" id="Register"  class="col">
                        
 
                         <div class="form-group row">
@@ -94,57 +94,52 @@
 
 
 <script>
-        export default {
-        props:['loggedin'],
-
-        computed() {
-           
-        },
-         
+    export default {
+        props:['loggedin', 'csrfToken'],
+        setup () {
+            const config = useRuntimeConfig();
+            return { config }
+        },         
         methods:{
+            async checkForm(e) {
+                    if (this.loggedin) {
+                        alert('Είστε ήδη συνδεδεμένος/η \n Μεταβείτε στην αρχική');
+                        this.$router.push('/home');
+                    } else {
+                        const formContents = new FormData(document.getElementById('Register'));
+                        const csrfToken = this.csrfToken; // Use the CSRF token prop
 
-      
-            checkForm: 
-                 
-                function (e) {
+                        try {
+                        const response = await fetch(this.config.public.apiUrl+'/vueregister', {
+                            method: 'POST',
+                            headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            },
+                            body: formContents,
+                        });
 
-                        if(this.loggedin){  
-                           alert('Είστε ήδη συνδεδεμένος/η \n Μεταβείτε στην αρχική')
-                           location.replace('/home');
-                        }else
-                        {
-                             
-
-
-                            var formContents = jQuery("#Register").serialize();
-
-                            axios.post('/api/vueregister', formContents).then((response) => {  
-                               if(response.data.status == "success"){
-                               
-                          
-                                let User = response.data.user;
-                              
-                                this.$emit('userID' , User); 
-                                this.$router.push('/home')
-                                    
-                                }
-                                else
-                                {
-                                    alert('Errors')
-                                }
-                            }, 
-                            function() 
-                            {
-                                console.log('failed');
-                            });
+                        if (response.status === 200) {
+                            const data = await response.json();
+                            if (data.status === 'success') {
+                            const User = data.user;
+                            this.$emit('userLogged', User);
+                            this.$router.push('/home');
+                            } else {
+                            alert('Errors');
+                            }
+                        } else {
+                            console.error('Request failed:', response.statusText);
                         }
-                        e.preventDefault();
-                        
+                        } catch (error) {
+                        console.error('Request error:', error);
+                        }
+                    }
+                    e.preventDefault();
                 },
-                 islogged(){
-                    alert('Είστε ήδη συνδεδεμένος/η \n Μεταβείτε στην αρχική')
-                    location.replace('/home');
-                }
+                islogged(){
+                alert('Είστε ήδη συνδεδεμένος/η \n Μεταβείτε στην αρχική')
+                location.replace('/home');
+            }
         }
     }
 

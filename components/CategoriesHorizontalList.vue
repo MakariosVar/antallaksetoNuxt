@@ -17,49 +17,49 @@
                                         </div>
                               </div>
                     </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <button class="carousel-control-prev me-auto" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                              <span class="btn btn-secondary carousel-control-prev-icon" aria-hidden="true"></span>
                               <span class="visually-hidden">Previous</span>
                     </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <button class="carousel-control-next me-auto" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                              <span class="btn btn-secondary carousel-control-next-icon" aria-hidden="true"></span>
                               <span class="visually-hidden">Next</span>
                     </button>
           </div>
 </template>
         
 <script>
-          export default defineNuxtComponent({
-                    data() {
-                              return {
-                                        isMobile: false,
-                                        chunkSize: 4,
-                                        categories: [],
-                                        categoryChunks: [],
-                              };
-                    },
-                    async asyncData() {
-                              const categories = await $fetch('http://127.0.0.1:8000/api/vue/categories');
-                              return {
-                                        categories,
-                              };
-                    },
-                    methods: {
-                              adjustChunkSize() {
-                                        this.isMobile = window.innerWidth < 572;
-                                        this.chunkSize = this.isMobile ? 2 : 4;
-                                        this.categoryChunks = [];
-                                        for (let i = 0; i < this.categories.length; i += this.chunkSize) {
-                                                  this.categoryChunks.push(this.categories.slice(i, i + this.chunkSize));
-                                        }
-                              },
-                    },
-                    mounted() {
-                              this.adjustChunkSize();
-                              window.addEventListener('resize', this.adjustChunkSize);
-                    },
-                    beforeDestroy() {
-                              window.removeEventListener('resize', this.adjustChunkSize);
-                    },
-          });
+    export default defineNuxtComponent({
+        data() {
+            return {
+                isMobile: false,
+                chunkSize: 4,
+                categories: [],
+                categoryChunks: [],
+            };
+        },
+        async asyncData() {
+            const categories = await $fetch('http://127.0.0.1:8000/api/vue/categories');
+            return {
+                    categories,
+            };
+        },
+        methods: {
+            adjustChunkSize() {
+                this.isMobile = window.innerWidth < 572;
+                this.chunkSize = this.isMobile ? 2 : 4;
+                this.categoryChunks = [];
+                for (let i = 0; i < this.categories.length; i += this.chunkSize) {
+                            this.categoryChunks.push(this.categories.slice(i, i + this.chunkSize));
+                }
+            },
+        },
+        mounted() {
+            this.adjustChunkSize();
+            window.addEventListener('resize', this.adjustChunkSize);
+        },
+        beforeDestroy() {
+            window.removeEventListener('resize', this.adjustChunkSize);
+        },
+    });
 </script>

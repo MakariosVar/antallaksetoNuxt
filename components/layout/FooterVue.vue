@@ -4,7 +4,7 @@
       <div class="row align-items-center">
         <div class="col-lg-3 mx-auto mb-4 d-flex justify-content-center">
           <nuxt-link to="/home" class="navbar-brand w-50">
-            <img src="@/assets/images/NewLogoPNG.svg" alt="Logo" class="img-fluid u-logo-image " />
+            <img src="~assets/images/NewLogoPNG.svg" alt="Logo" class="img-fluid u-logo-image " />
           </nuxt-link>
         </div>
 

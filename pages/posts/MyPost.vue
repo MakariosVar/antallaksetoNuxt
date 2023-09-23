@@ -6,7 +6,7 @@
                         
         <div v-if="!(this.posts[0])" class="pageMinFit">
                 <div class="d-flex justify-content-center">
-                        <img src="/images/NewLogoPNG.svg" class="imageNotFound">
+                        <img src="~assets/images/NewLogoPNG.svg" class="imageNotFound">
                 </div>
                 <div  style=" text-align: center; font-size:40px; "><strong>Δεν έχετε καταχωρήσει αγγελίες ακόμη</strong>
                         <br>
