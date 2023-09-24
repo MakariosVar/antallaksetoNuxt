@@ -17,8 +17,14 @@
                 <img :src="`${config.public.storageUrl}/${profile.image}`" class="rounded-circle" width="150">
             </span>
             <div class="mt-3">
-                <div v-if="user && user.id !== profile.user_id" @click="followclick()">
-                    <follow-button :userId="profileUser.id" :follows="profile.follows"></follow-button>
+                <div v-if="user && user.id !== profile.user_id">
+                    <ProfileFollowButton 
+                        :profileId="profileUser.id"
+                        :follows="profile.follows"
+                        :user="user"
+                        @followClick="followClick()"
+                        @sessionExpired="sessionExpired()"
+                    />
                 </div>
                 <div class="text-center">
                     <strong>Posts:</strong> {{ profile.postCount }}
@@ -51,6 +57,12 @@
                 // Trigger the file input click event
                 this.$refs.imageInput.click();
             },
+            followClick () {
+                this.$emit('followClick')
+            },
+            sessionExpired () {
+                this.$emit('sessionExpired')
+            },
             async handleImageUpload(event) {
                 // Get the selected file
                 const selectedFile = event.target.files[0];
@@ -75,7 +87,6 @@
                     if (data.image_url) {
                         this.$emit('updateProfileImage', data.image_url)
                     }
-                    console.log(data);
                     this.updating = false;
                 } catch (error) {
                     console.error('Image upload error:', error);

@@ -83,6 +83,8 @@ export default {
 
             if (data.status === 'success') {
                 this.profile.description = this.descriptionInput;
+            } else if (data.expired) {
+                this.$emit('sessionExpired', true);
             }
             } catch (error) {
                 console.error('An error occurred:', error);

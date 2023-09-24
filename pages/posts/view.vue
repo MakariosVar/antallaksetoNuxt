@@ -165,8 +165,6 @@ export default defineNuxtComponent({
 		// 	e.preventDefault();
 		// },
 		NotReady() {
-			alert(this.user.id)
-			alert(this.post)
 			alert(
 				"\n\n Η αγγελία δεν είναι έτοιμη για δημοσιοποίηση  \n Μεταβείτε στις αγγελίες \n\n Εάν η αγγελία είναι δική σας κάντε σύνδεση στο λογαριασμό σας"
 			);

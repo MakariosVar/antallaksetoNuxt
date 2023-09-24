@@ -1,10 +1,15 @@
 <template>
     <div class="container p-5 pageMinFit">
+        <div v-if="$route.query.reAutheticate" class="alert alert-danger d-flex align-items-center" role="alert">
+            <font-awesome-icon :icon="['fas', 'triangle-exclamation']" class="me-2" size="2x" />
+            <div>
+                Συνδεθείτε ξανά για λόγους ασφαλείας
+            </div>
+        </div>
         <div class="row justify-content-center py-5">
             <div class="col-md-8 py-5">
                 <div class="card">
                     <div class="card-header text-center">Σύνδεση</div>
-  
                        <div class="card-body">
                         <form @submit.prevent="checkForm" id="Login">
                             <div class="form-group row">

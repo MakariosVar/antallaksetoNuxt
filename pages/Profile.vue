@@ -5,7 +5,15 @@
     </div>
     <div v-else class="row">
       <div class="col-md-4">
-        <ProfileInfo :profile="profile" :profileUser="profileUser" :user="user" :isMine="isMine" @updateProfileImage="updateProfileImage" />
+        <ProfileInfo 
+          :profile="profile"
+          :profileUser="profileUser"
+          :user="user"
+          :isMine="isMine"
+          @sessionExpired="sessionExpired"
+          @updateProfileImage="updateProfileImage"
+          @followClick="followClick"
+        />
         <div v-if="user && user.id !== profile.user_id" class="card text-center my-2">
           <div class="card-body">
             <h1>Αφήστε Σχόλιο</h1>
@@ -28,10 +36,16 @@
                 </div>
               </div>
             </form>
+            <div v-if="commentExists" class="alert alert-warning d-flex align-items-center" role="alert">
+              <font-awesome-icon :icon="['fas', 'triangle-exclamation']" class="me-2" size="2x" />
+              <div>
+                Μπορείτε να αφήσετε ένα σχόλιο σε κάθε προφίλ.
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <ProfileDescription :profileUser="profileUser" :profile="profile" :isMine="isMine" :user="user"/>
+      <ProfileDescription @sessionExpired="sessionExpired" :profileUser="profileUser" :profile="profile" :isMine="isMine" :user="user"/>
     </div>
     <div class="mt-4 text-center">
       <h1><strong>Σχόλια</strong></h1>
@@ -53,7 +67,7 @@
     </div>
     <div v-if="posts.length > 0" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
       <div v-for="post in filteredPosts" :key="post.id" class="col mb-4">
-        <div class="card">
+        <div class="card h-100">
           <nuxt-link :to="`posts/view?id=${post.id}`">
             <img :src="`${config.public.storageUrl}/${post.image0}`" class="card-img-top" alt="Post Image">
             <div class="card-body">
@@ -64,7 +78,7 @@
         </div>
       </div>
       <div class="col mb-4">
-        <div class="card">
+        <div class="card h-100">
           <nuxt-link to="/p/create">
             <img :src="`${config.public.storageUrl}/profile/default.png`" class="card-img-top" alt="Default Post Image">
             <div class="card-body">
@@ -96,6 +110,7 @@
     props: [ 'user'],
     data() {
       return {
+        commentExists: false,
         commentInput: '',
         profile: {},
         profileUser: {},
@@ -109,6 +124,9 @@
       return { config }
     },
     methods:{
+      sessionExpired() {
+        this.$emit('sessionExpired', true);
+      },
       async deletecomment(id) {
         try {
           const response = await fetch(`${this.config.public.apiUrl}/deletecomment/${id}`, {
@@ -123,8 +141,9 @@
         }
       },
       async getProfileData() {
+        let token = this.user.auth_token
         try {
-          const response = await fetch(`${this.config.public.apiUrl}/vue/profile/${this.$route.query.id}`, {
+          const response = await fetch(`${this.config.public.apiUrl}/vue/profile/${this.$route.query.id}/${token}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -198,10 +217,12 @@
 
             const data = await response.json();
             if (data.status === 'success') {
+              this.commentExists = false
               this.getComments();
             } else if (data.expired) {
-              alert('Συνδεθείτε ξανά για λόγους ασφαλείας');
-              this.$emit('sessionExpired', true);
+              this.sessionExpired();
+            } else if (data.commentExist) {
+              this.commentExists = true
             } else {
               alert('Προσπαθήστε ξανά');
             }
@@ -210,7 +231,7 @@
           }
         }
       },
-      followclick(){
+      followClick(){
         if(!(this.profile.follows))
         {
           this.profile.follows = true;

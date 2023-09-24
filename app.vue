@@ -1,22 +1,24 @@
 <template>
   <div>
     <ClientOnly>
-        <span v-if="!updating">
-          <LayoutHeaderVue :loggedin="loggedin" :user="user" />
-          <router-view 
-            @userLogged="setUser($event)"
-            @sessionExpired="sessionExpired"
-            :loggedin="loggedin"
-            :user="user"
-            :key="$route.params.id"
-          />
+      <span v-if="!updating" class="d-flex flex-column" style="min-height: 100vh;">
+        <LayoutHeaderVue :loggedin="loggedin" :user="user" />
+        <router-view 
+          @userLogged="setUser($event)"
+          @sessionExpired="sessionExpired"
+          :loggedin="loggedin"
+          :user="user"
+          :key="$route.params.id"
+        />
+        <span class="mt-auto">
           <LayoutFooterVue />
         </span>
-        <span v-else class="d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
-          <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-        </span>
+      </span>
+      <span v-else class="d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
+        <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </span>
     </ClientOnly>
   </div>
 </template>
@@ -31,8 +33,8 @@
         this.loggedin = 0;
         if (process.client) {
           localStorage.clear();
+          location.replace('/Login?reAutheticate=1');
         }
-        this.$router.push({name: 'Login'})
       }
     },
     setup() {

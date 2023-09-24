@@ -128,7 +128,6 @@
         })
         const data = await response.json();
         if (data.status == 'success' && process.client) {
-          console.log(data)
           localStorage.setItem('user', null)
           location.replace('/home');
         }
