@@ -7,7 +7,7 @@
             <div style="font-size: 40px;">
                 <strong>Δεν έχετε καταχωρήσει αγγελίες ακόμη</strong>
                 <br>
-                <nuxt-link to="/p/create" class="btn btn-primary mt-3">Προώθηση Αγγελίας</nuxt-link>
+                <nuxt-link to="/posts/create" class="btn btn-primary mt-3">Προώθηση Αγγελίας</nuxt-link>
             </div>
         </div>
         <div v-else>
@@ -15,17 +15,19 @@
                 <h1 class="display-4">Οι Αγγελίες μου</h1>
             </div>
             <div class="mt-3 text-center p-3">
-                <nuxt-link to="/p/create" class="btn btn-primary btn-lg">Προώθηση Αγγελίας</nuxt-link>
+                <nuxt-link to="/posts/create" class="btn btn-primary btn-lg">Προώθηση Αγγελίας</nuxt-link>
             </div>
             <div class="container">
                 <div class="row">
                     <nuxt-link v-for="post in posts" :key="post.id" :to="{ path: '/posts/view', query: { id: post.id } }"
                         class="col-md-3 col-sm-6 mb-4">
                         <div class="card">
-                            <img :src="`${config.public.storageUrl}/${post.image0}`" class="card-img-top" alt="Post Image">
+                            <img :src="`${config.public.storageUrl}/${post.image0}`" class="card-img-top" style="height: 300px;" alt="Post Image">
                             <div class="card-body">
-                                <p v-if="post.verified == 1" class="card-text">{{ post.title }}</p>
-                                <p v-else class="card-text text-warning">ΠΡΟΣ ΕΓΚΡΙΣΗ</p>
+                                <p class="card-text">
+                                    <span v-if="!post.verified" class="card-text text-warning"><small>(ΠΡΟΣ ΕΓΚΡΙΣΗ)</small></span>
+                                    {{ post.title }}
+                                </p>
                             </div>
                         </div>
                     </nuxt-link>

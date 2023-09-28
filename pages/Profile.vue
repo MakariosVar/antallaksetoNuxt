@@ -69,7 +69,7 @@
       <div v-for="post in filteredPosts" :key="post.id" class="col mb-4">
         <div class="card h-100">
           <nuxt-link :to="`posts/view?id=${post.id}`">
-            <img :src="`${config.public.storageUrl}/${post.image0}`" class="card-img-top" alt="Post Image">
+            <img :src="`${config.public.storageUrl}/${post.image0}`" class="card-img-top" style="height: 300px;" alt="Post Image">
             <div class="card-body">
               <h5 class="card-title">{{ post.title }}</h5>
               <p v-if="!(post.verified === 1)" class="card-text text-danger">ΠΡΟΣ ΕΓΚΡΙΣΗ</p>

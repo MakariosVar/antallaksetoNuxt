@@ -1,6 +1,6 @@
 <template>
   <div>
-  <nav class="navbar navbar-expand-md navbar-light bg-light px-5">
+  <nav class="navbar navbar-expand-md navbar-light border bg-light px-5">
 
     <nuxt-link to="/home" class="navbar-brand" title="Αρχική">
       <img style="max-height: 70px;" src="~assets/images/NewLogoPNG.png" alt="Logo">
@@ -35,7 +35,7 @@
       <ul class="navbar-nav ms-auto">
         <li class="nav-item" v-if="!isPostPage">
           <form class="form-inline my-2 my-lg-0" @submit.prevent="handleSubmit">
-            <input v-model="searchInputValue" class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search">
+            <input v-model="searchInputValue" class="form-control mr-sm-2" type="search" placeholder="Αναζήτηση..." aria-label="Search">
           </form>
         </li>
 
@@ -44,14 +44,14 @@
             <font-awesome-icon icon="fa fa-gear" size="2x" />
           </a>
           <div class="dropdown-menu dropdown-menu-end" aria-labelledby="admin-dropdown">
-            <nuxt-link to="/admin-panel" class="dropdown-item">
+            <a :href="`${config.public.backendBasePath}/admin`" target="_blank" class="dropdown-item">
               <span class="text-dark">Admin panel</span>
-            </nuxt-link>
-            <nuxt-link to="/verificateposts" class="dropdown-item">
+            </a>
+            <nuxt-link :to="{path: '/posts/verification'}" class="dropdown-item">
               <span class="text-dark">Εξέταση Αγγελιών ({{ pending }})</span>
             </nuxt-link>
             <nuxt-link to="/messages" class="dropdown-item">
-              <span class="text-dark">Μηνύματα</span>
+              <span class="text-dark">Μηνύματα ({{ unreadMessages }})</span>
             </nuxt-link>
           </div>
         </li>
@@ -59,7 +59,7 @@
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="user-dropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <span v-if="profileImage">
-              <img style="max-width: 35px;" :src="`${$config.public.storageUrl}/${profileImage}`" alt="User" class="rounded-circle" />
+              <img style="max-width: 35px;" :src="`${config.public.storageUrl}/${profileImage}`" alt="User" class="rounded-circle" />
             </span>
             <span v-else>
             <font-awesome-icon icon="fa-solid fa-circle-user"  size="2x"/>
@@ -105,6 +105,7 @@
     data(){
       return{
           pending:0,
+          unreadMessages: 0,
           searchInputValue: '',
       }
     },
@@ -132,27 +133,39 @@
           location.replace('/home');
         }
       },
-      getPendingPosts(){ 
-          // axios.get('/api/vue/toverificate').then((response) => {
-                      
-          //           this.pending = Object.keys(response.data).length;
-          //     })
+      async getPendingPosts(){ 
+          const response = await fetch(`${this.config.public.apiUrl}/vue/toverificate/${this.user.auth_token}`);
+          const data = await response.json()
+          console.log(data)
+          this.pending = data.length ?? 0;
+          
+      },
+      async getUnreadMessages(){ 
+          const response = await fetch(`${this.config.public.apiUrl}/vue/unreadmessages/${this.user.auth_token}`);
+          const data = await response.json()
+          this.unreadMessages = data.totalUnreadMessages ?? 0;
       },
     },
-    created(){ 
+    created (){
+      if (this.user && this.user.role_id == 1) { 
+        // Call the method initially
+        this.getUnreadMessages();
         this.getPendingPosts();
-      },
+
+        // Use setInterval to call the method every 1 minute (60,000 milliseconds)
+        this.intervalId = setInterval(() => {
+          this.getUnreadMessages();
+          this.getPendingPosts();
+        }, 60000);
+      }
+    },
     computed:{
       profileImage() {
         return (this.user && this.user.profile_image) ? this.user.profile_image : false;
       },
       isPostPage() {
         return this.$route.path === '/p';
-      },
-      checkPost(){
-        this.getPendingPosts();
-        return 'updated';
-      } 
+      }, 
     }
   }
 </script>

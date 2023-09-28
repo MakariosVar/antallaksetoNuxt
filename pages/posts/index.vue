@@ -31,10 +31,10 @@
     <div v-else class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
       <nuxt-link v-for="post in ListResult" :key="post.id" :to="{ path: '/posts/view', query: { id: post.id } }" class="col post">
         <div class="card h-100">
-          <img :src="`${$config.public.storageUrl}/${post.image0}`" class="card-img-top" alt="Post Image">
+          <img :src="`${$config.public.storageUrl}/${post.image0}`" class="card-img-top" style="height: 300px;" alt="Post Image">
           <div class="card-body">
             <h5 class="card-title">{{ post.title }}</h5>
-            <p class="card-text">Περιοχή: {{ post.adlocation }}</p>
+            <p class="card-text">Περιοχή: {{ `${post.fullAddress.locality}, ${post.fullAddress.country}` }}</p>
           </div>
         </div>
       </nuxt-link>
@@ -149,8 +149,8 @@
     },
     created() {
       this.getCategories();
-      this.getPosts();
       this.queryCaught();
+      this.getPosts();
       // Add a scroll event listener
       window.addEventListener('scroll', this.loadMorePosts);
     },

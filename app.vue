@@ -33,7 +33,7 @@
         this.loggedin = 0;
         if (process.client) {
           localStorage.clear();
-          location.replace('/Login?reAutheticate=1');
+          this.$router.push('/Login?reAutheticate=1');
         }
       }
     },
@@ -84,6 +84,28 @@
         
       };
 
+      const googleApiKey = config.public.googleApiKey;
+      onMounted(() => {
+          // Check if the Google Maps API script is loaded
+          if (typeof google === 'undefined') {
+              // Wait for it to load
+              const script = document.createElement('script');
+              script.src = `https://maps.googleapis.com/maps/api/js?key=${googleApiKey}&libraries=places`;
+              script.async = true;
+              script.defer = true;
+              script.onload = () => {
+                  // Google Maps API script is now loaded, initialize the autocomplete component
+                  // this.initializeAutocomplete();
+              };
+              if (process.client) {
+                  document.head.appendChild(script);
+              }
+          } else {
+              // Google Maps API is already loaded, initialize the autocomplete component
+              // this.initializeAutocomplete();
+          }
+      });
+
       asyncData();
 
       return {
@@ -93,10 +115,14 @@
         setUser,
       };
     },
-    created() {
-      if (process.client) {
-        window.scrollTo(0, 0);
-      }
-    }
+    watch: {
+      $route() {
+        if (process.client) {
+          setTimeout(() => {
+            window.scrollTo(0, 0);
+          }, 500);
+        }
+      },
+    },
   });
 </script>

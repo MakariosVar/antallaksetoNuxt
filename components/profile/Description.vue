@@ -1,6 +1,6 @@
 <template>
     <div class="col-md-8">
-        <div class="card mb-3 text-center">
+        <div class="card mb-3 text-center h-100">
             <h1 class="m-3 pt-3">{{ profileUser.name }}</h1>
             <div class="card-body">
                 <div class="row">

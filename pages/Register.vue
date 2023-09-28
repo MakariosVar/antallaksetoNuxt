@@ -1,5 +1,5 @@
 <template>
-<div v-if="this.loggedin" v-bind="islogged()" class="pageMinFit">
+<div v-if="this.user" v-bind="islogged()" class="pageMinFit">
         <div class="d-flex justify-content-center">
             <img src="~assets/images/NewLogoPNG.svg" class="imageNotFound"> 
         </div>
@@ -95,14 +95,14 @@
 
 <script>
     export default {
-        props:['loggedin', 'csrfToken'],
+        props:['user', 'csrfToken'],
         setup () {
             const config = useRuntimeConfig();
             return { config }
         },         
         methods:{
             async checkForm(e) {
-                    if (this.loggedin) {
+                    if (this.user) {
                         alert('Είστε ήδη συνδεδεμένος/η \n Μεταβείτε στην αρχική');
                         this.$router.push('/home');
                     } else {
