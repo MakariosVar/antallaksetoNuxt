@@ -1,9 +1,6 @@
 <template>
   <div class="container mt-4" :key="profile.id">
-    <div v-if="!Loaded" class="d-flex justify-content-center">
-      <PreLoader></PreLoader>
-    </div>
-    <div v-else class="row">
+    <div class="row">
       <div class="col-md-4">
         <ProfileInfo 
           :profile="profile"

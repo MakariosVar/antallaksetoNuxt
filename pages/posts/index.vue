@@ -25,10 +25,7 @@
         </div>
       </div>
     </div>
-    <div v-if="!Loaded">
-      <PreLoader></PreLoader>
-    </div>
-    <div v-else class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
       <nuxt-link v-for="post in ListResult" :key="post.id" :to="{ path: '/posts/view', query: { id: post.id } }" class="col post">
         <div class="card h-100">
           <img :src="`${$config.public.storageUrl}/${post.image0}`" class="card-img-top" style="height: 300px;" alt="Post Image">
