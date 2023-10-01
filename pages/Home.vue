@@ -27,8 +27,6 @@
       </div>
     </section>
 
-    <ads></ads>
-
     <section>
       <div class="container">
         <h2 class="text-center">Προωθημένες Αγγελίες</h2>
