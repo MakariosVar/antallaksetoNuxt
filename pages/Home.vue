@@ -20,13 +20,12 @@
     <section class="text-center">
       <div class="container">
         <h2 class="display-4">Κορυφαίες Κατηγορίες</h2>
-        <CategoriesHorizontalList />
+        <CategoriesHorizontalList v-if="categories" :categories="categories" />
         <div class="text-center mt-3">
           <nuxt-link to="/posts/" class="btn btn-outline-secondary">ΔΕΙΤΕ ΟΛΕΣ ΤΙΣ ΑΓΓΕΛΙΕΣ</nuxt-link>
         </div>
       </div>
     </section>
-
     <section>
       <div class="container">
         <h2 class="text-center">Προωθημένες Αγγελίες</h2>
@@ -34,7 +33,7 @@
           <div v-for="post in premiumPosts" :key="post.id" class="col-md-3 mb-4">
             <nuxt-link :to="{ path: '/posts/view', query: { id: post.id } }" class="text-decoration-none">
               <div class="card h-100">
-                <img :src="`${$config.public.storageUrl }/${post.image0}`" class="card-img-top" style="height: 300px;" alt="Post Image">
+                <img :src="`${$config.public.storageUrl}/${post.image0}`" class="card-img-top" style="height: 300px;" alt="Post Image">
                 <div class="card-body">
                   <h5 class="card-title">{{ post.title }}</h5>
                   <p class="card-text">
@@ -60,6 +59,7 @@
     </section>
   </div>
 </template>
+
 <style scoped>
   .backgroundImage {
     background-image: url("/bg.jpg");
@@ -74,29 +74,31 @@
   }
 </style>
 
-<script>
-      export default defineNuxtComponent({
-        props:['loggedin'],
-        setup() {
-          const config = useRuntimeConfig();
-          return { config }
-        },
-        async asyncData () {
-          const config = useRuntimeConfig();
 
-          return {
-            premiumPosts: await $fetch(`${config.public.apiUrl}/vue/premiumPosts`)
-          }
-        },
-        methods: {
-          handleSearchSubmit() {
-            // Change the router's view programmatically
-            this.$router.push({ path: '/posts/' , query: { search: this.searchInputValue } });
-          },
-          truncatedDescription(description) {
-            let n = 100;
-            return (description.length > n) ? description.slice(0, n-1) + '...' : description;
-          },
-        }
-      })
+
+<script setup>
+  const { loggedin } = defineProps(['loggedin'])
+  const searchInputValue = ref('')
+
+  const handleSearchSubmit = () => {
+    // Change the router's view programmatically
+    const router = useRouter();
+    router.push({ path: '/posts' , query: { search: searchInputValue.value } });
+  }
+
+  const truncatedDescription = (description) => {
+    let n = 100;
+    return description.length > n ? description.slice(0, n - 1) + '...' : description;
+  }
+
+  // Fetch premiumPosts
+  const { data: premiumPostsData } = await useFetch('/api/premiumPosts');
+  const premiumPosts = premiumPostsData.value.posts;
+  // console.log(premiumPosts);
+
+  // Fetch categories
+  const { data: categoriesData } = await useFetch('/api/categories');
+  const categories = categoriesData.value.categories;
+  // console.log(categories);
+  
 </script>

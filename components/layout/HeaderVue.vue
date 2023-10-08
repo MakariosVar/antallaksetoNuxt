@@ -41,7 +41,9 @@
 
         <li class="nav-item dropdown" v-if="user && (user.role_id == 1 || user.role_id == 3)">
           <a class="nav-link dropdown-toggle" href="#" id="admin-dropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <font-awesome-icon icon="fa fa-gear" size="2x" />
+            <ClientOnly>
+              <font-awesome-icon icon="fa fa-gear" size="2x" />
+            </ClientOnly>
           </a>
           <div class="dropdown-menu dropdown-menu-end" aria-labelledby="admin-dropdown">
             <a :href="`${config.public.backendBasePath}/admin`" target="_blank" class="dropdown-item">
@@ -62,7 +64,9 @@
               <img style="max-width: 35px;" :src="`${config.public.storageUrl}/${profileImage}`" alt="User" class="rounded-circle" />
             </span>
             <span v-else>
-            <font-awesome-icon icon="fa-solid fa-circle-user"  size="2x"/>
+            <ClientOnly>
+              <font-awesome-icon icon="fa-solid fa-circle-user"  size="2x"/>
+            </ClientOnly>
             </span>
           </a>
           <div v-if="user" class="dropdown-menu dropdown-menu-end" aria-labelledby="user-dropdown">
@@ -106,12 +110,13 @@
       return{
           pending:0,
           unreadMessages: 0,
-          searchInputValue: '',
       }
     },
     setup() {
       const config = useRuntimeConfig();
+      const searchInputValue = ref('')
       return {
+        searchInputValue,
         config
       }
     },
