@@ -50,15 +50,15 @@
 
             if (storageUser && storageUser !== 'null') {
               storageUser = JSON.parse(storageUser);
-              const config = useRuntimeConfig();
-              const response = await $fetch(`${config.public.apiUrl}/vue/getuser/${storageUser.auth_token}`);
-              if (response.status === 'success') {
+              const response = await $fetch(`/api/getUser?auth_token=${storageUser.auth_token}`);
+
+              if (response.userData.status === 'success') {
                 if (process.client) {
-                  localStorage.setItem('user', JSON.stringify(response.user));
+                  localStorage.setItem('user', JSON.stringify(response.userData.user));
                 }
-                user.value = response.user;
+                user.value = response.userData.user;
                 loggedin.value = 1;
-              } else if (response.expired) {
+              } else if (response.userData.expired) {
                 user.value = null;
                 loggedin.value = 0;
               }
@@ -74,26 +74,26 @@
       };
 
       const googleApiKey = config.public.googleApiKey;
-      // onMounted(() => {
-      //     // Check if the Google Maps API script is loaded
-      //     if (typeof google === 'undefined') {
-      //         // Wait for it to load
-      //         const script = document.createElement('script');
-      //         script.src = `https://maps.googleapis.com/maps/api/js?key=${googleApiKey}&libraries=places`;
-      //         script.async = true;
-      //         script.defer = true;
-      //         script.onload = () => {
-      //             // Google Maps API script is now loaded, initialize the autocomplete component
-      //             // this.initializeAutocomplete();
-      //         };
-      //         if (process.client) {
-      //             document.head.appendChild(script);
-      //         }
-      //     } else {
-      //         // Google Maps API is already loaded, initialize the autocomplete component
-      //         // this.initializeAutocomplete();
-      //     }
-      // });
+      onMounted(() => {
+          // Check if the Google Maps API script is loaded
+          if (typeof google === 'undefined') {
+              // Wait for it to load
+              const script = document.createElement('script');
+              script.src = `https://maps.googleapis.com/maps/api/js?key=${googleApiKey}&libraries=places`;
+              script.async = true;
+              script.defer = true;
+              script.onload = () => {
+                  // Google Maps API script is now loaded, initialize the autocomplete component
+                  // this.initializeAutocomplete();
+              };
+              if (process.client) {
+                  document.head.appendChild(script);
+              }
+          } else {
+              // Google Maps API is already loaded, initialize the autocomplete component
+              // this.initializeAutocomplete();
+          }
+      });
 
       asyncData();
 
