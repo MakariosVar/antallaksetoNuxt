@@ -1,14 +1,23 @@
 <template>
-  <div class="container" :key="Date.now()">
+  <div class="container">
     <div class="row">
       <div class="col-12 py-3">
         <div class="d-flex flex-column align-items-center border bg-light mx-5 p-2">
           <h3>Αναζήτηση</h3>
           <form @submit.prevent="search" style="width: 70%;">
-            <div class="mb-3">
-              <input v-model="searchTitle" class="form-control form-control-lg" type="text" placeholder="Ψάχνω για..">
+            <div class="input-group mb-3">
+              <input v-model="searchTitle" @blur="search" class="form-control" type="text" placeholder="Ψάχνω για..">
+              <span v-if="searchTitle" class="input-group-text p-0">
+                <ClientOnly>
+                  <font-awesome-icon
+                   :icon="['fas', 'times']"
+                   class="btn" 
+                   @click="clearSearch"
+                  />
+                </ClientOnly>
+              </span>
             </div>
-            <div class="mb-3">
+            <div class="input-group mb-3">
               <select v-model="searchCategory" @change="search" id="category" class="form-select form-select-sm" name="category">
                 <option value="all">Όλες οι Κατηγορίες</option>
                 <option
@@ -19,6 +28,15 @@
                 {{ category.title + '(' + category.count + ')' }}
               </option>
             </select>
+            <span v-if="searchCategory && searchCategory != 'all'" class="input-group-text p-0">
+              <ClientOnly>
+                <font-awesome-icon
+                  :icon="['fas', 'times']"
+                  class="btn" 
+                  @click="clearCategory"
+                />
+              </ClientOnly>
+            </span>
           </div>
             <div class="">
               <button type="submit" class="btn btn-primary">Αναζήτηση</button>
@@ -28,9 +46,6 @@
       </div>
     </div>
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-      <!-- 2222 
-      
-      22222 -->
       <nuxt-link v-for="post in posts.data" :key="post.id" :to="{ path: '/posts/view', query: { id: post.id } }" class="col post">
         <div class="card h-100">
           <img :src="`${$config.public.storageUrl}/${post.image0}`" class="card-img-top" style="height: 300px;" alt="Post Image">
@@ -40,9 +55,6 @@
           </div>
         </div>
       </nuxt-link>
-      <!-- 22222
-      
-      2222-->
     </div>
   </div>
 </template>
@@ -53,15 +65,12 @@
     current_page: 1,
     last_page: 1,
   });
+  const route = useRoute();
 
-  
   const loadingMorePosts = ref(false);
-  const searchTitle = ref('');
-  const searchCategory = ref('all');
-  const Loaded = ref(false);
+  const searchTitle = ref(route?.query?.search ?? '');
+  const searchCategory = ref(route?.query?.category ?? 'all');
   const page = ref(0);
-
-  const config = useRuntimeConfig();
 
   const fetchPosts = async () => {
     page.value++;
@@ -80,8 +89,16 @@
   };
 
   const search = async () => {
-    // Reset page value to 1 when performing a new search.
     page.value = 1;
+    const router = useRouter();
+    const queryParams = {
+      page: page.value,
+      category: searchCategory.value,
+      search: searchTitle.value
+    };
+    router.push({ query: queryParams });
+
+    // Reset page value to 1 when performing a new search.
     try {
       const { data: postData } = await useFetch(`/api/posts?page=${page.value}&category=${searchCategory.value}&q=${searchTitle.value}`);
       const response = postData.value.posts_all;
@@ -90,6 +107,15 @@
       console.error(error);
     }
   };
+
+  const clearSearch = () => {
+    searchTitle.value = ""
+    search();
+  }
+  const clearCategory = () => {
+    searchCategory.value = "all"
+    search();
+  }
 
   const fetchMorePosts = async () => {
     if (loadingMorePosts.value) {

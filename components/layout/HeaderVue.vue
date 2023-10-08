@@ -35,7 +35,7 @@
       <ul class="navbar-nav ms-auto">
         <li class="nav-item" v-if="!isPostPage">
           <form class="form-inline my-2 my-lg-0" @submit.prevent="handleSubmit">
-            <input v-model="searchInputValue" class="form-control mr-sm-2" type="search" placeholder="Αναζήτηση..." aria-label="Search">
+            <input v-model="headerSearchInputValue" class="form-control mr-sm-2" type="search" placeholder="Αναζήτηση..." aria-label="Search">
           </form>
         </li>
 
@@ -114,9 +114,9 @@
     },
     setup() {
       const config = useRuntimeConfig();
-      const searchInputValue = ref('')
+      const headerSearchInputValue = ref('')
       return {
-        searchInputValue,
+        headerSearchInputValue,
         config
       }
     },
@@ -126,7 +126,7 @@
       },
       handleSubmit() {
         // Change the router's view programmatically
-        this.$router.push({ path: '/posts/' , query: { search: this.searchInputValue } });
+        this.$router.push({ path: '/posts/' , query: { search: this.headerSearchInputValue } });
       },
       async logout() {
         const response = await fetch(`${this.config.public.apiUrl}/vuelogout`, {

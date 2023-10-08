@@ -2,7 +2,7 @@
   <div>
     <span class="d-flex flex-column" style="min-height: 100vh;">
       <LayoutHeaderVue :loggedin="loggedin" :user="user" />
-      <router-view 
+      <NuxtPage 
         @userLogged="setUser($event)"
         @sessionExpired="sessionExpired"
         :loggedin="loggedin"
