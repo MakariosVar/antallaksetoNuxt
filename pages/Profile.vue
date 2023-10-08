@@ -1,30 +1,17 @@
 <template>
-  <div class="container mt-4" :key="profile.id">
+  <div v-if="profile" class="container mt-4" :key="profile.id">
     <div class="row">
       <div class="col-md-4">
-        <ProfileInfo 
-          :profile="profile"
-          :profileUser="profileUser"
-          :user="user"
-          :isMine="isMine"
-          @sessionExpired="sessionExpired"
-          @updateProfileImage="updateProfileImage"
-          @followClick="followClick"
-        />
+        <ProfileInfo v-if="profile && profileUser" :profile="profile" :profileUser="profileUser" :user="user"
+          :isMine="isMine" @sessionExpired="sessionExpired" @updateProfileImage="updateProfileImage"
+          @followClick="followClick" />
         <div v-if="user && user.id !== profile.user_id" class="card text-center my-2">
           <div class="card-body">
             <h1>Αφήστε Σχόλιο</h1>
             <form @submit.prevent="addComment" id="Comment">
               <div class="form-group">
-                <input
-                  v-model="commentInput"
-                  id="comment"
-                  type="text"
-                  class="form-control"
-                  name="comment"
-                  autocomplete="comment"
-                  autofocus
-                >
+                <input v-model="commentInput" id="comment" type="text" class="form-control" name="comment"
+                  autocomplete="comment" autofocus>
                 <span class="invalid-feedback" role="alert">
                   <strong>{{ message }}</strong>
                 </span>
@@ -42,31 +29,35 @@
           </div>
         </div>
       </div>
-      <ProfileDescription @sessionExpired="sessionExpired" :profileUser="profileUser" :profile="profile" :isMine="isMine" :user="user"/>
+      <ProfileDescription v-if="profile && profileUser" @sessionExpired="sessionExpired" :profileUser="profileUser"
+        :profile="profile" :isMine="isMine" :user="user" />
     </div>
-    <div class="mt-4 text-center">
+    <div v-if="comments && comments.length" class="mt-4 text-center">
       <h1><strong>Σχόλια</strong></h1>
       <hr>
     </div>
     <div v-for="comment in comments" :key="comment.id" class="card mb-3 text-center">
-        <nuxt-link :to="'/profile?id=' + comment.user_id"><h3 class="blue">{{ comment.commentersname }}</h3></nuxt-link>
-        <p>
-          <span>{{ comment.comment }}</span>
-        </p>
-        <span style="font-size:13px;">{{ comment.date }}</span>
-        <form @submit.prevent="deletecomment(comment.id)" v-if="user">
-          <button v-if="user.id === comment.user_id" type="submit" class="btn btn-link">Delete</button>
-        </form>
-      </div>
+      <nuxt-link :to="'/profile?id=' + comment.user_id">
+        <h3 class="blue">{{ comment.commentersname }}</h3>
+      </nuxt-link>
+      <p>
+        <span>{{ comment.comment }}</span>
+      </p>
+      <span style="font-size:13px;">{{ comment.date }}</span>
+      <form @submit.prevent="deletecomment(comment.id)" v-if="user">
+        <button v-if="user.id === comment.user_id" type="submit" class="btn btn-link">Delete</button>
+      </form>
+    </div>
     <div class="mt-4 text-center">
       <h1><strong>Αγγελίες</strong></h1>
       <hr>
     </div>
     <div v-if="posts.length > 0" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
-      <div v-for="post in filteredPosts" :key="post.id" class="col mb-4">
+      <div v-for="post in filteredPosts" :key="post.id" class="col-3 mb-4">
         <div class="card h-100">
           <nuxt-link :to="`posts/view?id=${post.id}`">
-            <img :src="`${config.public.storageUrl}/${post.image0}`" class="card-img-top" style="height: 300px;" alt="Post Image">
+            <img :src="`${config.public.storageUrl}/${post.image0}`" class="card-img-top" style="height: 300px;"
+              alt="Post Image">
             <div class="card-body">
               <h5 class="card-title">{{ post.title }}</h5>
               <p v-if="!(post.verified === 1)" class="card-text text-danger">ΠΡΟΣ ΕΓΚΡΙΣΗ</p>
@@ -103,41 +94,43 @@
 
 
 <script>
-  export default {
-    props: [ 'user'],
-    data() {
-      return {
-        commentExists: false,
-        commentInput: '',
-        profile: {},
-        profileUser: {},
-        comments: {}, 
-        posts: {},
-        Loaded: false,
+export default {
+  props: ['user'],
+  data() {
+    return {
+      commentExists: false,
+      commentInput: '',
+      profile: {},
+      profileUser: null,
+      comments: {},
+      posts: [],
+      Loaded: false,
+    }
+  },
+  setup() {
+    const config = useRuntimeConfig();
+    return { config }
+  },
+  methods: {
+    sessionExpired() {
+      this.$emit('sessionExpired', true);
+    },
+    async deletecomment(id) {
+      try {
+        const response = await fetch(`${this.config.public.apiUrl}/deletecomment/${id}`, {
+          method: 'POST',
+        });
+        const data = await response.json();
+        if (data.status === 'success') {
+          this.getComments();
+        }
+      } catch (error) {
+        console.error('An error occurred:', error);
       }
     },
-    setup () {
-			const config = useRuntimeConfig();
-      return { config }
-    },
-    methods:{
-      sessionExpired() {
-        this.$emit('sessionExpired', true);
-      },
-      async deletecomment(id) {
-        try {
-          const response = await fetch(`${this.config.public.apiUrl}/deletecomment/${id}`, {
-            method: 'POST',
-          });
-          const data = await response.json();
-          if (data.status === 'success') {
-            this.getComments();
-          }
-        } catch (error) {
-          console.error('An error occurred:', error);
-        }
-      },
-      async getProfileData() {
+    async getProfileData() {
+      if (this.user && this.user.auth_token) {
+
         let token = this.user.auth_token
         try {
           const response = await fetch(`${this.config.public.apiUrl}/vue/profile/${this.$route.query.id}/${token}`, {
@@ -159,49 +152,46 @@
             this.Loaded = true;
           }
         } catch (error) {
+          console.error(error)
         }
-      },
-      async getComments() {
+      }
+    },
+    async getComments() {
+      try {
+        const response = await fetch(`${this.config.public.apiUrl}/vue/getcomments/${this.$route.query.id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const data = await response.json();
+
+        if (data.status === 'success') {
+          this.comments = data.comments;
+        }
+      } catch (error) {
+        console.error('An error occurred:', error);
+      }
+    },
+    async getPosts() {
+      if (this.profileUser) {
         try {
-          const response = await fetch(`${this.config.public.apiUrl}/vue/getcomments/${this.$route.query.id}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
+          const { data: myPostsData } = await useFetch(`/api/myPosts?user_id=${this.profileUser.id}`);
+          const response = myPostsData.value.postsResponse;
 
-          const data = await response.json();
 
-          if (data.status === 'success') {
-            this.comments = data.comments;
+          if (response.status === 'success') {
+            this.posts = response.posts;
           }
         } catch (error) {
           console.error('An error occurred:', error);
         }
-      },
-      async getPosts() {
-        if (this.profileUser) {
-          try {
-            const response = await fetch(`${this.config.public.apiUrl}/vue/myposts/${this.$route.query.id}`, {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            });
-
-            const data = await response.json();
-
-            if (data.status === 'success') {
-              this.posts = data.posts;
-            }
-          } catch (error) {
-            console.error('An error occurred:', error);
-          }
-        }
-      },
-      async addComment() {
-        if (this.commentInput != '') {  
-          try {
+      }
+    },
+    async addComment() {
+      if (this.commentInput != '') {
+        try {
 
           const response = await fetch(`${this.config.public.apiUrl}/c/store`, {
             method: 'POST',
@@ -212,66 +202,65 @@
             })
           });
 
-            const data = await response.json();
-            if (data.status === 'success') {
-              this.commentExists = false
-              this.getComments();
-            } else if (data.expired) {
-              this.sessionExpired();
-            } else if (data.commentExist) {
-              this.commentExists = true
-            } else {
-              alert('Προσπαθήστε ξανά');
-            }
-          } catch (error) {
-            console.error('An error occurred:', error);
+          const data = await response.json();
+          if (data.status === 'success') {
+            this.commentExists = false
+            this.getComments();
+          } else if (data.expired) {
+            this.sessionExpired();
+          } else if (data.commentExist) {
+            this.commentExists = true
+          } else {
+            alert('Προσπαθήστε ξανά');
           }
+        } catch (error) {
+          console.error('An error occurred:', error);
         }
-      },
-      followClick(){
-        if(!(this.profile.follows))
-        {
-          this.profile.follows = true;
-          this.profile.followersCount += 1;
-        } else {
-          this.profile.follows = false;
-          this.profile.followersCount -= 1; 
-        } 
-      },
-      updateProfileImage (event) {
-        this.profile.image = event
       }
     },
-    computed: {
-      isMine() {
-        return this.user && (this.user.id == this.profileUser.id);
-      },
-      filteredPosts() {
-        return this.posts.filter(post => {
-          return this.user && (this.user.id === post.user_id || post.verified === 1);
-        });
-      },
+    followClick() {
+      if (!(this.profile.follows)) {
+        this.profile.follows = true;
+        this.profile.followersCount += 1;
+      } else {
+        this.profile.follows = false;
+        this.profile.followersCount -= 1;
+      }
     },
-    created(){
+    updateProfileImage(event) {
+      this.profile.image = event
+    }
+  },
+  computed: {
+    isMine() {
+      return this.user && (this.user.id == this.profileUser.id);
+    },
+    filteredPosts() {
+      return this.posts.filter(post => {
+        return this.user && (this.user.id === post.user_id || post.verified === 1);
+      });
+    },
+  },
+  async created() {
     // Watch for changes in the route query's "id"
-      this.$watch(
+    this.$watch(
       () => this.$route.query.id,
-        (newId, oldId) => {
-          if (newId !== oldId) {
-            if (newId) {
-              // Route query "id" has changed, fetch new data
-              this.getProfileData();
-              this.getPosts();
-              this.getComments();
-            }
+      async (newId, oldId) => {
+        if (newId !== oldId) {
+          if (newId) {
+            // Route query "id" has changed, fetch new data
+            await this.getProfileData();
+            await this.getPosts();
+            await this.getComments();
           }
         }
-      );
+      }
+    );
 
-      // Initial data fetch
-      this.getProfileData();
-      this.getPosts();
-      this.getComments();
-    }
+    // Initial data fetch
+    await this.getProfileData();
+    await this.getPosts();
+    await this.getComments();
   }
+}
 </script>
