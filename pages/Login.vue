@@ -11,11 +11,17 @@
                 <div class="card">
                     <div class="card-header text-center">Σύνδεση</div>
                     <div class="card-body">
+                        <div v-if="showLoginError" class="alert alert-danger d-flex align-items-center" role="alert">
+                            <font-awesome-icon :icon="['fas', 'triangle-exclamation']" class="me-2" size="2x" />
+                            <div>
+                                Λάθος Κωδικός ή email
+                            </div>
+                        </div>
                         <form @submit.prevent="checkForm" id="Login">
                             <div class="form-group row">
                                 <label for="email" class="col-md-4 col-form-label text-md-right">E-Mail</label>
                                 <div class="col-md-6">
-                                    <input id="email" type="email" class="form-control" name="email" required
+                                    <input id="email" v-model="emailInput" type="email" class="form-control" name="email" required
                                         autocomplete="email" autofocus>
                                 </div>
                             </div>
@@ -23,7 +29,7 @@
                                 <label for="password" class="col-md-4 col-form-label text-md-right">Κωδικός
                                     πρόσβασης</label>
                                 <div class="col-md-6">
-                                    <input id="password" type="password" class="form-control" name="password" required
+                                    <input v-model="passwordInput" id="password" type="password" class="form-control" name="password" required
                                         autocomplete="current-password">
                                 </div>
                             </div>
@@ -60,9 +66,15 @@
 <script>
 export default {
     props: ['loggedin'],
+    data() {
+        return {
+            showLoginError: false,
+            passwordInput: '',
+            emailInput: ''
+        }
+    },
     mounted() {
         if (this.loggedin) {
-            alert('Είστε ήδη συνδεδεμένος/η \n Μεταβείτε στην αρχική');
             location.replace('/home');
         }
     },
@@ -76,33 +88,23 @@ export default {
         return { config }
     },
     methods: {
-        async checkForm(e) {
-            e.preventDefault();
+        async checkForm() {
             var formContents = new FormData(document.getElementById('Login'));
 
             try {
-                const response = await fetch(this.config.public.apiUrl + '/vuelogin', {
-                    method: 'POST',
-                    body: formContents,
-                });
+                const response = await useFetch(`/api/login?email=${this.emailInput}&password=${this.passwordInput}`);
 
-                if (response.status === 200) {
-                    const data = await response.json();
-                    if (data.status === 'success') {
-                        let user = data.user;
+                const data = response.data.value.loginData;
+                if (data.status === 'success') {
+                    let user = data.user;
 
-                        this.$emit('userLogged', user);
-                        if (process.client) {
-                            location.replace('/home');
-                        }
-                    } else if (data.status === 'error') {
-                        alert('Το email και ο κωδικός δεν ταιριάζουν, Προσπαθήστε ξανά');
-                    } else {
-                        await fetch(this.config.public.apiUrl + '/vuelogout');
-                        this.checkForm();
+                    this.$emit('userLogged', user);
+                    if (process.client) {
+                        location.replace('/home');
                     }
-                } else {
-                    console.error('Failed to fetch');
+                } else if (data.status === 'error') {
+                    this.showLoginError = true;
+                    this.passwordInput = ''
                 }
             } catch (error) {
                 console.error('Error:', error);
