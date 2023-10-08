@@ -16,25 +16,17 @@
 </template>
 
 <script>
-    export default defineNuxtComponent({
-        props: ['post'],
-        data() {
-            return {
-                posts: []
-            }
-        },
-        methods: {
-            async getRelatedPosts() {
-                const response = await fetch(`${this.$config.public.apiUrl}/p/related/${this.post.id}`)
-                const data = await response.json();
-                
-                if (data.status === 'success') {
-                    this.posts = data.posts
-                }
-            }
-        },
-        mounted() {
-            this.getRelatedPosts()  
-        },
-    })
+    export default {
+        props: ['post']
+    }
+</script>
+<script setup>
+    const route = useRoute();
+    const posts = ref([])
+    // Fetch related posts
+    const { data: postsData } = await useFetch(`/api/relatedPosts?id=${route.query.id}`);
+    const response = postsData.value.posts;
+    if (response.status === 'success'){
+        posts.value = response.posts;
+    }
 </script>

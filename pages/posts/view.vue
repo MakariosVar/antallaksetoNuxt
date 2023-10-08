@@ -147,6 +147,10 @@ const deletePost = async () => {
 	}
 };
 
+// Watch for changes in route.query.id and trigger getPostData accordingly
+watch(() => route.query.id, () => {
+  getPostData();
+});
 
 
 </script>
