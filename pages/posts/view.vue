@@ -1,6 +1,5 @@
 <template>
-	<div v-if="post && (post.reEdit || !post.verified) && user.id != post.user_id"
-		:key="post.id"
+	<div v-if="post && (post.reEdit || !post.verified) && user && user.id != post.user_id" :key="post.id"
 		class="pageMinFit  d-flex flex-column align-items-center my-5 py-5">
 		<p class="h2 loadingText"> Φόρτωση</p>
 		<div class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
@@ -44,9 +43,10 @@
 							αγγελίας
 							και θα την επαναξετάσουμε
 						</p>
-						<div v-if="this.loggedin && this.user.id == post.user_id" class="text-center">
+						<div v-if="loggedin && user.id == post.user_id" class="text-center">
 							<p>
-								<router-link class="btn btn-outline-primary text-center" :to="{path: '/posts/edit', query: {id: this.post.id}}">Επεξεργασία</router-link>
+								<router-link class="btn btn-outline-primary text-center"
+									:to="{ path: '/posts/edit', query: { id: post.id } }">Επεξεργασία</router-link>
 							</p>
 						</div>
 						<p class="small text-center">
@@ -86,9 +86,10 @@
 					<p class="postText">
 						<small><strong>Ημερομηνία:</strong> {{ post.date }}</small>
 					</p>
-					<div v-if="this.loggedin && this.user.id == post.user_id" class="text-center">
+					<div v-if="loggedin && user.id == post.user_id" class="text-center">
 						<div>
-							<button @click="() => {$router.push({path: '/posts/edit', query: {id: post.id}})}" class="btn btn-outline-primary ml-3 mx-1">
+							<button @click="() => { $router.push({ path: '/posts/edit', query: { id: post.id } }) }"
+								class="btn btn-outline-primary ml-3 mx-1">
 								Επεξεργασία
 							</button>
 							<button type="submit" @click="deletePost" class="btn btn-outline-danger ml-3 mx-1">
@@ -99,64 +100,53 @@
 				</div>
 			</div>
 		</div>
-		<PostRelated :post="post" :key="post.id"/>
+		<PostRelated :post="post" :key="post.id" />
 	</div>
 </template>
-
 <script>
-export default defineNuxtComponent({
-	props: ['user', 'loggedin'],
-	data() {
-		return {
-			post: {},
-			loaded: false,
-		};
-	},
-	setup() {
-		const config = useRuntimeConfig();
-		return { config };
-	},
-	watch: {
-		$route: function (newRoute, oldRoute) {
-			if (newRoute.query.id != oldRoute.query.id) {
-				this.getPostData();
-			}
+	export default {
+		props: ['loggedin', 'user'],
+	}
+</script>
+<script setup>
+
+const config = useRuntimeConfig();
+const post = ref({});
+const loaded = ref(false);
+const route = useRoute();
+const router = useRouter();
+
+const getPostData = async () => {
+	const response = await $fetch("/api/post?id=" + route.query.id);
+	const data = response.post;
+	if (data.status == "success") {
+		post.value = data.post;
+		loaded.value = true;
+	}
+};
+await getPostData();
+
+const deletePost = async () => {
+	if (confirm("Πατόντας ΟΚ η αγγελία θα διαγραφεί, είστε σίγουροι;") == true) {
+		const response = await fetch(`${config.value.public.apiUrl}/p/${post.value.id}/${props.user.auth_token}`, {
+			method: 'DELETE',
+		});
+		const data = await response.json();
+		if (data.status === 'success') {
+			router.push({ name: 'Profile', query: { id: props.user.id } });
 		}
-	},
-	methods: {
-		async getPostData() {
-			const response = await fetch(
-				this.config.public.apiUrl + "/vue/post/" + this.$route.query.id
-			);
-			const data = await response.json();
-			if (data.status == "success") {
-				this.post = data.post;
-				this.loaded = true;
-			}
-		},
-		async deletePost() {
-			if (confirm("Πατόντας ΟΚ η αγγελία θα διαγραφεί, είστε σίγουροι;") == true) {
-				const response = await fetch (`${this.config.public.apiUrl}/p/${this.post.id}/${this.user.auth_token}`, {
-					method: 'DELETE',
-				})
-				const data = await response.json();
-				if (data.status === 'success') {
-					this.$router.push({name: 'Profile', query: {id: this.user.id}})
-				}
-				if (data.unauthorized) {
-					this.$emit('sessionExpired')
-				}
-				if (data.expired) {
-					this.$emit('sessionExpired')
-				}
-				if (data.post_not_found) {
-					this.$router.push({name: 'Home'})
-				}
-			}
-		},
-	},
-	created() {
-		this.getPostData();
-	},
-});
+		if (data.unauthorized) {
+			$emit('sessionExpired');
+		}
+		if (data.expired) {
+			$emit('sessionExpired');
+		}
+		if (data.post_not_found) {
+			router.push({ name: 'Home' });
+		}
+	}
+};
+
+
+
 </script>

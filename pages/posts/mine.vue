@@ -1,5 +1,5 @@
 <template>
-    <div :key="id">
+    <div>
         <div v-if="!posts" class="pageMinFit text-center">
             <div class="d-flex justify-content-center">
                 <img src="~assets/images/NewLogoPNG.svg" class="imageNotFound">
@@ -40,38 +40,31 @@
 
 
 <script setup>
+    const config = useRuntimeConfig()
+    const posts = ref([])
+    
+    const props = defineProps({
+        user: {
+            type: Object,
+        }
+    })
 
-const config = useRuntimeConfig()
-const route = useRoute()
-const router = useRouter()
-const id = route.query.id ? String(route.query.id) : ''
-const posts = ref([])
-var wrongId = false;
+    if (!props.user) {
+        const router = useRouter()
 
-const props = defineProps({
-  user: Object
-})
-
-let response; // Define response variable here
-
-onMounted(async () => {
-    if (props.user.id != id) {
-        router.push({ path: '/posts/mine', query: { id: props.user.id } })
-        wrongId = true;
+        router.push({ path: '/home'})
     }
+
     try {
-        if (wrongId) {
-            response = await fetch(`${config.public.apiUrl}/vue/myposts/${props.user.id}`)
-        } else {
-            response = await fetch(`${config.public.apiUrl}/vue/myposts/${id}`)
+        const {data: myPostsData} = await useFetch(`/api/myPosts?user_id=${props.user.id}`);
+        const response = myPostsData.value.postsResponse;
+
+        if (response.status == 'success') {
+            posts.value = response.posts;
         }
-        if (!response.ok) {
-            throw new Error('Failed to fetch data')
-        }
-        const data = await response.json()
-        posts.value = data.posts
     } catch (error) {
         console.error('Error fetching data:', error)
     }
-})
+
+  
 </script>

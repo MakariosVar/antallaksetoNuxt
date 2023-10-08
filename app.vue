@@ -30,7 +30,7 @@
         }
       }
     },
-    setup() {
+    async setup() {
       const config = useRuntimeConfig();
       const user = ref(null);
       const loggedin = ref(0);
@@ -95,7 +95,7 @@
           }
       });
 
-      asyncData();
+      await asyncData();
 
       return {
         user,
