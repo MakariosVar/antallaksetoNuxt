@@ -1,5 +1,5 @@
 <template>
-    <div class="row">
+    <div class="row" v-if="posts && posts.length">
         <div class="col-12">
             <h5 class="text-decoration-underline">Σχετικές Αγγελίες</h5>
         </div>
