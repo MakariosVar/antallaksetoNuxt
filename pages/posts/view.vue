@@ -92,7 +92,7 @@
 								class="btn btn-outline-primary ml-3 mx-1">
 								Επεξεργασία
 							</button>
-							<button type="submit" @click="deletePost" class="btn btn-outline-danger ml-3 mx-1">
+							<button type="submit" @click="deletePost(post.id, user)" class="btn btn-outline-danger ml-3 mx-1">
 								Διαγραφή
 							</button>
 						</div>
@@ -126,14 +126,12 @@ const getPostData = async () => {
 };
 await getPostData();
 
-const deletePost = async () => {
+const deletePost = async (id, user) => {
 	if (confirm("Πατόντας ΟΚ η αγγελία θα διαγραφεί, είστε σίγουροι;") == true) {
-		const response = await fetch(`${config.value.public.apiUrl}/p/${post.value.id}/${props.user.auth_token}`, {
-			method: 'DELETE',
-		});
-		const data = await response.json();
+		const response = await $fetch(`/api/deletePost?id=${id}&auth_token=${user.auth_token}`);
+		const data = response.deleteResponse
 		if (data.status === 'success') {
-			router.push({ name: 'Profile', query: { id: props.user.id } });
+			router.push({ name: 'Profile', query: { id: user.id } });
 		}
 		if (data.unauthorized) {
 			$emit('sessionExpired');

@@ -141,7 +141,6 @@
       async getPendingPosts(){ 
           const response = await fetch(`${this.config.public.apiUrl}/vue/toverificate/${this.user.auth_token}`);
           const data = await response.json()
-          console.log(data)
           this.pending = data.length ?? 0;
           
       },
