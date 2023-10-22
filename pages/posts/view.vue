@@ -32,9 +32,9 @@
 				</div>
 				<div class="col-md-12 col-lg-7 text-center text-lg-start">
 					<p class="postText">
-						<strong>{{ post.title }}</strong><span v-if="post.verified == 0" class="text-danger"><i> ( ΔΕΝ ΕΧΕΙ
-								ΕΓΚΡΙΘΕΙ ΑΚΟΜΑ
-								)</i></span>
+						<strong>{{ post.title }}</strong>
+						<span v-if="post.done" class="badge bg-success">ΟΛΟΚΛΗΡΩΜΕΝΗ</span>
+						<span v-if="post.verified == 0" class="text-danger"><i> ( ΔΕΝ ΕΧΕΙ ΕΓΚΡΙΘΕΙ ΑΚΟΜΑ )</i></span>
 					</p>
 					<div v-if="post.reEdit == 1" class="border m-3 border-danger rounded">
 						<p class="text-center">
@@ -88,7 +88,11 @@
 					</p>
 					<div v-if="loggedin && user.id == post.user_id" class="text-center">
 						<div>
-							<button @click="() => { $router.push({ path: '/posts/edit', query: { id: post.id } }) }"
+							<button v-if="!post.done" @click="postCompleted(post.id, user)"
+								class="btn btn-outline-success ml-3 mx-1">
+								Ολοκληρώθηκε
+							</button>
+							<button v-if="!post.done" @click="() => { $router.push({ path: '/posts/edit', query: { id: post.id } }) }"
 								class="btn btn-outline-primary ml-3 mx-1">
 								Επεξεργασία
 							</button>
@@ -125,6 +129,25 @@ const getPostData = async () => {
 	}
 };
 await getPostData();
+
+const postCompleted = async (id, user) => {
+	if (confirm("Πατόντας ΟΚ η αγγελία θα επισημοποιηθεί ως ολοκληρωμένη, είστε σίγουροι;") == true) {
+		const response = await $fetch(`/api/postDone?id=${id}&auth_token=${user.auth_token}`);
+		const data = response.doneResponse
+		if (data.status === 'success') {
+			router.push({ name: 'Profile', query: { id: user.id } });
+		}
+		if (data.unauthorized) {
+			$emit('sessionExpired');
+		}
+		if (data.expired) {
+			$emit('sessionExpired');
+		}
+		if (data.post_not_found) {
+			router.push({ name: 'Home' });
+		}
+	}
+}
 
 const deletePost = async (id, user) => {
 	if (confirm("Πατόντας ΟΚ η αγγελία θα διαγραφεί, είστε σίγουροι;") == true) {

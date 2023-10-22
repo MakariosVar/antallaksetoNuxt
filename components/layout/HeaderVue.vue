@@ -126,7 +126,8 @@
       },
       handleSubmit() {
         // Change the router's view programmatically
-        this.$router.push({ path: '/posts/' , query: { search: this.headerSearchInputValue } });
+        this.$router.push({ path: '/posts' , query: { search: this.headerSearchInputValue } });
+        this.headerSearchInputValue = ""
       },
       async logout() {
         const response = await fetch(`${this.config.public.apiUrl}/vuelogout`, {
@@ -139,18 +140,15 @@
         }
       },
       async getPendingPosts(){ 
-          const response = await fetch(`${this.config.public.apiUrl}/vue/toverificate/${this.user.auth_token}`);
-          const data = await response.json()
-          this.pending = data.length ?? 0;
-          
+          let response = await $fetch(`/api/postsToVerificate?token=${this.user.auth_token}`);
+          this.pending = response.post ? response.post.length : 0;
       },
       async getUnreadMessages(){ 
-          const response = await fetch(`${this.config.public.apiUrl}/vue/unreadmessages/${this.user.auth_token}`);
-          const data = await response.json()
-          this.unreadMessages = data.totalUnreadMessages ?? 0;
+          let response = await $fetch(`/api/unreadMessages?token=${this.user.auth_token}`);
+          this.unreadMessages = response.totalUnreadMessages ?? 0;
       },
     },
-    created (){
+    mounted (){
       if (this.user && this.user.role_id == 1) { 
         // Call the method initially
         this.getUnreadMessages();

@@ -172,6 +172,15 @@
       searchTitle.value = useRoute().query.search;
     }
   };
+  watch(
+      () => route.query,
+      (newQuery) => {
+        if (newQuery.search) {
+          searchTitle.value = newQuery.search;
+          search();
+        }
+      }
+    );
   
   
   onMounted(async() => {

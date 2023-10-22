@@ -83,9 +83,8 @@ export default {
 	},
 	methods: {
 		async getPosts() {
-			const response = await fetch(`${this.config.public.apiUrl}/vue/toverificate/${this.user.auth_token}`)
-			const data = await response.json();
-			this.posts = data;
+			let response = await $fetch(`/api/postsToVerificate?token=${this.user.auth_token}`);
+			this.posts = response.post;
 			this.loaded = true
 		},
 		async verificate(param) {

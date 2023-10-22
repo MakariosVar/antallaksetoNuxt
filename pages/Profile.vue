@@ -60,6 +60,7 @@
               alt="Post Image">
             <div class="card-body">
               <h5 class="card-title">{{ post.title }}</h5>
+						  <span v-if="post.done" class="card-text badge bg-success">ΟΛΟΚΛΗΡΩΜΕΝΗ</span>
               <p v-if="!(post.verified === 1)" class="card-text text-danger">ΠΡΟΣ ΕΓΚΡΙΣΗ</p>
             </div>
           </nuxt-link>
@@ -80,12 +81,6 @@
       <h3>Καμία αγγελία.</h3>
       <div v-if="user && user.id === profile.user_id">
         <nuxt-link to="/p/create">Δημιουργήστε την πρώτη σας αγγελία.</nuxt-link>
-      </div>
-    </div>
-    <div v-if="comments.length > 0">
-      <div class="mt-4 text-center">
-        <h1><strong>Σχόλια</strong></h1>
-        <hr>
       </div>
     </div>
   </div>
@@ -133,14 +128,9 @@ export default {
 
         let token = this.user.auth_token
         try {
-          const response = await fetch(`${this.config.public.apiUrl}/vue/profile/${this.$route.query.id}/${token}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
+          const response = await $fetch(`/api/getProfile?id=${this.$route.query.id}&auth_token=${token}`);
 
-          const data = await response.json();
+          const data = response.profileResponse;
 
           if (data.status === 'success') {
             this.profile = data.profile[0];
@@ -158,14 +148,9 @@ export default {
     },
     async getComments() {
       try {
-        const response = await fetch(`${this.config.public.apiUrl}/vue/getcomments/${this.$route.query.id}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+        const response = await $fetch(`/api/getComments?id=${this.$route.query.id}`);
 
-        const data = await response.json();
+        const data = response.commentsResponse;
 
         if (data.status === 'success') {
           this.comments = data.comments;
@@ -193,16 +178,9 @@ export default {
       if (this.commentInput != '') {
         try {
 
-          const response = await fetch(`${this.config.public.apiUrl}/c/store`, {
-            method: 'POST',
-            body: new URLSearchParams({
-              comment: this.commentInput,
-              auth_token: this.user.auth_token,
-              profile_id: this.profile.id
-            })
-          });
+          const response = await $fetch(`/api/addComment?comment=${this.commentInput}&token=${this.user.auth_token}&profile_id=${this.profile.id}`);
 
-          const data = await response.json();
+          const data = response.commentsResponse;
           if (data.status === 'success') {
             this.commentExists = false
             this.getComments();

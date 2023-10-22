@@ -34,16 +34,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row">
-                                <div class="col-md-6 offset-md-4">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="remember" id="remember">
-                                        <label class="form-check-label" for="remember">Να με θυμάσαι</label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-8 offset-md-4">
+                            <div class="col-md-12 text-center">
                                 <button type="submit" class="btn btn-success">Σύνδεση</button>
                             </div>
                             <div>
