@@ -60,8 +60,8 @@
 
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="user-dropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span v-if="profileImage">
-              <img style="max-width: 35px;" :src="`${config.public.storageUrl}/${profileImage}`" alt="User" class="rounded-circle" />
+            <span v-if="profileImage.length">
+              <img style="max-width: 35px;" :src="profileImage" alt="User" class="rounded-circle" />
             </span>
             <span v-else>
             <ClientOnly>
@@ -110,6 +110,7 @@
       return{
           pending:0,
           unreadMessages: 0,
+          profileImage: '',
       }
     },
     setup() {
@@ -147,8 +148,23 @@
           let response = await $fetch(`/api/unreadMessages?token=${this.user.auth_token}`);
           this.unreadMessages = response.totalUnreadMessages ?? 0;
       },
+      async fetchProfileImage () {
+        if (this.user && this.user.profile_image) {
+          try {
+              const response = await $fetch(`/api/image?image=${this.user.profile_image}`);
+              const imageRes = response.imageRes; 
+  
+              if (imageRes) {
+                  this.profileImage = `data:image/jpeg;base64,${imageRes}`;
+              }
+          } catch (error) {
+              console.error('Error fetching image:', error);
+          }
+        }
+      }
     },
     mounted (){
+      this.fetchProfileImage();
       if (this.user && this.user.role_id == 1) { 
         // Call the method initially
         this.getUnreadMessages();
@@ -162,9 +178,6 @@
       }
     },
     computed:{
-      profileImage() {
-        return (this.user && this.user.profile_image) ? this.user.profile_image : false;
-      },
       isPostPage() {
         return this.$route.path === '/p';
       }, 

@@ -9,12 +9,14 @@
                     </div>
                 </span>
                 <span v-else>
-                    <img :src="`${config.public.storageUrl}/${profile.image}`" class="rounded-circle mine-profile-image" width="150">
+                    <img v-if="!profileImage" src="~assets/images/default.png" class="rounded-circle" width="150">
+                    <img v-else :src="profileImage" class="rounded-circle mine-profile-image" width="150">
                     <span class="overlay-text">Επιλέξε Φωτογραφία</span>
                 </span>
             </span>
             <span v-else>
-                <img :src="`${config.public.storageUrl}/${profile.image}`" class="rounded-circle" width="150">
+                <img v-if="!profileImage" src="~assets/images/default.png" class="rounded-circle" width="150">
+                <img v-else :src="profileImage" class="rounded-circle" width="150">
             </span>
             <div class="mt-3">
                 <div v-if="user && user.id !== profile.user_id">
@@ -36,13 +38,16 @@
                     <strong>Following:</strong> {{ profile.followingCount }}
                 </div>
             </div>
+            <div class="text-center">
+                <a href="#" class="text-danger fst-italic" title="Διαγραφή Λογαριασμού" style="font-size: 0.7rem;">Διαγραφή Λογαριασμού</a>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
     export default {
-        props: ['profile', 'profileUser', 'user', 'isMine'],
+        props: ['profile', 'profileUser', 'user', 'isMine', 'profileImage'],
         data() {
             return {
                 updating: false

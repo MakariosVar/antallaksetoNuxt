@@ -12,21 +12,28 @@
 				<span class="visually-hidden">Loading...</span>
 			</div>
 		</div>
-		<div v-else class="row m-2 bg-light border py-4 rounded pageMinFit">
-			<div class="row">
+		<div v-else class="row justify-content-center m-2 bg-light border py-4 rounded pageMinFit">
+			<div class="col-md-10 col-12">
+				<p class="font-italic text-center alert alert-warning p-0" style="font-size:0.8rem">
+					* Προτείνουμε οι ανταλλαγές να γίνονται έπειτα από αρκετή συνεννόηση
+					και με φυσική παρουσία από εσάς ή κάποιον έμπιστο εκπρόσωπό σας ώστε να
+					υπάρξει σωστή αξιολόγηση των αντικειμένων προτού προβείτε σε ανταλλαγή.
+				</p>
+			</div>
+			<div class="col-12 row">
 				<div class="col-md-12 col-lg-5 text-center">
-					<img v-if="post.image0" :src="`${$config.public.storageUrl}/${post.image0}`"
+					<img v-if="post.image0" :src="post.image0"
 						style="height: auto; width: 299px" />
 					<div>
-						<img v-if="post.image1" :src="`${$config.public.storageUrl}/${post.image1}`"
+						<img v-if="post.image1" :src="post.image1"
 							style="height: auto; width: 147px" />
-						<img v-if="post.image2" :src="`${$config.public.storageUrl}/${post.image2}`"
+						<img v-if="post.image2" :src="post.image2"
 							style="height: auto; width: 147px" />
 					</div>
 					<div>
-						<img v-if="post.image3" :src="`${$config.public.storageUrl}/${post.image3}`"
+						<img v-if="post.image3" :src="post.image3"
 							style="height: auto; width: 147px" />
-						<img v-if="post.image4" :src="`${$config.public.storageUrl}/${post.image4}`"
+						<img v-if="post.image4" :src="post.image4"
 							style="height: auto; width: 147px" />
 					</div>
 				</div>
@@ -74,7 +81,7 @@
 					<p class="postText">
 						<small><strong>Του Χρήστη:</strong><router-link :to="'/profile?id=' + post.user_id">
 								{{ post.username
-								}}<img v-if="post.userimage" :src="`${$config.public.storageUrl}/${post.userimage}`"
+								}}<img v-if="post.userimage" :src="post.userimage"
 									class="rounded-circle ml-2" style="width: 50px; height: auto" /></router-link></small>
 					</p>
 					<p class="postText">
@@ -120,10 +127,42 @@ const loaded = ref(false);
 const route = useRoute();
 const router = useRouter();
 
+
+const getImage = async (path) => {
+	try {
+		const response = await $fetch(`/api/image?image=${path}`);
+		let imageRes = response.imageRes; 
+
+		if (imageRes) {
+			return `data:image/jpeg;base64,${imageRes}`;
+		}
+	} catch (error) {
+		console.error('Error fetching image:', error);
+	}
+};
 const getPostData = async () => {
 	const response = await $fetch("/api/post?id=" + route.query.id);
 	const data = response.post;
 	if (data.status == "success") {
+		if (data.post.image0) {
+			data.post.image0 = await getImage(data.post.image0)
+		}
+		if (data.post.image1) {
+			data.post.image1 = await getImage(data.post.image1)
+		}
+		if (data.post.image2) {
+			data.post.image2 = await getImage(data.post.image2)
+		}
+		if (data.post.image3) {
+			data.post.image3 = await getImage(data.post.image3)
+		}
+		if (data.post.image4) {
+			data.post.image4 = await getImage(data.post.image4)
+		}
+		if (data.post.userimage) {
+			data.post.userimage = await getImage(data.post.userimage)
+		}
+		
 		post.value = data.post;
 		loaded.value = true;
 	}

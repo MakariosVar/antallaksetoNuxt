@@ -33,7 +33,7 @@
           <div v-for="post in premiumPosts" :key="post.id" class="col-md-3 mb-4">
             <nuxt-link :to="{ path: '/posts/view', query: { id: post.id } }" class="text-decoration-none">
               <div class="card h-100">
-                <img :src="`${$config.public.storageUrl}/${post.image0}`" class="card-img-top" style="height: 300px;" alt="Post Image">
+                <img :src="post.imageURL" class="card-img-top" style="height: 300px;" alt="Post Image">
                 <div class="card-body">
                   <h5 class="card-title">{{ post.title }}</h5>
                   <p class="card-text">
@@ -43,7 +43,7 @@
               </div>
             </nuxt-link>
           </div>
-          <div class="col-md-3 mb-4">
+          <!-- <div class="col-md-3 mb-4">
             <nuxt-link to="#" class="text-decoration-none">
               <div class="card h-100">
                 <img src="~assets/images/premium.png" class="card-img-top" alt="Post Image">
@@ -53,7 +53,7 @@
                 </div>
               </div>
             </nuxt-link>
-          </div>
+          </div> -->
         </div>
       </div>
     </section>
@@ -91,9 +91,28 @@
     return description.length > n ? description.slice(0, n - 1) + '...' : description;
   }
 
+  const getImage = async (path) => {
+    try {
+        const response = await $fetch(`/api/image?image=${path}`);
+        const imageRes = response.imageRes; 
+
+        if (imageRes) {
+            return `data:image/jpeg;base64,${imageRes}`;
+        }
+    } catch (error) {
+        console.error('Error fetching image:', error);
+    }
+  };
+
   // Fetch premiumPosts
   const { data: premiumPostsData } = await useFetch('/api/premiumPosts');
   const premiumPosts = premiumPostsData.value.posts;
+  premiumPosts.forEach(async (post) => {
+    if (post.image0) {
+      const imageURL = await getImage(post.image0);
+      post.imageURL = imageURL 
+    }
+  })
   // console.log(premiumPosts);
 
   // Fetch categories

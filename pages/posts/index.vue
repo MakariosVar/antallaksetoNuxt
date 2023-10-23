@@ -48,7 +48,7 @@
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
       <nuxt-link v-for="post in posts.data" :key="post.id" :to="{ path: '/posts/view', query: { id: post.id } }" class="col post">
         <div class="card h-100">
-          <img :src="`${$config.public.storageUrl}/${post.image0}`" class="card-img-top" style="height: 300px;" alt="Post Image">
+          <img :src="post.imageURL" class="card-img-top" style="height: 300px;" alt="Post Image">
           <div class="card-body">
             <h5 class="card-title">{{ post.title }}</h5>
             <p class="card-text">Περιοχή: {{ `${post.fullAddress.locality}, ${post.fullAddress.country}` }}</p>
@@ -81,6 +81,13 @@
 
         if (page.value === 1) {
           posts.value = response;
+
+          posts.value.data.forEach(async (post) => {
+            if (post.image0) {
+                const imageURL = await getImage(post.image0);
+                post.imageURL = imageURL 
+            }
+          })
         } 
 
       } catch (error) {
@@ -102,6 +109,12 @@
     try {
       const { data: postData } = await useFetch(`/api/posts?page=${page.value}&category=${searchCategory.value}&q=${searchTitle.value}`);
       const response = postData.value.posts_all;
+      response.data.forEach(async (post) => {
+        if (post.image0) {
+            const imageURL = await getImage(post.image0);
+            post.imageURL = imageURL 
+        }
+      })
       posts.value = response;
     } catch (error) {
       console.error(error);
@@ -116,6 +129,20 @@
     searchCategory.value = "all"
     search();
   }
+
+
+  const getImage = async (path) => {
+    try {
+        const response = await $fetch(`/api/image?image=${path}`);
+        const imageRes = response.imageRes; 
+
+        if (imageRes) {
+            return `data:image/jpeg;base64,${imageRes}`;
+        }
+    } catch (error) {
+        console.error('Error fetching image:', error);
+    }
+  };
 
   const fetchMorePosts = async () => {
     if (loadingMorePosts.value) {
@@ -139,6 +166,12 @@
         }  else if (response && response.data.length > 0) {
           const scrollYAfterLoad = window.scrollY; // Calculate the new scroll position
 
+          response.data.forEach(async (post) => {
+            if (post.image0) {
+                const imageURL = await getImage(post.image0);
+                post.imageURL = imageURL 
+            }
+          })
           posts.value.data = [...posts.value.data, ...response.data];
           posts.value.current_page = response.current_page;
           posts.value.last_page = response.last_page;

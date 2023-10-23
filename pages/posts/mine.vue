@@ -22,7 +22,7 @@
                     <nuxt-link v-for="post in posts" :key="post.id" :to="{ path: '/posts/view', query: { id: post.id } }"
                         class="col-md-3 col-sm-6 mb-4">
                         <div class="card">
-                            <img :src="`${config.public.storageUrl}/${post.image0}`" class="card-img-top" style="height: 300px;" alt="Post Image">
+                            <img :src="post.imageURL" class="card-img-top" style="height: 300px;" alt="Post Image">
                             <div class="card-body">
                                 <p class="card-text">
                                     <span v-if="!post.verified" class="card-text text-warning"><small>(ΠΡΟΣ ΕΓΚΡΙΣΗ)</small></span>
@@ -55,16 +55,34 @@
         router.push({ path: '/home'})
     }
 
+    const getImage = async (path) => {
+        try {
+            const response = await $fetch(`/api/image?image=${path}`);
+            const imageRes = response.imageRes; 
+
+            if (imageRes) {
+                return `data:image/jpeg;base64,${imageRes}`;
+            }
+        } catch (error) {
+            console.error('Error fetching image:', error);
+        }
+    };
+
     try {
-        const {data: myPostsData} = await useFetch(`/api/myPosts?user_id=${props.user.id}`);
-        const response = myPostsData.value.postsResponse;
+        const myPostsData = await $fetch(`/api/myPosts?user_id=${props.user.id}`);
+        const response = myPostsData.postsResponse;
 
         if (response.status == 'success') {
             posts.value = response.posts;
+            posts.value.forEach(async (post) => {
+                if (post.image0) {
+                    const imageURL = await getImage(post.image0);
+                    post.imageURL = imageURL 
+                }
+            })
         }
     } catch (error) {
         console.error('Error fetching data:', error)
     }
-
   
 </script>

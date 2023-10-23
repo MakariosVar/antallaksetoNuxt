@@ -1,89 +1,85 @@
 <template>
-  <!-- <section id="carousel_00c7" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
-    <ol class="carousel-indicators">
-      <li data-bs-target="#carousel_00c7" data-bs-slide-to="0" class="active"></li>
-      <li data-bs-target="#carousel_00c7" data-bs-slide-to="1"></li>
-      <li data-bs-target="#carousel_00c7" data-bs-slide-to="2"></li>
-    </ol>
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <div class="container">
-          <h1 class="display-4">Πως Λειτουργεί:</h1>
-          <p class="lead">
-            Δημιουργήστε τις δικές σας αγγελίες δίνοντας τα απαραίτητα στοιχεία επικοινωνίας
-            ή κάντε αναζήτηση ό,τι ψάχνετε στις διαθέσιμες αγγελίες.
-          </p>
-          <router-link class="h2" :to="loggedin ? '/p/create' : '/login'">
-            {{ loggedin ? 'Δημιουργήστε μια Αγγελία' : 'Δημιουργήστε μια Αγγελία' }}
-          </router-link>
-          <router-link class="h2" to="/terms">Όροι και προϋποθέσεις χρήσης</router-link>
-          <p class="text-warning font-italic">
-            * Προτείνουμε οι ανταλλαγές να γίνονται έπειτα από αρκετή συνεννόηση
-            και με φυσική παρουσία από εσάς ή κάποιον έμπιστο εκπρόσωπό σας ώστε να
-            υπάρξει σωστή αξιολόγηση των αντικειμένων προτού προβείτε σε ανταλλαγή.
-          </p>
-        </div>
-      </div>
-    </div>
-    <a class="carousel-control-prev" href="#carousel_00c7" role="button" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#carousel_00c7" role="button" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </a>
-  </section> -->
-  <div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-bs-ride="carousel">
+  <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-indicators">
       <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
       <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
       <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
     </div>
     <div class="carousel-inner">
-      <div class="carousel-item active">
+      <div data-bs-interval="10000" class="carousel-item active">
+        <img src="~assets/images/NewLogoPNG.png" style="max-height: 70vh;" class="d-block w-100" alt="...">
+        <div class="carousel-caption d-none d-md-block bg-light py-4 rounded text-black">
+          <h1 class="display-4">Καλωσορίσατε στο Ανταλλαξέτο.gr <br> Την κοινότητα όπου η ανταλλαγή γίνεται πραγματικότητα!</h1>
+          <p class="lead">
+            {{ `Στο Ανταλλαξέτο.gr, προσφέρουμε έναν χώρο όπου μπορείτε να ανακαλύψετε τον θησαυρό σας ή να μοιραστείτε 
+            αυτά που δεν χρειάζεστε πια. Είναι η πλατφόρμα που σας δίνει τη δυνατότητα να βρείτε αυτό που ψάχνετε, ενώ 
+            ταυτόχρονα μπορείτε να ανταλλάξετε αντικείμενα που θέλετε να δώσετε νέα ζωή.` }}
+          </p>
+        </div>
+      </div>
+      <div data-bs-interval="10000" class="carousel-item">
         <img src="~assets/images/bg.jpg" style="max-height: 70vh;" class="d-block w-100" alt="...">
         <div class="carousel-caption d-none d-md-block">
-          <div class="container bg-dark mb-5 py-4 rounded">
+          <div class="container bg-light py-4 rounded text-black">
             <h1 class="display-4">Πως Λειτουργεί:</h1>
             <p class="lead">
-              Δημιουργήστε τις δικές σας αγγελίες δίνοντας τα απαραίτητα στοιχεία επικοινωνίας
-              ή κάντε αναζήτηση ό,τι ψάχνετε στις διαθέσιμες αγγελίες.
+              Είναι πολύ απλό: δημιουργήστε μια αγγελία για το αντικείμενο που θέλετε να ανταλλάξετε ή αυτό που ψάχνετε.
+               Αναζητήστε αντικείμενα που σας ενδιαφέρουν και επικοινωνήστε με άλλα μέλη για να συναλλαχθείτε. 
+               Είναι ο τρόπος για να κάνετε οικονομία, να βρείτε σπάνια αντικείμενα και να συμβάλετε στην ανακύκλωση 
+               και την επαναχρησιμοποίηση.
             </p>
             <router-link class="h2" :to="loggedin ? '/p/create' : '/login'">
               {{ loggedin ? 'Δημιουργήστε μια Αγγελία' : 'Δημιουργήστε μια Αγγελία' }}
             </router-link>
             <br>
             <router-link class="h2" to="/terms">Όροι και προϋποθέσεις χρήσης</router-link>
-            <p class="text-warning font-italic">
-              * Προτείνουμε οι ανταλλαγές να γίνονται έπειτα από αρκετή συνεννόηση
-              και με φυσική παρουσία από εσάς ή κάποιον έμπιστο εκπρόσωπό σας ώστε να
-              υπάρξει σωστή αξιολόγηση των αντικειμένων προτού προβείτε σε ανταλλαγή.
-            </p>
           </div>
         </div>
       </div>
-      <div class="carousel-item">
-        <img src="~assets/images/mak.png" style="max-height: 70vh;" class="d-block w-100" alt="...">
-        <div class="carousel-caption d-none d-md-block">
-          <h5>Second slide label</h5>
-          <p>Some representative placeholder content for the second slide.</p>
-        </div>
-      </div>
-      <div class="carousel-item">
+      <div data-bs-interval="10000" class="carousel-item">
         <img src="~assets/images/sigmund-UorPU70_D60-unsplash.jpg" style="max-height: 70vh;" class="d-block w-100" alt="...">
         <div class="carousel-caption d-none d-md-block">
-          <h5>Third slide label</h5>
-          <p>Some representative placeholder content for the third slide.</p>
+          <div class="container bg-light py-4 rounded text-black">
+            <p class="fs-5">Η ανταλλαγή αγαθών και προϊόντων είναι πολύ περισσότερο από απλά μια διαδικτυακή δραστηριότητα - είναι ένας τρόπος ζωής 
+              που φέρνει μαζί ανθρώπους, δημιουργεί δεσμούς, και επιδρά θετικά στην κοινότητα και τον πλανήτη μας.
+            </p>
+            <ul class="text-start">
+              <li>
+                <span class="fw-bold">Βιώσιμοτητα:</span> 
+                Η ανταλλαγή συμβάλλει στη μείωση της κατανάλωσης και των αποβλήτων. Όταν δίνουμε δεύτερη ευκαιρία σε αντικείμενα που δεν χρειαζόμαστε
+                πλέον, μειώνουμε την ανάγκη για νέα παραγωγή.
+              </li>
+              <li>
+                <span class="fw-bold">Οικονομία:</span> 
+                Η ανταλλαγή επιτρέπει στους ανθρώπους να αποκτήσουν αντικείμενα χωρίς 
+                να χρειάζεται να αγοράσουν κάτι καινούργιο. Αυτό μπορεί να είναι εξαιρετικά οικονομικό.
+              </li>
+              <li>
+                <span class="fw-bold">Κοινότητα:</span> 
+                Η ανταλλαγή ενισχύει τους δεσμούς στην κοινότητα. Όταν ανταλλάσσουμε αντικείμενα, 
+                γνωρίζουμε τους γείτονές μας και δημιουργούμε αλληλεγγύη και αμοιβαία υποστήριξη.
+              </li>
+              <li>
+                <span class="fw-bold">Δημιουργικότητα:</span> 
+                Η ανταλλαγή ενθαρρύνει τη δημιουργικότητα και την ανακύκλωση. Κάτι που δεν έχει αξία για έναν άνθρωπο μπορεί να είναι θησαυρός για κάποιον άλλον, 
+                ενισχύοντας την επαναχρησιμοποίηση και την δημιουργία νέων προϊόντων.
+              </li>
+              <li>
+                <span class="fw-bold">Ευτυχία:</span> 
+                Η ανταλλαγή μπορεί να προκαλέσει χαρά και ικανοποίηση, καθώς η ανακάλυψη και η προσφορά δώρων 
+                μπορεί να είναι ευχάριστη και επιβραβευτική εμπειρία.
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
       <span class="visually-hidden">Previous</span>
     </button>
     <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
       <span class="visually-hidden">Next</span>
     </button>
   </div>

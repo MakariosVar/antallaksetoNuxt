@@ -4,7 +4,7 @@
       <div class="col-md-4">
         <ProfileInfo v-if="profile && profileUser" :profile="profile" :profileUser="profileUser" :user="user"
           :isMine="isMine" @sessionExpired="sessionExpired" @updateProfileImage="updateProfileImage"
-          @followClick="followClick" />
+          @followClick="followClick" :profileImage="profileAvatar" />
         <div v-if="user && user.id !== profile.user_id" class="card text-center my-2">
           <div class="card-body">
             <h1>Αφήστε Σχόλιο</h1>
@@ -56,7 +56,7 @@
       <div v-for="post in filteredPosts" :key="post.id" class="col-3 mb-4">
         <div class="card h-100">
           <nuxt-link :to="`posts/view?id=${post.id}`">
-            <img :src="`${config.public.storageUrl}/${post.image0}`" class="card-img-top" style="height: 300px;"
+            <img :src="post.imageURL" class="card-img-top" style="height: 300px;"
               alt="Post Image">
             <div class="card-body">
               <h5 class="card-title">{{ post.title }}</h5>
@@ -69,7 +69,7 @@
       <div class="col mb-4">
         <div class="card h-100">
           <nuxt-link to="/p/create">
-            <img :src="`${config.public.storageUrl}/profile/default.png`" class="card-img-top" alt="Default Post Image">
+            <img src="~assets/images/default.png" class="card-img-top" alt="Default Post Image">
             <div class="card-body">
               <h5 class="card-title">Προσθήκη Νέας Αγγελίας</h5>
             </div>
@@ -97,6 +97,7 @@ export default {
       commentInput: '',
       profile: {},
       profileUser: null,
+      profileAvatar: false,
       comments: {},
       posts: [],
       Loaded: false,
@@ -168,6 +169,12 @@ export default {
 
           if (response.status === 'success') {
             this.posts = response.posts;
+            this.posts.forEach(async (post) => {
+              if (post.image0) {
+                const imageURL = await this.getImage(post.image0);
+                post.imageURL = imageURL 
+              }
+            })
           }
         } catch (error) {
           console.error('An error occurred:', error);
@@ -194,6 +201,23 @@ export default {
         } catch (error) {
           console.error('An error occurred:', error);
         }
+      }
+    },
+    async getImage (path) {
+      try {
+        const response = await $fetch(`/api/image?image=${path}`);
+        const imageRes = response.imageRes; 
+
+        if (imageRes) {
+            return `data:image/jpeg;base64,${imageRes}`;
+        }
+      } catch (error) {
+        console.error('Error fetching image:', error);
+      }
+    },
+    async profileImage() {
+      if (this.profile.image) {
+        this.profileAvatar =  await this.getImage(this.profile.image);
       }
     },
     followClick() {
@@ -239,6 +263,7 @@ export default {
     await this.getProfileData();
     await this.getPosts();
     await this.getComments();
+    await this.profileImage();
   }
 }
 </script>
