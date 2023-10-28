@@ -44,6 +44,12 @@
             <ClientOnly>
               <font-awesome-icon icon="fa fa-gear" size="2x" />
             </ClientOnly>
+            <span v-if="user.role_id == 1" class="ml-1">
+              Admin
+            </span>
+            <span v-else-if="user.role_id == 3" class="ml-1">
+              Moderator
+            </span>
           </a>
           <div class="dropdown-menu dropdown-menu-end" aria-labelledby="admin-dropdown">
             <a :href="`${config.public.backendBasePath}/admin`" target="_blank" class="dropdown-item">
@@ -59,7 +65,7 @@
         </li>
 
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="user-dropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <a class="nav-link dropdown-toggle d-flex align-items-center gap-1" href="#" id="user-dropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <span v-if="profileImage.length">
               <img style="max-width: 35px;" :src="profileImage" alt="User" class="rounded-circle" />
             </span>
@@ -67,6 +73,9 @@
             <ClientOnly>
               <font-awesome-icon icon="fa-solid fa-circle-user"  size="2x"/>
             </ClientOnly>
+            </span>
+            <span v-if="user" class="ml-1">
+              {{  user.name  }}
             </span>
           </a>
           <div v-if="user" class="dropdown-menu dropdown-menu-end" aria-labelledby="user-dropdown">
@@ -179,7 +188,7 @@
     },
     computed:{
       isPostPage() {
-        return this.$route.path === '/p';
+        return this.$route.path === '/posts';
       }, 
     }
   }
