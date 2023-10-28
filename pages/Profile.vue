@@ -53,7 +53,7 @@
       <hr>
     </div>
     <div v-if="posts.length > 0" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
-      <div v-for="post in filteredPosts" :key="post.id" class="col-3 mb-4">
+      <div v-for="post in sortedFilteredPosts" :key="post.id" class="col-3 mb-4">
         <div class="card h-100">
           <nuxt-link :to="`posts/view?id=${post.id}`">
             <img :src="post.imageURL" class="card-img-top" style="height: 300px;"
@@ -66,7 +66,7 @@
           </nuxt-link>
         </div>
       </div>
-      <div class="col mb-4">
+      <div class="col-3 mb-4" v-if="user && user.id === profileUser.id">
         <div class="card h-100">
           <nuxt-link to="/posts/create">
             <img src="~assets/images/default.png" class="card-img-top" alt="Default Post Image">
@@ -125,28 +125,25 @@ export default {
       }
     },
     async getProfileData() {
-      if (this.user && this.user.auth_token) {
-
-        let token = this.user.auth_token
-        try {
-          const response = await $fetch(`/api/getProfile?id=${this.$route.query.id}&auth_token=${token}`);
-         if (typeof response === 'undefined' && process.client) {
+      let token = (this.user && this.user.auth_token) ? this.user.auth_token : '-'; 
+      try {
+        const response = await $fetch(`/api/getProfile?id=${this.$route.query.id}&auth_token=${token}`);
+        if (typeof response === 'undefined' && process.client) {
           location.replace('/home');
-         }
-
-          const data = response.profileResponse;
-          if (data.status === 'success') {
-            this.profile = data.profile[0];
-            this.profileUser = data.profileUser;
-
-            if (this.profile.image === null) {
-              this.profile.image = '/profile/default.png';
-            }
-            this.Loaded = true;
-          }
-        } catch (error) {
-          console.error(error)
         }
+
+        const data = response.profileResponse;
+        if (data.status === 'success') {
+          this.profile = data.profile[0];
+          this.profileUser = data.profileUser;
+
+          if (this.profile.image === null) {
+            this.profile.image = '/profile/default.png';
+          }
+          this.Loaded = true;
+        }
+      } catch (error) {
+        console.error(error)
       }
     },
     async getComments() {
@@ -240,9 +237,16 @@ export default {
       return this.user && (this.user.id == this.profileUser.id);
     },
     filteredPosts() {
-      return this.posts.filter(post => {
-        return this.user && (this.user.id === post.user_id || post.verified === 1);
-      });
+      if (this.user) {
+        return this.posts.filter(post => {
+          return (this.user.id === post.user_id || post.verified === 1);
+        });
+      } else {
+        return this.posts.filter(post => {
+          return post.verified === 1;
+        });
+
+      }
     },
     sortedFilteredPosts() {
       if (!this.filteredPosts) {
@@ -250,7 +254,7 @@ export default {
       }
 
       const unverifiedPosts = this.filteredPosts.filter(post => !post.verified);
-      const incompletePosts = this.filteredPosts.filter(post => typeof post.done === 'undefined' || !post.done);
+      const incompletePosts = this.filteredPosts.filter(post => (typeof post.done === 'undefined' || !post.done) && post.verified);
       const completePosts = this.filteredPosts.filter(post => post.done);
 
       return unverifiedPosts.concat(incompletePosts, completePosts);
