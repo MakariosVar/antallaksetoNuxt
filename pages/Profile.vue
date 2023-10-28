@@ -45,7 +45,7 @@
       </p>
       <span style="font-size:13px;">{{ comment.date }}</span>
       <form @submit.prevent="deletecomment(comment.id)" v-if="user">
-        <button v-if="user.id === comment.user_id" type="submit" class="btn btn-link">Delete</button>
+        <button v-if="user.id === comment.user_id || user.id === profile.user_id" type="submit" class="btn btn-link">Delete</button>
       </form>
     </div>
     <div class="mt-4 text-center">
@@ -68,7 +68,7 @@
       </div>
       <div class="col mb-4">
         <div class="card h-100">
-          <nuxt-link to="/p/create">
+          <nuxt-link to="/posts/create">
             <img src="~assets/images/default.png" class="card-img-top" alt="Default Post Image">
             <div class="card-body">
               <h5 class="card-title">Προσθήκη Νέας Αγγελίας</h5>
@@ -80,7 +80,7 @@
     <div v-else class="text-center">
       <h3>Καμία αγγελία.</h3>
       <div v-if="user && user.id === profile.user_id">
-        <nuxt-link to="/p/create">Δημιουργήστε την πρώτη σας αγγελία.</nuxt-link>
+        <nuxt-link to="/posts/create">Δημιουργήστε την πρώτη σας αγγελία.</nuxt-link>
       </div>
     </div>
   </div>
@@ -130,9 +130,11 @@ export default {
         let token = this.user.auth_token
         try {
           const response = await $fetch(`/api/getProfile?id=${this.$route.query.id}&auth_token=${token}`);
+         if (typeof response === 'undefined' && process.client) {
+          location.replace('/home');
+         }
 
           const data = response.profileResponse;
-
           if (data.status === 'success') {
             this.profile = data.profile[0];
             this.profileUser = data.profileUser;
@@ -241,6 +243,17 @@ export default {
       return this.posts.filter(post => {
         return this.user && (this.user.id === post.user_id || post.verified === 1);
       });
+    },
+    sortedFilteredPosts() {
+      if (!this.filteredPosts) {
+        return [];
+      }
+
+      const unverifiedPosts = this.filteredPosts.filter(post => !post.verified);
+      const incompletePosts = this.filteredPosts.filter(post => typeof post.done === 'undefined' || !post.done);
+      const completePosts = this.filteredPosts.filter(post => post.done);
+
+      return unverifiedPosts.concat(incompletePosts, completePosts);
     },
   },
   async created() {
