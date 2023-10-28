@@ -72,11 +72,19 @@
                                         name="password_confirmation" required autocomplete="new-password">
                                 </div>
                             </div>
-                            <div class="form-group tex mb-1 t-center mb-0">
-                                <div>
-                                    <input type="checkbox" id="terms" name="terms" value="terms" required>
-                                    <label for="terms">Έχω Διαβάσει και Αποδέχομαι τους <router-link to="/terms">Όρους και
-                                            τις προϋποθεσεις χρήσης</router-link></label>
+                            <div class="form-group py-2 container" style="font-size: 0.8rem;">
+                                <div class="row">
+                                    <div class="col-1 d-flex justify-content-end">
+                                        <input type="checkbox" id="terms" name="terms" value="terms" required>
+                                    </div>
+                                    <div class="col-11">
+                                        <label for="terms">
+                                            Έχω Διαβάσει και Αποδέχομαι τους 
+                                            <nuxt-link to="/terms">Όρους και τις προϋποθεσεις χρήσης</nuxt-link>
+                                            και την 
+                                            <nuxt-link to="/privacyPolicy">Πολιτική Απορρήτου</nuxt-link>
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group row mb-1">
