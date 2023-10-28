@@ -146,7 +146,7 @@ export default {
             try {
                 const {data: registerData} = await useFetch(url);
                 const response = registerData.value.registerData
- console.log(response)
+
                 if (response.status === 'success') {
                     const User = data.user;
                     this.$emit('userLogged', User);

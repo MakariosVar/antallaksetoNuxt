@@ -8,7 +8,6 @@ export default defineEventHandler(async (event) => {
     const response = await axios.get(`${config.public.apiUrl}/p/related/${id}`);
     const posts = response.data;
 
-    console.log(response)
     return {
         posts: posts,
     };

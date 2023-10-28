@@ -32,7 +32,7 @@
                             console.error('Failed to fetch data');
                         }
                     } catch (error) {
-                        console.log(error);
+                        console.error(error);
                     }
 
                 }

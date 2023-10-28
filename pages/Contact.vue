@@ -67,7 +67,6 @@ export default {
           body: form,
         });
         if (response.status === 200) {
-          console.log('Successfully message sent');
           this.$router.push('/home');
           alert('Το Μήνυμα Στάλθηκε Επιτυχώς');
         } else {

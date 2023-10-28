@@ -41,7 +41,6 @@
         methods: {
             onPlaceChanged(place) {
                 this.selectedPlace = place;
-                console.log(place)
                 this.$emit('placeSelected', place);
             },
         },

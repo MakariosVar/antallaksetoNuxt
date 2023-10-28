@@ -56,7 +56,7 @@
                         alert(data.message)
                         this.$router.push({name: 'Home'})
                     }
-                    console.log(data)
+                    console.error(data)
                 }
                 this.loading = false;
             }
