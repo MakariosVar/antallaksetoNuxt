@@ -70,9 +70,6 @@
                         <div v-if="this.newImageLoad0 || (this.post && this.post.image0)" class="w-25">
                             <img :src="getPreviewPhotoUrl0()" alt="Image Preview" class="w-100" />
                         </div>
-                        <div v-else class="d-flex flex-column align-items-center">
-                            <img src="~assets/images/ImageRequire1.svg" class="w-50">
-                        </div>
                         <div class="text-center">
                             <p>
                                 Φωτογραφία 1*
@@ -89,9 +86,6 @@
                         <!-- Preview Area -->
                         <div v-if="this.newImageLoad1  || (this.post && this.post.image1)" class="w-25">
                             <img :src="getPreviewPhotoUrl1()" alt="Image Preview" class="w-100" />
-                        </div>
-                        <div v-else class="d-flex flex-column align-items-center">
-                            <img src="~assets/images/ImageRequire1.svg" class="w-50">
                         </div>
                         <div class="text-center">
                             <p>
@@ -110,9 +104,6 @@
                         <div v-if="this.newImageLoad2 || (this.post && this.post.image2)" class="w-25">
                             <img :src="getPreviewPhotoUrl2()" alt="Image Preview" class="w-100" />
                         </div>
-                        <div v-else class="d-flex flex-column align-items-center">
-                            <img src="~assets/images/ImageRequire1.svg" class="w-50">
-                        </div>
                         <div class="text-center">
                             <p>
                                 Φωτογραφία 3
@@ -130,9 +121,6 @@
                         <div v-if="this.newImageLoad3 || (this.post && this.post.image3)" class="w-25">
                             <img :src="getPreviewPhotoUrl3()" alt="Image Preview" class="w-100" />
                         </div>
-                        <div v-else class="d-flex flex-column align-items-center">
-                            <img src="~assets/images/ImageRequire1.svg" class="w-50">
-                        </div>
                         <div class="text-center">
                             <p>
                                 Φωτογραφία 4
@@ -149,9 +137,6 @@
                         <!-- Preview Area -->
                         <div v-if="this.newImageLoad4 || (this.post && this.post.image4)" class="w-25">
                             <img :src="getPreviewPhotoUrl4()" alt="Image Preview" class="w-100" />
-                        </div>
-                        <div v-else class="d-flex flex-column align-items-center">
-                            <img src="~assets/images/ImageRequire1.svg" class="w-50">
                         </div>
                         <div class="text-center">
                             <p>
@@ -359,9 +344,9 @@ export default defineNuxtComponent({
             if (response_data.status === 'success') {
                 this.$router.push({ path: '/posts/mine', query: { id: this.user.id } });
             } else {
-                console.log(data)
+                console.error(data)
 
-                console.log(response_data.errors)
+                console.error(response_data.errors)
             }
             this.submit = false;
 
