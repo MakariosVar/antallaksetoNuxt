@@ -38,8 +38,34 @@
                     <strong>Following:</strong> {{ profile.followingCount }}
                 </div>
             </div>
-            <div class="text-center">
-                <a href="#" class="text-danger fst-italic" title="Διαγραφή Λογαριασμού" style="font-size: 0.7rem;">Διαγραφή Λογαριασμού</a>
+            <div class="text-center" v-if="user && user.id === profileUser.id">
+                <a
+                    href="#"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteConfirmModal"
+                    class="text-danger fst-italic"
+                    title="Διαγραφή Λογαριασμού"
+                    style="font-size: 0.7rem;"
+                >
+                    Διαγραφή Λογαριασμού
+                </a>
+            </div>
+            <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteConfirmModalLabel">Διαγραφή Λογαριασμού</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Είστε σίγουροι ότι θέλετε να διαγράψετε τον λογαριασμό σας;
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ακύρωση</button>
+                        <button type="button" class="btn btn-danger" @click="deleteUser()">Επιβεβαίωση</button>
+                    </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -68,6 +94,21 @@
             sessionExpired () {
                 this.$emit('sessionExpired')
             },
+            async deleteUser() {
+                if (this.user && this.user.id) {
+                    try {
+                        const response = await $fetch(`/api/deleteUser?id=${this.user.id}&auth_token=${this.user.auth_token}`);
+                        const data = response.deleteResponse
+                        if (data.status === 'success') {
+                            if (process.client) {
+                                location.replace('/home');
+                            }
+                        }
+                    } catch (error) {
+                        console.error(error)
+                    }
+                }
+            },
             async handleImageUpload(event) {
                 // Get the selected file
                 const selectedFile = event.target.files[0];
@@ -77,7 +118,6 @@
                 formData.append('image', selectedFile);
 
                 try {
-                    this.updating = true;
                     // Send a POST request to your backend API to save the image
                     const response = await fetch(`${this.config.public.apiUrl}/profile/${this.user.auth_token}`, {
                         method: 'POST',
@@ -90,12 +130,13 @@
 
                     const data = await response.json();
                     if (data.image_url) {
+                        this.updating = true;
                         this.$emit('updateProfileImage', data.image_url)
                     }
-                    this.updating = false;
                 } catch (error) {
                     console.error('Image upload error:', error);
                 }
+                this.updating = false;
             },
         },
     };
