@@ -19,13 +19,14 @@
             </div>
             <div class="container">
                 <div class="row">
-                    <nuxt-link v-for="post in posts" :key="post.id" :to="{ path: '/posts/view', query: { id: post.id } }"
+                    <nuxt-link v-for="post in sortedPosts" :key="post.id" :to="{ path: '/posts/view', query: { id: post.id } }"
                         class="col-md-3 col-sm-6 mb-4">
                         <div class="card">
                             <img :src="post.imageURL" class="card-img-top" style="height: 300px;" alt="Post Image">
                             <div class="card-body">
                                 <p class="card-text">
-                                    <span v-if="!post.verified" class="card-text text-warning"><small>(ΠΡΟΣ ΕΓΚΡΙΣΗ)</small></span>
+                                    <span v-if="!post.verified" class="badge bg-warning"><small>(ΠΡΟΣ ΕΓΚΡΙΣΗ)</small></span>
+                                    <span v-if="post.done" class="badge bg-success">ΟΛΟΚΛΗΡΩΜΕΝΗ</span>
                                     {{ post.title }}
                                 </p>
                             </div>
@@ -85,4 +86,15 @@
         console.error('Error fetching data:', error)
     }
   
+    const sortedPosts = computed(() => {
+        if (!posts.value) {
+            return [];
+        }
+
+        const unverifiedPosts = posts.value.filter(post => !post.verified);
+        const incompletePosts = posts.value.filter(post => (typeof post.done === 'undefined' || !post.done) && post.verified);
+        const completePosts = posts.value.filter(post => post.done);
+
+        return unverifiedPosts.concat(incompletePosts, completePosts);
+    });
 </script>
