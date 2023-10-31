@@ -305,7 +305,7 @@ export default defineNuxtComponent({
             }
         },
         async submitForm(e) {
-            // this.submit = true;
+            this.submit = true;
             let data = new FormData();
             data.append('title', this.form.title);
             data.append('description', this.form.description);
