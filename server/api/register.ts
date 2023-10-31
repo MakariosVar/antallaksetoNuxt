@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
     body.append('name', name)
     body.append('email', email)
     body.append('password', password)
-    const response = await axios.post(`${config.public.apiUrl}/vueregister`, body);
+    const response = await axios.post(`${config.apiUrl}/vueregister`, body);
     const registerData = response.data;
     
     return {

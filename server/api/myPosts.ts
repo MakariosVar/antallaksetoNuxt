@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
   const { user_id } = getQuery(event);
 
   try {
-    const response = await axios.get(`${config.public.apiUrl}/vue/myposts/${user_id}`);
+    const response = await axios.get(`${config.apiUrl}/vue/myposts/${user_id}`);
     const postsData = response.data;
 
     return {

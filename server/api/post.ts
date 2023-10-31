@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     
-    const response = await axios.get(`${config.public.apiUrl}/vue/post/${id}`);
+    const response = await axios.get(`${config.apiUrl}/vue/post/${id}`);
     const post = response.data;
 
     return {

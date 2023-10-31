@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   const { auth_token } = getQuery(event);
 
   try {
-    const response = await axios.delete(`${config.public.apiUrl}/p/${id}/${auth_token}`);
+    const response = await axios.delete(`${config.apiUrl}/p/${id}/${auth_token}`);
     const deleteResponse = response.data;
     return {
         deleteResponse: deleteResponse,

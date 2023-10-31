@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     
-    const response = await axios.get(`${config.public.apiUrl}/vue/unreadmessages/${token}`);
+    const response = await axios.get(`${config.apiUrl}/vue/unreadmessages/${token}`);
     const totalUnreadMessages = response.data.totalUnreadMessages;
 
     return {

@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
 
     try {
         // Make an HTTP GET request to fetch the image
-        const imageUrl = `${config.public.storageUrl}/${image}`;
+        const imageUrl = `${config.storageUrl}/${image}`;
         const response = await axios.get(imageUrl, { responseType: "arraybuffer" });
 
         if (response.status === 200) {

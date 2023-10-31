@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
   const { auth_token } = getQuery(event);
 
   try {
-    const response = await axios.get(`${config.public.apiUrl}/vue/getuser/${auth_token}`);
+    const response = await axios.get(`${config.apiUrl}/vue/getuser/${auth_token}`);
     const userData = response.data;
     return {
         userData: userData,

@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
   const { id } = getQuery(event);
 
   try {
-    const response = await axios.post(`${config.public.apiUrl}/deleteMessage/${id}`);
+    const response = await axios.post(`${config.apiUrl}/deleteMessage/${id}`);
     const deleteResponse = response.data;
     return {
         deleteResponse: deleteResponse,

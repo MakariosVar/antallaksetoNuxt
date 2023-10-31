@@ -6,12 +6,10 @@ export default defineNuxtConfig({
     // The private keys which are only available server-side
     apiSecret: process.env.API_URL,
     // Keys within public are also exposed client-side
-    public: {
-      apiUrl: process.env.API_URL+'/api',
-      storageUrl: process.env.API_URL+'/storage',
-      backendBasePath: process.env.API_URL,
-      googleApiKey :process.env.GOOGLE_MAPS_API_KEY
-    }
+    apiUrl: process.env.API_URL+'/api',
+    storageUrl: process.env.API_URL+'/storage',
+    backendBasePath: process.env.API_URL,
+    googleApiKey :process.env.GOOGLE_MAPS_API_KEY
   },
   plugins: [{ src: "~/plugins/google-autocomplete.js", ssr: false } ],
   css: [

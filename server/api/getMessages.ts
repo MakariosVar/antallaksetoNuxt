@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     
-    const response = await axios.get(`${config.public.apiUrl}/getmessages/${token}`);
+    const response = await axios.get(`${config.apiUrl}/getmessages/${token}`);
 
     return {
         response: response.data,

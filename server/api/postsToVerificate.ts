@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     
-    const response = await axios.get(`${config.public.apiUrl}/vue/toverificate/${token}`);
+    const response = await axios.get(`${config.apiUrl}/vue/toverificate/${token}`);
     const post = response.data;
 
     return {

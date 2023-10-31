@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   const { token } = getQuery(event);
 
   try {
-    const response = await axios.post(`${config.public.apiUrl}/c/store`,{
+    const response = await axios.post(`${config.apiUrl}/c/store`,{
         comment,
         auth_token: token,
         profile_id

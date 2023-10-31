@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
   const { id } = getQuery(event);
 
   try {
-    const response = await axios.get(`${config.public.apiUrl}/p/related/${id}`);
+    const response = await axios.get(`${config.apiUrl}/p/related/${id}`);
     const posts = response.data;
 
     return {

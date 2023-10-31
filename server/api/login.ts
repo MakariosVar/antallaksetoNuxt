@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     const body = new FormData();
     body.append('email', email)
     body.append('password', password)
-    const response = await axios.post(`${config.public.apiUrl}/vuelogin`, body);
+    const response = await axios.post(`${config.apiUrl}/vuelogin`, body);
     const loginData = response.data;
     return {
         loginData: loginData,
