@@ -48,7 +48,12 @@
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
       <nuxt-link v-for="post in posts.data" :key="post.id" :to="{ path: '/posts/view', query: { id: post.id } }" class="col post">
         <div class="card h-100">
-          <img :src="post.imageURL" class="card-img-top" style="height: 300px;" alt="Post Image">
+          <img v-if="post.imageURL" :src="post.imageURL" class="card-img-top" style="height: 300px;" alt="Post Image">
+          <div v-else class="d-flex justify-content-center align-items-center" style="width: 100%; height: 300px;">
+              <div class="spinner-grow" style="color: #e4e3e3; width: 150px; height: 150px;" role="status">
+                  <span class="visually-hidden">Loading...</span>
+              </div>
+          </div>
           <div class="card-body">
             <h5 class="card-title">{{ post.title }}</h5>
             <p class="card-text">Περιοχή: {{ `${post.fullAddress.locality}, ${post.fullAddress.country}` }}</p>
@@ -81,13 +86,6 @@
 
         if (page.value === 1) {
           posts.value = response;
-
-          posts.value.data.forEach(async (post) => {
-            if (post.image0) {
-                const imageURL = await getImage(post.image0);
-                post.imageURL = imageURL 
-            }
-          })
         } 
 
       } catch (error) {
@@ -188,6 +186,16 @@
     }
   };
   await fetchPosts();
+  onMounted(() => {
+    if(posts.value) {
+      posts.value.data.forEach(async (post) => {
+        if (post.image0) {
+            const imageURL = await getImage(post.image0);
+            post.imageURL = imageURL 
+        }
+      })
+    }
+  }) 
 
   // Fetch categories
   const { data: categoriesData } = await useFetch('/api/categories');

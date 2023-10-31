@@ -22,19 +22,24 @@
 			</div>
 			<div class="col-12 row">
 				<div class="col-md-12 col-lg-5 text-center">
-					<img v-if="post.image0" :src="post.image0"
-						style="height: auto; width: 299px" />
-					<div>
-						<img v-if="post.image1" :src="post.image1"
-							style="height: auto; width: 147px" />
-						<img v-if="post.image2" :src="post.image2"
-							style="height: auto; width: 147px" />
+					<img v-if="post.image0_loaded" :src="post.image0_loaded" style="height: auto; width: 299px" />
+					<div v-else-if="post.image0" class="d-flex justify-content-center align-items-center" style="width: 100%; height: 300px;">
+						<div class="spinner-grow" style="color: #e4e3e3; width: 150px; height: 150px;" role="status">
+							<span class="visually-hidden">Loading...</span>
+						</div>
 					</div>
 					<div>
-						<img v-if="post.image3" :src="post.image3"
-							style="height: auto; width: 147px" />
-						<img v-if="post.image4" :src="post.image4"
-							style="height: auto; width: 147px" />
+						<img v-if="post.image2_loaded" :src="post.image2_loaded" style="height: auto; width: 147px" />
+						<div v-else-if="post.image2" class="d-flex justify-content-center align-items-center" style="width: 100%; height: 150px;">
+							<div class="spinner-grow" style="color: #e4e3e3; width: 75px; height: 75px;" role="status">
+								<span class="visually-hidden">Loading...</span>
+							</div>
+						</div>
+						<img v-if="post.image1_loaded" :src="post.image1_loaded" style="height: auto; width: 147px" />
+					</div>
+					<div>
+						<img v-if="post.image3_loaded" :src="post.image3_loaded" style="height: auto; width: 147px" />
+						<img v-if="post.image4_loaded" :src="post.image4_loaded" style="height: auto; width: 147px" />
 					</div>
 				</div>
 				<div class="col-md-12 col-lg-7 text-center text-lg-start">
@@ -81,8 +86,8 @@
 					<p class="postText">
 						<small><strong>Του Χρήστη:</strong><router-link :to="'/profile?id=' + post.user_id">
 								{{ post.username
-								}}<img v-if="post.userimage" :src="post.userimage"
-									class="rounded-circle ml-2" style="width: 50px; height: auto" /></router-link></small>
+								}}<img v-if="post.userimage_loaded" :src="post.userimage_loaded" class="rounded-circle ml-2"
+									style="width: 50px; height: auto" /></router-link></small>
 					</p>
 					<p class="postText">
 						<small><strong>Email:</strong> {{ post.email }}</small>
@@ -99,11 +104,13 @@
 								class="btn btn-outline-success ml-3 mx-1">
 								Ολοκληρώθηκε
 							</button>
-							<button v-if="!post.done" @click="() => { $router.push({ path: '/posts/edit', query: { id: post.id } }) }"
+							<button v-if="!post.done"
+								@click="() => { $router.push({ path: '/posts/edit', query: { id: post.id } }) }"
 								class="btn btn-outline-primary ml-3 mx-1">
 								Επεξεργασία
 							</button>
-							<button type="submit" @click="deletePost(post.id, user)" class="btn btn-outline-danger ml-3 mx-1">
+							<button type="submit" @click="deletePost(post.id, user)"
+								class="btn btn-outline-danger ml-3 mx-1">
 								Διαγραφή
 							</button>
 						</div>
@@ -115,9 +122,9 @@
 	</div>
 </template>
 <script>
-	export default {
-		props: ['loggedin', 'user'],
-	}
+export default {
+	props: ['loggedin', 'user'],
+}
 </script>
 <script setup>
 
@@ -131,7 +138,7 @@ const router = useRouter();
 const getImage = async (path) => {
 	try {
 		const response = await $fetch(`/api/image?image=${path}`);
-		let imageRes = response.imageRes; 
+		let imageRes = response.imageRes;
 
 		if (imageRes) {
 			return `data:image/jpeg;base64,${imageRes}`;
@@ -144,30 +151,30 @@ const getPostData = async () => {
 	const response = await $fetch("/api/post?id=" + route.query.id);
 	const data = response.post;
 	if (data.status == "success") {
-		if (data.post.image0) {
-			data.post.image0 = await getImage(data.post.image0)
-		}
-		if (data.post.image1) {
-			data.post.image1 = await getImage(data.post.image1)
-		}
-		if (data.post.image2) {
-			data.post.image2 = await getImage(data.post.image2)
-		}
-		if (data.post.image3) {
-			data.post.image3 = await getImage(data.post.image3)
-		}
-		if (data.post.image4) {
-			data.post.image4 = await getImage(data.post.image4)
-		}
-		if (data.post.userimage) {
-			data.post.userimage = await getImage(data.post.userimage)
-		}
-		
 		post.value = data.post;
 		loaded.value = true;
 	}
 };
 await getPostData();
+
+const loadImages = async () => {
+	if (post.value) {
+		const imageKeys = ['image0', 'image1', 'image2', 'image3', 'image4', 'userimage'];
+
+		const imagePromises = imageKeys.map(async (key) => {
+			if (post.value[key]) {
+				post.value[key+"_loaded"] = await getImage(post.value[key]);
+
+			}
+		});
+		// Wait for all image loading Promises to complete
+		await Promise.all(imagePromises);
+	}
+}
+
+onMounted(async () => {
+	await loadImages();
+})
 
 const postCompleted = async (id, user) => {
 	if (confirm("Πατόντας ΟΚ η αγγελία θα επισημοποιηθεί ως ολοκληρωμένη, είστε σίγουροι;") == true) {
@@ -208,8 +215,9 @@ const deletePost = async (id, user) => {
 };
 
 // Watch for changes in route.query.id and trigger getPostData accordingly
-watch(() => route.query.id, () => {
-  getPostData();
+watch(() => route.query.id, async () => {
+	await getPostData();
+	await loadImages()
 });
 
 
