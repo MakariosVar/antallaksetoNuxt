@@ -73,13 +73,8 @@ export default {
         },
         async updateDescription () {
             try {
-            const response = await fetch(`${this.config.public.apiUrl}/profile/${this.user.auth_token}`, {
-                method: 'POST',
-                body: new URLSearchParams({
-                    description: this.descriptionInput,
-                })
-            });
-            const data = await response.json();
+            const response = await $fetch(`/api/updateProfileDescription?auth_token=${this.user.auth_token}&descriptionInput=${this.descriptionInput}`);
+            const data = await response.commentsResponse;
 
             if (data.status === 'success') {
                 this.profile.description = this.descriptionInput;
