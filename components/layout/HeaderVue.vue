@@ -142,11 +142,7 @@
         this.headerSearchInputValue = ""
       },
       async logout() {
-        const response = await fetch(`${this.config.public.apiUrl}/vuelogout`, {
-          method: 'GET',
-        })
-        const data = await response.json();
-        if (data.status == 'success' && process.client) {
+        if (process.client) {
           localStorage.setItem('user', null)
           location.replace('/home');
         }
