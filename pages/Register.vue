@@ -26,7 +26,12 @@
                                 Ξεχάσατε τον κωδικό σας; πατήστε <nuxt-link to="/resetPassword">εδώ</nuxt-link>
                             </div>
                         </div>
-                        <form @submit.prevent="checkForm" id="Register" class="col">
+                        <div v-if="loading" class="d-flex justify-content-center align-items-center">
+                            <div class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <form v-else @submit.prevent="checkForm" id="Register" class="col">
                             <div class="form-group row mb-1 ">
                                 <label for="name" class="col-md-4 col-form-label text-md-right">
                                     {{ 'Όνομα' }}
@@ -88,7 +93,7 @@
                                 </div>
                             </div>
                             <div class="form-group row mb-1">
-                                <div class="col-md-6 offset-md-4">
+                                <div class="col-12 text-center">
                                     <button type="submit" class="btn btn-primary">
                                         {{ 'Εγγραφή' }}
                                     </button>
@@ -118,7 +123,8 @@ export default {
             password: '',
             passwordConfirm: '',
             incorectPasswordRepeatError: false,
-            emailExistsError: false
+            emailExistsError: false,
+            loading: false,
         }
     },
     setup() {
@@ -142,21 +148,26 @@ export default {
                 return;
             }
 
+            this.loading = true;
             let url = `/api/register?name=${this.name}&password=${this.password}&email=${this.email}`
             try {
                 const {data: registerData} = await useFetch(url);
                 const response = registerData.value.registerData
 
                 if (response.status === 'success') {
-                    const User = data.user;
+                    const User = response.user;
                     this.$emit('userLogged', User);
-                    this.$router.push('/home');
+                    if (process.client) {
+                        location.replace('/home');
+                    }
                 } else if (response.status === 'error' && response.message === 'User Exist') {
                     this.emailExistsError = true;
+                    this.loading = false;
                 } else {
-                    alert('Errors');
+                    this.loading = false;
                 }
             } catch (error) {
+                this.loading = false;
                 console.error('Request error:', error);
             }
         },

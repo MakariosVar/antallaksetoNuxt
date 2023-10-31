@@ -17,7 +17,12 @@
                                 Λάθος Κωδικός ή email
                             </div>
                         </div>
-                        <form @submit.prevent="checkForm" id="Login">
+                        <div v-if="loading" class="d-flex justify-content-center align-items-center">
+                            <div class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <form v-else @submit.prevent="checkForm" id="Login" >
                             <div class="form-group row mb-2">
                                 <label for="email" class="col-md-4 col-form-label text-md-right">E-Mail</label>
                                 <div class="col-md-6">
@@ -61,7 +66,8 @@ export default {
         return {
             showLoginError: false,
             passwordInput: '',
-            emailInput: ''
+            emailInput: '',
+            loading: false,
         }
     },
     mounted() {
@@ -81,7 +87,7 @@ export default {
     methods: {
         async checkForm() {
             var formContents = new FormData(document.getElementById('Login'));
-
+            this.loading = true;
             try {
                 const response = await useFetch(`/api/login?email=${this.emailInput}&password=${this.passwordInput}`);
 
@@ -96,8 +102,10 @@ export default {
                 } else if (data.status === 'error') {
                     this.showLoginError = true;
                     this.passwordInput = ''
+                    this.loading = false
                 }
             } catch (error) {
+                this.loading = false
                 console.error('Error:', error);
             }
 
