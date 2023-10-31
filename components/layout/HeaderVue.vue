@@ -35,7 +35,7 @@
       <ul class="navbar-nav ms-auto">
         <li class="nav-item" v-if="!isPostPage">
           <form class="form-inline my-2 my-lg-0" @submit.prevent="handleSubmit">
-            <input v-model="headerSearchInputValue" class="form-control mr-sm-2" type="search" placeholder="Αναζήτηση..." aria-label="Search">
+            <input v-model="headerSearchInputValue" class="form-control mr-sm-2 d-sm-none d-lg-block " type="search" placeholder="Αναζήτηση..." aria-label="Search">
           </form>
         </li>
 
@@ -76,6 +76,9 @@
             </span>
             <span v-if="user" class="ml-1">
               {{  user.name  }}
+            </span>
+            <span v-else class="ml-1">
+              Προφίλ
             </span>
           </a>
           <div v-if="user" class="dropdown-menu dropdown-menu-end" aria-labelledby="user-dropdown">
