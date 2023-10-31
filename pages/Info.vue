@@ -7,10 +7,10 @@
     </div>
     <div class="carousel-inner">
       <div data-bs-interval="10000" class="carousel-item active">
-        <img src="~assets/images/NewLogoPNG.png" style="max-height: 70vh;" class="d-block w-100" alt="...">
-        <div class="carousel-caption d-none d-md-block bg-light py-4 rounded text-black">
-          <h1 class="display-4">Καλωσορίσατε στο Ανταλλαξέτο.gr <br> Την κοινότητα όπου η ανταλλαγή γίνεται πραγματικότητα!</h1>
-          <p class="lead">
+        <img src="~assets/images/NewLogoPNG.png" style="height: 100vh;" class="d-block w-100" alt="...">
+        <div class="carousel-caption bg-light py-4 rounded text-black">
+          <h1>Καλωσορίσατε στο Ανταλλαξέτο.gr <br> Την κοινότητα όπου η ανταλλαγή γίνεται πραγματικότητα!</h1>
+          <p class="lead" style="font-size:0.9rem">
             {{ `Στο Ανταλλαξέτο.gr, προσφέρουμε έναν χώρο όπου μπορείτε να ανακαλύψετε τον θησαυρό σας ή να μοιραστείτε 
             αυτά που δεν χρειάζεστε πια. Είναι η πλατφόρμα που σας δίνει τη δυνατότητα να βρείτε αυτό που ψάχνετε, ενώ 
             ταυτόχρονα μπορείτε να ανταλλάξετε αντικείμενα που θέλετε να δώσετε νέα ζωή.` }}
@@ -18,58 +18,45 @@
         </div>
       </div>
       <div data-bs-interval="10000" class="carousel-item">
-        <img src="~assets/images/bg.jpg" style="max-height: 70vh;" class="d-block w-100" alt="...">
-        <div class="carousel-caption d-none d-md-block">
+        <img src="~assets/images/bg.jpg" style="height: 100vh;" class="d-block w-100" alt="...">
+        <div class="carousel-caption">
           <div class="container bg-light py-4 rounded text-black">
-            <h1 class="display-4">Πως Λειτουργεί:</h1>
-            <p class="lead">
+            <h1>Πως Λειτουργεί:</h1>
+            <p class="lead" style="font-size: 0.9rem;">
               Είναι πολύ απλό: δημιουργήστε μια αγγελία για το αντικείμενο που θέλετε να ανταλλάξετε ή αυτό που ψάχνετε.
                Αναζητήστε αντικείμενα που σας ενδιαφέρουν και επικοινωνήστε με άλλα μέλη για να συναλλαχθείτε. 
                Είναι ο τρόπος για να κάνετε οικονομία, να βρείτε σπάνια αντικείμενα και να συμβάλετε στην ανακύκλωση 
                και την επαναχρησιμοποίηση.
             </p>
-            <router-link class="h2" :to="loggedin ? '/p/create' : '/login'">
+            <router-link class="text-black" :to="loggedin ? '/p/create' : '/login'">
               {{ loggedin ? 'Δημιουργήστε μια Αγγελία' : 'Δημιουργήστε μια Αγγελία' }}
             </router-link>
             <br>
-            <router-link class="h2" to="/terms">Όροι και προϋποθέσεις χρήσης</router-link>
+            <router-link class="text-black" to="/terms">Όροι και προϋποθέσεις χρήσης</router-link>
           </div>
         </div>
       </div>
       <div data-bs-interval="10000" class="carousel-item">
-        <img src="~assets/images/sigmund-UorPU70_D60-unsplash.jpg" style="max-height: 70vh;" class="d-block w-100" alt="...">
-        <div class="carousel-caption d-none d-md-block">
+        <img src="~assets/images/sigmund-UorPU70_D60-unsplash.jpg" style="height: 100vh;" class="d-block w-100" alt="...">
+        <div class="carousel-caption">
           <div class="container bg-light py-4 rounded text-black">
-            <p class="fs-5">Η ανταλλαγή αγαθών και προϊόντων είναι πολύ περισσότερο από απλά μια διαδικτυακή δραστηριότητα - είναι ένας τρόπος ζωής 
+            <p style="font-size: 0.8rem;" class="fw-bold">Η ανταλλαγή αγαθών και προϊόντων είναι πολύ περισσότερο από απλά μια διαδικτυακή δραστηριότητα - είναι ένας τρόπος ζωής 
               που φέρνει μαζί ανθρώπους, δημιουργεί δεσμούς, και επιδρά θετικά στην κοινότητα και τον πλανήτη μας.
             </p>
-            <ul class="text-start">
-              <li>
-                <span class="fw-bold">Βιώσιμοτητα:</span> 
+
+              <p style="font-size: 0.7rem">
+                <u>Βιώσιμοτητα:</u><br>
                 Η ανταλλαγή συμβάλλει στη μείωση της κατανάλωσης και των αποβλήτων. Όταν δίνουμε δεύτερη ευκαιρία σε αντικείμενα που δεν χρειαζόμαστε
-                πλέον, μειώνουμε την ανάγκη για νέα παραγωγή.
-              </li>
-              <li>
-                <span class="fw-bold">Οικονομία:</span> 
-                Η ανταλλαγή επιτρέπει στους ανθρώπους να αποκτήσουν αντικείμενα χωρίς 
-                να χρειάζεται να αγοράσουν κάτι καινούργιο. Αυτό μπορεί να είναι εξαιρετικά οικονομικό.
-              </li>
-              <li>
-                <span class="fw-bold">Κοινότητα:</span> 
+                πλέον, μειώνουμε την ανάγκη για νέα παραγωγή.<br>
+
+                <u>Κοινότητα:</u><br> 
                 Η ανταλλαγή ενισχύει τους δεσμούς στην κοινότητα. Όταν ανταλλάσσουμε αντικείμενα, 
-                γνωρίζουμε τους γείτονές μας και δημιουργούμε αλληλεγγύη και αμοιβαία υποστήριξη.
-              </li>
-              <li>
-                <span class="fw-bold">Δημιουργικότητα:</span> 
+                γνωρίζουμε τους γείτονές μας και δημιουργούμε αλληλεγγύη και αμοιβαία υποστήριξη.<br>
+
+                <u>Δημιουργικότητα:</u><br> 
                 Η ανταλλαγή ενθαρρύνει τη δημιουργικότητα και την ανακύκλωση. Κάτι που δεν έχει αξία για έναν άνθρωπο μπορεί να είναι θησαυρός για κάποιον άλλον, 
-                ενισχύοντας την επαναχρησιμοποίηση και την δημιουργία νέων προϊόντων.
-              </li>
-              <li>
-                <span class="fw-bold">Ευτυχία:</span> 
-                Η ανταλλαγή μπορεί να προκαλέσει χαρά και ικανοποίηση, καθώς η ανακάλυψη και η προσφορά δώρων 
-                μπορεί να είναι ευχάριστη και επιβραβευτική εμπειρία.
-              </li>
-            </ul>
+                ενισχύοντας την επαναχρησιμοποίηση και την δημιουργία νέων προϊόντων.<br>
+              </p> 
           </div>
         </div>
       </div>
