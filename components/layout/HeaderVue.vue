@@ -52,7 +52,7 @@
             </span>
           </a>
           <div class="dropdown-menu dropdown-menu-end" aria-labelledby="admin-dropdown">
-            <a :href="`${config.public.backendBasePath}/admin`" target="_blank" class="dropdown-item">
+            <a :href="`${backendBasePath}/admin`" target="_blank" class="dropdown-item">
               <span class="text-dark">Admin panel</span>
             </a>
             <nuxt-link :to="{path: '/posts/verification'}" class="dropdown-item">
@@ -125,8 +125,10 @@
     setup() {
       const config = useRuntimeConfig();
       const headerSearchInputValue = ref('')
+      const backendBasePath = 'https://b.antallakseto.gr'
       return {
         headerSearchInputValue,
+        backendBasePath,
         config
       }
     },
