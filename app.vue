@@ -72,6 +72,8 @@
         }
         
       };
+      useHead({script:{src: "https://www.googletagmanager.com/gtag/js?id=G-H6SJD5S37R",async: true},});
+
 
       const googleApiKey = config.public.googleApiKey;
       onMounted(() => {
@@ -92,6 +94,14 @@
           } else {
               // Google Maps API is already loaded, initialize the autocomplete component
               // this.initializeAutocomplete();
+          }
+          if (process.client) {
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+              dataLayer.push(arguments);
+            }
+            gtag("js", new Date());
+            gtag("config", "G-H6SJD5S37R");
           }
       });
 
