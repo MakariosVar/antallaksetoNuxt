@@ -106,6 +106,10 @@
     watch: {
       $route() {
         if (process.client) {
+          const collapseNav = document.getElementById('nav-collapse');
+          if (collapseNav && collapseNav.classList.contains('show')) {
+            collapseNav.classList.remove('show');
+          }
           setTimeout(() => {
             window.scrollTo(0, 0);
           }, 500);
