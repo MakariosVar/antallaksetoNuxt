@@ -22,7 +22,7 @@
             <div class="container">
                 <h2 class="display-4">Κορυφαίες Κατηγορίες</h2>
                 <CategoriesHorizontalList v-if="categories" :categories="categories" />
-                <div class="text-center mt-3">
+                <div class="text-center my-3">
                     <nuxt-link to="/posts/" class="btn btn-outline-secondary">ΔΕΙΤΕ ΟΛΕΣ ΤΙΣ ΑΓΓΕΛΙΕΣ</nuxt-link>
                 </div>
             </div>
