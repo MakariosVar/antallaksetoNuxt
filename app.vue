@@ -18,7 +18,7 @@
 <script>
   export default defineNuxtComponent({
     head: {
-      title: 'Ανταλλαξέ το',
+      title: 'Αντάλλαξέ το',
     },
     methods: {
       sessionExpired () {
