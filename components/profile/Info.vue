@@ -113,32 +113,33 @@
             async handleImageUpload(event) {
                 // Get the selected file
                 const selectedFile = event.target.files[0];
-                
-                // Create a FormData object to send the file
-                const formData = new FormData();
-                formData.append('image', selectedFile);
-
-                try {
-                    // Send a POST request to your backend API to save the image
-                    const response = await fetch(`${this.config.public.apiUrl}/profile/${this.user.auth_token}`, {
-                        method: 'POST',
-                        body: formData, // Set the FormData object as the request body
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`API request failed with status ${response.status}`);
-                    }
-
-                    const data = await response.json();
-                    if (data.image_url) {
+                if (selectedFile) {
+                    try {
+                        // Create a new FormData object
+                        const formData = new FormData();
+                        
+                        // Append the selected file to the FormData object
+                        formData.append("image", selectedFile);
                         this.updating = true;
-                        this.$emit('updateProfileImage', data.image_url)
+
+                        // Send a POST request to your backend API to save the image
+                        const response = await $fetch(`/api/updateProfileImage/${this.user.auth_token}`, {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        if (response && response.status == 'success' && response.image_url) {
+                            this.$emit('updateProfileImage', response.image_url);
+                        }
+                        this.$nextTick(() => {
+                            this.updating = false;
+                        });
+                    } catch (error) {
+                        this.updating = false;
+                        console.error('Image upload error:', error);
                     }
-                } catch (error) {
-                    console.error('Image upload error:', error);
                 }
-                this.updating = false;
-            },
+            }
         },
     };
 </script>

@@ -11,6 +11,13 @@ export default defineNuxtConfig({
     backendBasePath: process.env.API_URL,
     googleApiKey :process.env.GOOGLE_MAPS_API_KEY
   },
+  nitro: {
+    routeRules: {
+      '/api/updateProfileImage/**': { 
+        proxy: `${process.env.API_URL}/api/profile/**`,
+      },
+    }
+  },
   plugins: [{ src: "~/plugins/google-autocomplete.js", ssr: false } ],
   css: [
     "bootstrap/dist/css/bootstrap.min.css",

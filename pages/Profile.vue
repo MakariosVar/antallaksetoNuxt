@@ -242,8 +242,9 @@ export default {
                 this.profile.followersCount -= 1;
             }
         },
-        updateProfileImage(event) {
-            this.profile.image = event
+        async updateProfileImage(event) {
+            this.profileAvatar = null;
+            this.profileAvatar = await this.getImage(event);
         }
     },
     computed: {
