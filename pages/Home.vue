@@ -112,7 +112,7 @@
 
     // Fetch premiumPosts
     const { data: premiumPostsData } = await useFetch('/api/premiumPosts');
-    const premiumPosts = premiumPostsData.value.posts;
+    const premiumPosts = premiumPostsData.value?.posts ?? [];
     onMounted(() => {
         premiumPosts.forEach(async (post) => {
             if (post.image0) {
@@ -125,7 +125,7 @@
 
     // Fetch categories
     const { data: categoriesData } = await useFetch('/api/categories');
-    const categories = categoriesData.value.categories;
+    const categories = categoriesData.value?.categories ?? [];
     // console.log(categories);
 
 </script>
