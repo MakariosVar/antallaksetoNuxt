@@ -10,7 +10,7 @@
                 </span>
                 <span v-else>
                     <img v-if="!profileImage" src="~assets/images/default.png" class="rounded-circle" width="150">
-                    <img v-else :src="profileImage" class="rounded-circle mine-profile-image" width="150">
+                    <img v-else :src="profileImage" :key="profileImage" class="rounded-circle mine-profile-image" width="150">
                     <span class="overlay-text">Επιλέξε Φωτογραφία</span>
                 </span>
             </span>
