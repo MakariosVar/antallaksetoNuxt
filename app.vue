@@ -52,13 +52,16 @@
               storageUser = JSON.parse(storageUser);
               const response = await $fetch(`/api/getUser?auth_token=${storageUser.auth_token}`);
 
-              if (response.userData.status === 'success') {
+              if (response && response.userData && response.userData.status === 'success') {
                 if (process.client) {
                   localStorage.setItem('user', JSON.stringify(response.userData.user));
                 }
                 user.value = response.userData.user;
                 loggedin.value = 1;
-              } else if (response.userData.expired) {
+              } else if (response && response.userData && response.userData.expired) {
+                user.value = null;
+                loggedin.value = 0;
+              } else {
                 user.value = null;
                 loggedin.value = 0;
               }
