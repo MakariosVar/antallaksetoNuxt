@@ -45,16 +45,15 @@
             async submitForm () {
                 this.loading = true;
                 if (this.email !== '') {
-                    const response = await fetch(`${this.config.public.apiUrl}/reset-password`, {
-                        method: 'POST',
-                        body: new URLSearchParams({
-                            email: this.email
-                        })
-                    })
-                    const data = await response.json();
-                    if (data.status === 'success') {
-                        alert(data.message)
-                        this.$router.push({name: 'Home'})
+                    const response = await $fetch(`/api/resetPassword?email=${this.email}`)
+
+                    if (response && response.resetResponse) {
+                        const data = response.resetResponse;
+                        if (data.status === 'success') {
+                            alert(data.message)
+                            this.$router.push({name: 'Home'})
+                        }
+                        console.error(data)
                     }
                 }
                 this.loading = false;
