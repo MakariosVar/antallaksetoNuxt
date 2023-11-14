@@ -21,14 +21,12 @@
                 this.$emit('sessionExpired')
             },
             async getPostData() {
-                const response = await fetch(
-                    this.config.public.apiUrl + "/vue/post/" + this.$route.query.id
-                );
-                const data = await response.json();
+                const response = await $fetch("/api/post?id=" + this.$route.query.id);
+                const data = response.post;
                 if (data.status == "success") {
                     this.post = data.post;
                 }
-            },
+            }
         },
         mounted () {
             this.getPostData();
