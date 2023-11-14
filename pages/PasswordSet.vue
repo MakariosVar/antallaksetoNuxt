@@ -61,15 +61,18 @@
                     alert('Επαναλάβετε τον κωδικό σωστα')
                     return;
                 }
-                let response = await fetch(`${this.$config.public.apiUrl}/set-password/${this.token}`, {
-                    method: 'POST',
-                    body: new URLSearchParams({
-                        password: this.password
-                    })
-                });
-                const data = await response.json();
-                if (data.status === "success") {
-                    this.$router.push({name: 'Login'})
+                let response = await $fetch(`/api/setPassword?token=${this.token}&password=${this.password}`);
+
+                if (response && response.resetResponse) {
+
+                    const data = response.resetResponse;
+                    if (data.status === "success") {
+                        alert('Ο κωδικός σας άλλαξε');
+                        this.$router.push({name: 'Login'})
+                    } else {
+                        alert('Κάτι πήγε στραβά\nΚάν\'τε αίτηση ξανά');
+                        this.$router.push({path: 'ResetPassword'})
+                    }
                 } else {
                     alert('Κάτι πήγε στραβά\nΚάν\'τε αίτηση ξανά');
                     this.$router.push({path: 'ResetPassword'})
