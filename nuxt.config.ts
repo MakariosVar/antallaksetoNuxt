@@ -9,7 +9,9 @@ export default defineNuxtConfig({
     apiUrl: process.env.API_URL+'/api',
     storageUrl: process.env.API_URL+'/storage',
     backendBasePath: process.env.API_URL,
-    googleApiKey :process.env.GOOGLE_MAPS_API_KEY
+    public: {
+      googleApiKey :process.env.GOOGLE_MAPS_API_KEY
+    }
   },
   nitro: {
     routeRules: {
