@@ -2,18 +2,20 @@
     <div id="homepage">
         <section class="text-center text-white bg-image backgroundImage">
             <div class="container home-container">
-                <h1 class="display-1">Ανταλλαξέ το</h1>
-                <h2 class="subtitle display-5">Δώσε ο,τι δεν χρειάζεσαι</h2>
-                <div class="d-flex justify-content-center mt-4">
-                    <nuxt-link v-if="loggedin" to="/posts/create" class="btn btn-light">ΠΡΟΣΘΗΚΗ ΑΓΓΕΛΙΑΣ</nuxt-link>
-                    <nuxt-link v-else to="/login" class="btn btn-light">ΠΡΟΣΘΗΚΗ ΑΓΓΕΛΙΑΣ</nuxt-link>
-                </div>
-                <div class="d-flex flex-column align-items-center mt-3">
-                    <h2 class="display-5">Βρες ο,τι χρειαζεσαι</h2>
-                    <form @submit.prevent="handleSearchSubmit" class="input-group mb-3 w-50">
-                        <input v-model="searchInputValue" type="text" class="form-control" aria-label="Sizing example input"
-                            placeholder="Αναζήτηση..." aria-describedby="inputGroup-sizing-default">
-                    </form>
+                <div class="rounded py-2 mx-3">
+                    <h1 class="display-1">Ανταλλαξέ το</h1>
+                    <h2 class="subtitle display-5">Δώσε ο,τι δεν χρειάζεσαι</h2>
+                    <div class="d-flex justify-content-center mt-4">
+                        <nuxt-link v-if="loggedin" to="/posts/create" class="btn btn-light">ΠΡΟΣΘΗΚΗ ΑΓΓΕΛΙΑΣ</nuxt-link>
+                        <nuxt-link v-else to="/login" class="btn btn-light">ΠΡΟΣΘΗΚΗ ΑΓΓΕΛΙΑΣ</nuxt-link>
+                    </div>
+                    <div class="d-flex flex-column align-items-center mt-3">
+                        <h2 class="display-5">Βρες ο,τι χρειαζεσαι</h2>
+                        <form @submit.prevent="handleSearchSubmit" class="input-group mb-3 w-50">
+                            <input v-model="searchInputValue" type="text" class="form-control" aria-label="Sizing example input"
+                                placeholder="Αναζήτηση..." aria-describedby="inputGroup-sizing-default">
+                        </form>
+                    </div>
                 </div>
             </div>
         </section>
