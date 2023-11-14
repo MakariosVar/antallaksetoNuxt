@@ -22,6 +22,9 @@ export default defineNuxtConfig({
       '/api/postUpdate/**': { 
         proxy: `${process.env.API_URL}/api/p/**`,
       },
+      '/api/user-verificate/**': { 
+        proxy: `${process.env.API_URL}/api/user-verificate/**`,
+      },
     }
   },
   plugins: [{ src: "~/plugins/google-autocomplete.js", ssr: false } ],

@@ -21,7 +21,7 @@
             async verificateUser() {
                 if (this.token !== '') {
                     try {
-                        const response = await fetch(this.config.public.apiUrl+'/user-verificate/'+this.token)
+                        const response = await fetch('/api/user-verificate/'+this.token)
                         if (response.ok) {
                             const data = await response.json(); // Parse JSON response
                             if (data.status == 'success' && data.user) {
