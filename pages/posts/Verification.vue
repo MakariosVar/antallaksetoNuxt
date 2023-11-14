@@ -111,14 +111,9 @@ export default {
 		async verificate(param) {
 			let id = param;
 			if (confirm("Πατόντας ΟΚ η αγγελία θα εγκριθεί και θα δημοσιοποιηθεί , είστε σίγουροι;") == true) {
-				let formData = new FormData();
-            	formData.append('auth_token', this.user.auth_token);
-				const response = await fetch(`${this.config.public.apiUrl}/verificatepost/${id}`, {
-					method: 'POST',
-					body: formData,
-				})
-				const data = await response.json();
-				if (data.status == "success") {
+				const response = await $fetch(`/api/postVerification?action=verificate&token=${this.user.auth_token}&id=${id}`)
+				const data = response.response ?? null;
+				if (data.status && data.status == "success") {
 					this.getPosts();
 				} else {
 					alert('Σφάλμα')
@@ -147,14 +142,9 @@ export default {
 			let id = param;
 
 			if (confirm("Πατόντας ΟΚ η αγγελία θα περάσει το στάδιο διαμόρφωσης και επαναξέτασης , είστε σίγουροι;") == true) {
-				let formData = new FormData();
-            	formData.append('auth_token', this.user.auth_token);
-				const response = await fetch(`${this.config.public.apiUrl}/toreedit/${id}`, {
-					method: 'POST',
-					body: formData,
-				})
-				const data = await response.json();
-				if (data.status == "success") {
+				const response = await $fetch(`/api/postVerification?action=reEdit&token=${this.user.auth_token}&id=${id}`)
+				const data = response.response ?? null;
+				if (data.status && data.status == "success") {
 					this.getPosts();
 				} else {
 					alert('Σφάλμα')
