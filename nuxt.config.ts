@@ -16,6 +16,12 @@ export default defineNuxtConfig({
       '/api/updateProfileImage/**': { 
         proxy: `${process.env.API_URL}/api/profile/**`,
       },
+      '/api/postStore/**': { 
+        proxy: `${process.env.API_URL}/api/p/store/**`,
+      },
+      '/api/postUpdate/**': { 
+        proxy: `${process.env.API_URL}/api/p/**`,
+      },
     }
   },
   plugins: [{ src: "~/plugins/google-autocomplete.js", ssr: false } ],

@@ -224,11 +224,11 @@ export default defineNuxtComponent({
         },
         async checkSession() {
             if (this.user) {
-                const response = await $fetch(`${this.config.public.apiUrl}/checkSession/${this.user.auth_token}`)
-                if (response.session) {
+                const response = await $fetch(`/api/checkSession?token=${this.user.auth_token}`)
+                if (response && response.sessionResponse && response.sessionResponse.session) {
                     this.loading = false;
                 }
-                if (response.expired) {
+                if (response && response.sessionResponse && response.sessionResponse.expired) {
                     this.$emit('sessionExpired')
                 }
             }
@@ -346,11 +346,11 @@ export default defineNuxtComponent({
 
             if (this.form.image4 != null) { data.append('image4', this.form.image4); }
             
-            var url = `${this.config.public.apiUrl}/p/store/${this.user.auth_token}`
+            var url = `/api/postStore/${this.user.auth_token}`
             var method = 'POST'
             if (this.isUpdate) {
                 data.append('_method', 'PATCH');
-                url = `${this.config.public.apiUrl}/p/${this.post.id}/${this.user.auth_token}`
+                url = `/api/postUpdate/${this.post.id}/${this.user.auth_token}`
             }
             const response = await fetch(url, {
                 method: method,
