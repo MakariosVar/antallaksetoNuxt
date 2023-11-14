@@ -18,13 +18,16 @@ export default {
     },
     methods: {
         async followUser() {
-            const response = await fetch(`${this.config.public.apiUrl}/follow/${this.profileId}/${this.user.auth_token}`)
-            const data = await response.json();
-            if (data.status == 'success') {
-                this.followtext = !this.followtext;
-                this.$emit('followClick')
-            } else if (data.expired) {
-                this.$emit('sessionExpired')
+            const response = await $fetch(`/api/followUser?id=${this.profileId}&token=${this.user.auth_token}`)
+
+            if (response && response.followResponse) {
+                let data = response.followResponse
+                if (data.status == 'success') {
+                    this.followtext = !this.followtext;
+                    this.$emit('followClick')
+                } else if (data.expired) {
+                    this.$emit('sessionExpired')
+                }
             }
         }
 
