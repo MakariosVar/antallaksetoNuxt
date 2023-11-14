@@ -135,6 +135,9 @@ export default defineNuxtComponent({
         }
     },
     async mounted() {
+        if (!this.user || this.user.role_id == 2) {
+            this.$router.push({name: 'Home'})
+        }
         await this.getMessages();
     }
 })

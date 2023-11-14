@@ -143,6 +143,9 @@ export default {
 		}
 	},
 	created() {
+		if (!this.user || this.user.role_id == 2) {
+			this.$router.push({name: 'Home'})
+		}
 		this.getPosts();
 	}
 }
