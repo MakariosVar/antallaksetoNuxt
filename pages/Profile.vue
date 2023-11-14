@@ -127,12 +127,13 @@ export default {
         },
         async deletecomment(id) {
             try {
-                const response = await fetch(`${this.config.public.apiUrl}/deletecomment/${id}`, {
-                    method: 'POST',
-                });
-                const data = await response.json();
-                if (data.status === 'success') {
-                    this.getComments();
+                const response = await $fetch(`/api/deleteComment?id=${id}`);
+
+                if (response && response.deleteResponse) {
+                    const data = response.deleteResponse
+                    if (data.status === 'success') {
+                        this.getComments();
+                    }
                 }
             } catch (error) {
                 console.error('An error occurred:', error);
