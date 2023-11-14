@@ -199,8 +199,8 @@
 
   // Fetch categories
   const { data: categoriesData } = await useFetch('/api/categories');
-  const categories = categoriesData.value.categories;
-  // console.log(categories);
+  const categories = categoriesData.value?.categories ?? [];
+    // console.log(categories);
   
 
   const queryCaught = () => {
