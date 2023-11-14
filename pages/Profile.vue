@@ -199,7 +199,7 @@ export default {
             if (this.commentInput != '') {
                 try {
 
-                    const response = await $fetch(`/api/addComment?comment=${this.commentInput}&token=${this.user.auth_token}&profile_id=${this.profile.id}`);
+                    const response = await $fetch(`/api/addComment?comment=${this.commentInput}&token=${this.user.auth_token}&profile_id=${this.$route.query.id}`);
 
                     const data = response.commentsResponse;
                     if (data.status === 'success') {
