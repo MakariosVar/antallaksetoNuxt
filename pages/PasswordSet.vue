@@ -46,8 +46,9 @@
         },
         methods: {
             async checkToken() {
-                let response = await $fetch(`${this.$config.public.apiUrl}/checkResetPasswordToken/${this.token}`);
-                if (response.status === "success") {
+                let response = await $fetch(`/api/checkResetPasswordToken?token=${this.token}`);
+                
+                if (response && response.resetResponse && response.resetResponse.status === "success") {
                     this.loaded = true
                 } else {
                     alert('Κάτι πήγε στραβά\nΚάν\'τε αίτηση ξανά');
