@@ -68,7 +68,7 @@
                         class="col-12 d-flex flex-column justify-content-center align-items-center border border-rounded my-2 py-2">
                         <!-- Preview Area -->
                         <div v-if="this.newImageLoad0 || (this.post && this.post.image0)" class="w-25">
-                            <img :src="getPreviewPhotoUrl0()" alt="Image Preview" class="w-100" />
+                            <img :src="getPreviewPhotoUrl0" alt="Image Preview" class="w-100" />
                         </div>
                         <div class="text-center">
                             <p>
@@ -85,7 +85,7 @@
                         class="col-12 d-flex flex-column justify-content-center align-items-center border border-rounded my-2 py-2">
                         <!-- Preview Area -->
                         <div v-if="this.newImageLoad1  || (this.post && this.post.image1)" class="w-25">
-                            <img :src="getPreviewPhotoUrl1()" alt="Image Preview" class="w-100" />
+                            <img :src="getPreviewPhotoUrl1" alt="Image Preview" class="w-100" />
                         </div>
                         <div class="text-center">
                             <p>
@@ -102,7 +102,7 @@
                         class="col-12 d-flex flex-column justify-content-center align-items-center border border-rounded my-2 py-2">
                         <!-- Preview Area -->
                         <div v-if="this.newImageLoad2 || (this.post && this.post.image2)" class="w-25">
-                            <img :src="getPreviewPhotoUrl2()" alt="Image Preview" class="w-100" />
+                            <img :src="getPreviewPhotoUrl2" alt="Image Preview" class="w-100" />
                         </div>
                         <div class="text-center">
                             <p>
@@ -119,7 +119,7 @@
                         class="col-12 d-flex flex-column justify-content-center align-items-center border border-rounded my-2 py-2">
                         <!-- Preview Area -->
                         <div v-if="this.newImageLoad3 || (this.post && this.post.image3)" class="w-25">
-                            <img :src="getPreviewPhotoUrl3()" alt="Image Preview" class="w-100" />
+                            <img :src="getPreviewPhotoUrl3" alt="Image Preview" class="w-100" />
                         </div>
                         <div class="text-center">
                             <p>
@@ -136,7 +136,7 @@
                         class="col-12 d-flex flex-column justify-content-center align-items-center border border-rounded my-2 py-2">
                         <!-- Preview Area -->
                         <div v-if="this.newImageLoad4 || (this.post && this.post.image4)" class="w-25">
-                            <img :src="getPreviewPhotoUrl4()" alt="Image Preview" class="w-100" />
+                            <img :src="getPreviewPhotoUrl4" alt="Image Preview" class="w-100" />
                         </div>
                         <div class="text-center">
                             <p>
@@ -198,6 +198,24 @@ export default defineNuxtComponent({
         return {
             categories
         };
+
+    },
+    computed: {
+        getPreviewPhotoUrl0 (){
+            return (this.post && this.post.image0 && !this.newImageLoad0) ? `${this.post.imageURL0 ?? ''}` : this.newImageLoad0;
+        },
+        getPreviewPhotoUrl1 (){
+            return (this.post && this.post.image1 && !this.newImageLoad1) ? `${this.post.imageURL1 ?? ''}` : this.newImageLoad1;
+        },
+        getPreviewPhotoUrl2 (){
+            return (this.post && this.post.image2 && !this.newImageLoad2) ? `${this.post.imageURL2 ?? ''}` : this.newImageLoad2;
+        },
+        getPreviewPhotoUrl3 (){
+            return (this.post && this.post.image3 && !this.newImageLoad3) ? `${this.post.imageURL3 ?? ''}` : this.newImageLoad3;
+        },
+        getPreviewPhotoUrl4 (){
+            return (this.post && this.post.image4 && !this.newImageLoad4) ? `${this.post.imageURL4 ?? ''}` : this.newImageLoad4;
+        },
     },
     methods: {
         onPlaceSelected(place) {
@@ -229,21 +247,18 @@ export default defineNuxtComponent({
                 console.error('Invalid file type. Please select an image.');
             }
         },
-        getPreviewPhotoUrl0 (){
-            return (this.post && this.post.image0 && !this.newImageLoad0) ? `${this.config.public.storageUrl}/${this.post.image0}` : this.newImageLoad0;
-        },
-        getPreviewPhotoUrl1 (){
-            return (this.post && this.post.image1 && !this.newImageLoad1) ? `${this.config.public.storageUrl}/${this.post.image1}` : this.newImageLoad1;
-        },
-        getPreviewPhotoUrl2 (){
-            return (this.post && this.post.image2 && !this.newImageLoad2) ? `${this.config.public.storageUrl}/${this.post.image2}` : this.newImageLoad2;
-        },
-        getPreviewPhotoUrl3 (){
-            return (this.post && this.post.image3 && !this.newImageLoad3) ? `${this.config.public.storageUrl}/${this.post.image3}` : this.newImageLoad3;
-        },
-        getPreviewPhotoUrl4 (){
-            return (this.post && this.post.image4 && !this.newImageLoad4) ? `${this.config.public.storageUrl}/${this.post.image4}` : this.newImageLoad4;
-        },
+		async getImage(path) {
+			try {
+				const response = await $fetch(`/api/image?image=${path}`);
+				const imageRes = response.imageRes; 
+
+				if (imageRes) {
+					return `data:image/jpeg;base64,${imageRes}`;
+				}
+			} catch (error) {
+				console.error('Error fetching image:', error);
+			}
+		},
         image1(event) {
             const file = event.target.files[0];
             if (file && file.type.startsWith('image/')) {
@@ -361,7 +376,15 @@ export default defineNuxtComponent({
                 return true;
             }
         },
-        setPost() {
+        hasImages() {
+            return this.post &&
+                (this.post.image0
+                || this.post.image1
+                || this.post.image2
+                || this.post.image3
+                || this.post.image4)
+        },
+        async setPost() {
             this.form.title = this.post.title ?? '';
             this.form.description = this.post.description ?? '';
             this.form.adlocation = this.post.adlocation ?? '';
@@ -371,6 +394,23 @@ export default defineNuxtComponent({
             this.form.phone = this.post.phone ?? '';
             this.form.transferPref = this.post.transferPref ?? '';
             this.form.premium = this.post.premium ?? '';
+            if (this.hasImages()) {
+                if (this.post.image0) {
+                    this.post.imageURL0 = await this.getImage(this.post.image0)
+                }
+                if (this.post.image1) {
+                    this.post.imageURL1 = await this.getImage(this.post.image1)
+                }
+                if (this.post.image2) {
+                    this.post.imageURL2 = await this.getImage(this.post.image2)
+                }
+                if (this.post.image3) {
+                    this.post.imageURL3 = await this.getImage(this.post.image3)
+                }
+                if (this.post.image4) {
+                    this.post.imageURL4 = await this.getImage(this.post.image4)
+                }
+            }
         }
     },
     created() {
