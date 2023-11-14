@@ -98,7 +98,6 @@
                 if (this.user && this.user.id) {
                     try {
                         const response = await $fetch(`/api/deleteUser?id=${this.user.id}&auth_token=${this.user.auth_token}`);
-                        console.log(response)
                         const data = response.deleteResponse
                         if (data.status === 'success') {
                             if (process.client) {
