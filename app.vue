@@ -38,6 +38,7 @@
       const setUser = (newUser) => {
         if (newUser) {
           loggedin.value = 1;
+          user.value = newUser
           if (process.client) {
             localStorage.setItem('user', JSON.stringify(newUser));
           }
