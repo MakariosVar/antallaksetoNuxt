@@ -19,7 +19,7 @@
 				<div v-for="post in posts" :key="post.id" class="card mb-3">
 					<div class="row g-0">
 						<div class="col-md-4 d-flex align-items-center justify-content-center">
-							<img v-if="post.image0" :src="`${config.public.storageUrl}/${post.image0}`"
+							<img v-if="post.imageURL" :src="post.imageURL"
 								class="img-fluid w-75">
 						</div>
 						<div class="col-md-8">
@@ -84,8 +84,29 @@ export default {
 	methods: {
 		async getPosts() {
 			let response = await $fetch(`/api/postsToVerificate?token=${this.user.auth_token}`);
-			this.posts = response.post;
-			this.loaded = true
+			if (response && response.post) {
+				for (const post of response.post) {
+					if (post.image0) {
+						const imageURL = await this.getImage(post.image0);
+						post.imageURL = imageURL;
+					}
+				}
+
+				this.posts = response.post;
+				this.loaded = true
+			}
+		},
+		async getImage(path) {
+			try {
+				const response = await $fetch(`/api/image?image=${path}`);
+				const imageRes = response.imageRes; 
+
+				if (imageRes) {
+					return `data:image/jpeg;base64,${imageRes}`;
+				}
+			} catch (error) {
+				console.error('Error fetching image:', error);
+			}
 		},
 		async verificate(param) {
 			let id = param;
