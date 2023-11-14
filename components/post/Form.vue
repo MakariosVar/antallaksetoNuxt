@@ -193,8 +193,9 @@ export default defineNuxtComponent({
         }
     },
     async asyncData() {
-        const config = useRuntimeConfig();
-        const categories = await $fetch(config.public.apiUrl + '/vue/categories');
+        const { data: categoriesData } = await useFetch('/api/categories');
+        const categories = categoriesData.value?.categories ?? [];
+        // console.log(categories);
         return {
             categories
         };
