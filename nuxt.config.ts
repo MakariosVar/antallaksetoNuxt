@@ -21,6 +21,9 @@ export default defineNuxtConfig({
       '/api/sendMessage': { 
         proxy: `${process.env.API_URL}/api/sendMessage`,
       },
+      '/api/readMessage/**': { 
+        proxy: `${process.env.API_URL}/api/readMessage/**`,
+      },
       '/api/postStore/**': { 
         proxy: `${process.env.API_URL}/api/p/store/**`,
       },

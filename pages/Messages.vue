@@ -105,8 +105,10 @@ export default defineNuxtComponent({
     },
     methods: {
         async onClickMessage(message) {
-            let data = await $fetch(`${this.config.public.apiUrl}/readMessage/${message.id}/${this.user.auth_token}`);
-            message.is_read = true;
+            if (this.user) {
+                let data = await $fetch(`api/readMessage/${message.id}/${this.user.auth_token}`);
+                message.is_read = true;
+            }
         },
         async getMessages() {
             let data = await $fetch(`/api/getMessages?token=${this.user.auth_token}`);
