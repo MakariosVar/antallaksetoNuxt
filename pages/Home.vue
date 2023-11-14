@@ -33,7 +33,7 @@
             <div class="container">
                 <h2 class="text-center">Προωθημένες Αγγελίες</h2>
                 <div class="row">
-                    <div v-for="post in premiumPosts" :key="post.id" class="col-md-3 mb-4">
+                    <div v-for="post in premiumPosts" :key="post.id" class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
                         <nuxt-link :to="{ path: '/posts/view', query: { id: post.id } }" class="text-decoration-none">
                             <div class="card h-100">
                                 <img v-if="post.imageURL" :src="post.imageURL" class="card-img-top" style="height: 300px;" alt="Post Image">

@@ -20,7 +20,7 @@
             <div class="container">
                 <div class="row">
                     <nuxt-link v-for="post in sortedPosts" :key="post.id" :to="{ path: '/posts/view', query: { id: post.id } }"
-                        class="col-md-3 col-sm-6 mb-4">
+                        class="col-md-4 col-lg-3 col-sm-6 col-xs-12 mb-4">
                         <div class="card">
                             <img :src="post.imageURL" class="card-img-top" style="height: 300px;" alt="Post Image">
                             <div class="card-body">
