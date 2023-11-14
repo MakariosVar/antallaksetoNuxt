@@ -18,6 +18,9 @@ export default defineNuxtConfig({
       '/api/updateProfileImage/**': { 
         proxy: `${process.env.API_URL}/api/profile/**`,
       },
+      '/api/sendMessage': { 
+        proxy: `${process.env.API_URL}/api/sendMessage`,
+      },
       '/api/postStore/**': { 
         proxy: `${process.env.API_URL}/api/p/store/**`,
       },

@@ -62,7 +62,7 @@ export default {
     async sendMessage() {
       const form = new FormData(document.getElementById('Message'));
       try {
-        const response = await fetch(this.config.public.apiUrl+'/sendMessage', {
+        const response = await fetch('api/sendMessage', {
           method: 'POST',
           body: form,
         });
