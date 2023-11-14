@@ -203,6 +203,7 @@ export default {
 
                     const data = response.commentsResponse;
                     if (data.status === 'success') {
+                        this.commentInput = ''
                         this.commentExists = false
                         this.getComments();
                     } else if (data.expired) {
