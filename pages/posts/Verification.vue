@@ -123,19 +123,22 @@ export default {
 		},
 		async  deletePost(param) {
 		 	let id = param;
-
 		 	if (confirm("Πατόντας ΟΚ η αγγελία θα διαγραφεί, είστε σίγουροι;") == true) {
-				let formData = new FormData();
-            	formData.append('auth_token', this.user.auth_token);
-
-		 		const response = await fetch (`${this.config.public.apiUrl}/p/${id}/${this.user.auth_token}`, {
-					method: 'DELETE',
-					body: formData,
-				});
-				const data = await response.json();
-				if (data.status == "success") {
-					this.getPosts();
+				const response = await $fetch(`/api/deletePost?id=${id}&auth_token=${this.user.auth_token}`);
+				const data = response.deleteResponse
+				if (data.status === 'success') {
+					router.push({ name: 'Profile', query: { id: user.id } });
 				}
+				if (data.unauthorized) {
+					$emit('sessionExpired');
+				}
+				if (data.expired) {
+					$emit('sessionExpired');
+				}
+				if (data.post_not_found) {
+					router.push({ name: 'Home' });
+				}
+					this.getPosts();
 		 	}
 		},
 		async reEditPost(param) {
