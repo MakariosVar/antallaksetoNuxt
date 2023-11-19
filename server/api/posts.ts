@@ -5,9 +5,10 @@ export default defineEventHandler(async (event) => {
   const { page } = getQuery(event);
   const { category } = getQuery(event);
   const { q } = getQuery(event);
+  const { place } = getQuery(event);
 
   try {
-    const response = await axios.get(`${config.apiUrl}/vue/posts?page=${page}&category=${category}&q=${q}`);
+    const response = await axios.get(`${config.apiUrl}/vue/posts?page=${page}&category=${category}&q=${q}&place=${place}`);
     const post_all = response.data;
 
     delete post_all.first_page_url;
