@@ -47,7 +47,9 @@
                         class="form-control" name="phone" autocomplete="phone" autofocus>
                 </div>
                 <div class="col-md-12 col-sm-12 form-group">
-                    <PostAddressInput @placeSelected="onPlaceSelected" :postLocation="post ? post.fullAddress : null" :required="isUpdate ? false : true"/>
+                    <ClientOnly>
+                        <PostAddressInput @placeSelected="onPlaceSelected" :postLocation="post ? post.fullAddress : null" :required="isUpdate ? false : true"/>
+                    </ClientOnly>
                 </div>
                 <div class="col-12 form-group">
                     <label for="transferPref">Προτίμηση Ανταλλαγής</label>
