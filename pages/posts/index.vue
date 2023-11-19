@@ -1,12 +1,21 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col-12 py-3">
-        <div class="d-flex flex-column align-items-center border bg-light mx-5 p-2">
-          <h3>Αναζήτηση</h3>
-          <form @submit.prevent="search" style="width: 70%;">
-            <div class="input-group mb-3">
-              <input v-model="searchTitle" @blur="search" class="form-control" type="text" placeholder="Ψάχνω για..">
+      <div class="col-12 py-2">
+        <div class="d-flex flex-column align-items-center border bg-light  p-2">
+          <h3>Όλες οι αγγελίες</h3>
+          <ClientOnly>  
+            <div>
+              <a href="#" class="link-secondary" @click.prevent="onShowFiltersClick">
+                Φίλτρα
+                <font-awesome-icon v-if="!showFilters" :icon="['fas', 'caret-down']" class="me-2" />
+                <font-awesome-icon v-else :icon="['fas', 'caret-up']" class="me-2" />
+              </a>
+            </div>
+          </ClientOnly>
+          <form v-if="showFilters" @submit.prevent="search" style="width: 70%;" class="border p-3">
+            <div class="input-group mb-2">
+              <input v-model="searchTitle" @blur="search" class="form-control form-control-sm" type="text" placeholder="Ψάχνω για..">
               <span v-if="searchTitle" class="input-group-text p-0">
                 <ClientOnly>
                   <font-awesome-icon
@@ -17,29 +26,27 @@
                 </ClientOnly>
               </span>
             </div>
-            <div class="input-group mb-3">
-              <select v-model="searchCategory" @change="search" id="category" class="form-select form-select-sm" name="category">
-                <option value="all">Όλες οι Κατηγορίες</option>
-                <option
-                v-for="category in categories"
-                :key="category.id"
-                :value="category.title"
-                >
-                {{ category.title + '(' + category.count + ')' }}
-              </option>
-            </select>
-            <span v-if="searchCategory && searchCategory != 'all'" class="input-group-text p-0">
-              <ClientOnly>
-                <font-awesome-icon
-                  :icon="['fas', 'times']"
-                  class="btn" 
-                  @click="clearCategory"
-                />
-              </ClientOnly>
-            </span>
-          </div>
-            <div class="">
-              <button type="submit" class="btn btn-primary">Αναζήτηση</button>
+            <div class="row">
+              <div class="col-12 col-md-6 mb-2">
+                <ClientOnly>
+                  <PostAddressInput @placeSelected="onPlaceSelected" @clearSearch="clearSearchPlace" :postLocation="addressInput" :isIndexPage="true"/>
+                </ClientOnly>
+              </div>
+              <div class="col-12 col-md-6 mb-2">
+                <select v-model="searchCategory" @change="search" id="category" class="form-select form-select-sm w-100" name="category">
+                  <option value="all">Όλες οι Κατηγορίες</option>
+                  <option
+                    v-for="category in categories"
+                    :key="category.id"
+                    :value="category.title"
+                    >
+                    {{ category.title + '(' + category.count + ')' }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="my-2 text-center">
+              <button type="submit" class="btn btn-sm btn-primary">Αναζήτηση</button>
             </div>
           </form>
         </div>
@@ -71,12 +78,15 @@
     last_page: 1,
   });
   const route = useRoute();
-
+  
+  const showFilters = ref(false);
   const loadingMorePosts = ref(false);
   const searchTitle = ref(route?.query?.search ?? '');
+  const addressInput = ref('');
+  const placeObject = ref(route?.query?.place ?? '');
   const searchCategory = ref(route?.query?.category ?? 'all');
   const page = ref(0);
-
+  
   const fetchPosts = async () => {
     page.value++;
 
@@ -93,6 +103,11 @@
       }
   };
 
+  const onPlaceSelected = (place) => {
+    addressInput.value = place.fullAddress
+    placeObject.value = place
+  }
+
   const search = async () => {
     page.value = 1;
     const router = useRouter();
@@ -105,7 +120,17 @@
 
     // Reset page value to 1 when performing a new search.
     try {
-      const { data: postData } = await useFetch(`/api/posts?page=${page.value}&category=${searchCategory.value}&q=${searchTitle.value}`);
+      let url = `/api/posts?page=${page.value}`;
+      if (searchCategory.value) {
+        url = url+`&category=${searchCategory.value}`
+      }
+      if (searchTitle.value) {
+        url = url+`&q=${searchTitle.value}`
+      }
+      if (placeObject.value) {
+        url = url+`&place=${JSON.stringify(placeObject.value)}`
+      }
+      const { data: postData } = await useFetch(url);
       const response = postData.value.posts_all;
       response.data.forEach(async (post) => {
         if (post.image0) {
@@ -119,6 +144,10 @@
     }
   };
 
+  const clearSearchPlace = () => {
+    placeObject.value = ""
+    search();
+  }
   const clearSearch = () => {
     searchTitle.value = ""
     search();
@@ -156,7 +185,17 @@
       page.value++;
 
       try {
-        const { data: postData } = await useFetch(`/api/posts?page=${page.value}&category=${searchCategory.value}&q=${searchTitle.value}`);
+        let url = `/api/posts?page=${page.value}`;
+        if (searchCategory.value) {
+          url = url+`&category=${searchCategory.value}`
+        }
+        if (searchTitle.value) {
+          url = url+`&q=${searchTitle.value}`
+        }
+        if (placeObject.value) {
+          url = url+`&place=${JSON.stringify(placeObject.value)}`
+        }
+        const { data: postData } = await useFetch(url);
         const response = postData.value ? postData.value.posts_all : null;
 
         if (page.value === 1) {
@@ -214,16 +253,19 @@
     }
   };
   watch(
-      () => route.query,
-      (newQuery) => {
-        if (newQuery.search) {
-          searchTitle.value = newQuery.search;
-          search();
-        }
+    () => route.query,
+    (newQuery) => {
+      if (newQuery.search) {
+        searchTitle.value = newQuery.search;
+        search();
       }
-    );
+    }
+  );
   
-  
+  const onShowFiltersClick = () => {
+    showFilters.value = !showFilters.value
+  }
+
   onMounted(async() => {
     const router = useRouter();
     await router.isReady();
