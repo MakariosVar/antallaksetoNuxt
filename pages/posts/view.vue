@@ -96,7 +96,7 @@
 						<small><strong>Τηλέφωνο:</strong> {{ post.phone }}</small>
 					</p>
 					<p class="postText">
-						<small><strong>Ημερομηνία:</strong> {{ post.date }}</small>
+						<small><strong>Ημερομηνία:</strong> {{ post.date.slice(0, 10) }}</small>
 					</p>
 					<div v-if="loggedin && user.id == post.user_id" class="text-center">
 						<div>
@@ -114,6 +114,23 @@
 								Διαγραφή
 							</button>
 						</div>
+					</div>
+					<div v-else>
+						<ClientOnly>
+							<p class="postText">
+								<small>
+									<strong>
+										Εντόπισες κάποιο λάθος;
+									</strong>
+									<Report 
+										:user="user"
+										:object_type="'POST'"
+										:object_id="post.id"
+										@sessionExpired="$emit('sessionExpired')"
+									/>
+								</small>
+							</p>
+						</ClientOnly>
 					</div>
 				</div>
 			</div>
@@ -133,7 +150,6 @@ const post = ref({});
 const loaded = ref(false);
 const route = useRoute();
 const router = useRouter();
-
 
 const getImage = async (path) => {
 	try {

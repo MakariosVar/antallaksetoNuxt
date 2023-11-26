@@ -52,7 +52,7 @@
             </span>
           </a>
           <div class="dropdown-menu dropdown-menu-end" aria-labelledby="admin-dropdown">
-            <a :href="`${backendBasePath}/admin`" target="_blank" class="dropdown-item">
+            <a v-if="user.role_id == 1" :href="`${backendBasePath}/admin`" target="_blank" class="dropdown-item">
               <span class="text-dark">Admin panel</span>
             </a>
             <nuxt-link :to="{path: '/posts/verification'}" class="dropdown-item">
@@ -60,6 +60,9 @@
             </nuxt-link>
             <nuxt-link to="/messages" class="dropdown-item">
               <span class="text-dark">Μηνύματα ({{ unreadMessages }})</span>
+            </nuxt-link>
+            <nuxt-link to="/reports" class="dropdown-item">
+              <span class="text-dark">Αναφορές</span>
             </nuxt-link>
           </div>
         </li>
@@ -175,7 +178,7 @@
     },
     mounted (){
       this.fetchProfileImage();
-      if (this.user && this.user.role_id == 1) { 
+      if (this.user && this.user.role_id != 2) { 
         // Call the method initially
         this.getUnreadMessages();
         this.getPendingPosts();

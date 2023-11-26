@@ -67,6 +67,14 @@
                     </div>
                 </div>
             </div>
+            <div class="text-center" v-if="!user || user.id != profileUser.id">
+                <Report
+                    :user="user"
+                    :object_type="'PROFILE'"
+                    :object_id="profileUser.id"
+                    @sessionExpired="$emit('sessionExpired')"
+                />
+            </div>
         </div>
     </div>
 </template>
