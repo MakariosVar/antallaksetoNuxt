@@ -391,7 +391,7 @@ export default defineNuxtComponent({
             this.form.title = this.post.title ?? '';
             this.form.description = this.post.description ?? '';
             this.form.adlocation = this.post.adlocation ?? '';
-            this.form.fullPlace = this.post.fullPlace ?? {};
+            this.form.fullPlace = this.post.fullAddress ?? {};
             this.form.category = this.post.category ?? 'Διάφορα';
             this.form.condition = this.post.condition ?? 'Μεταχειρισμένο';
             this.form.phone = this.post.phone ?? '';
