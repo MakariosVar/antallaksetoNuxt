@@ -7,7 +7,6 @@ export default defineEventHandler(async (event) => {
   const { token } = getQuery(event);
 
   try {
-    console.log(descriptionInput)
     const formData = new URLSearchParams({
       description: descriptionInput,
     })
