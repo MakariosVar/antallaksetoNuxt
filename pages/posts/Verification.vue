@@ -127,18 +127,11 @@ export default {
 				const response = await $fetch(`/api/deletePost?id=${id}&auth_token=${this.user.auth_token}`);
 				const data = response.deleteResponse
 				if (data.status === 'success') {
-					router.push({ name: 'Profile', query: { id: user.id } });
-				}
-				if (data.unauthorized) {
-					$emit('sessionExpired');
-				}
-				if (data.expired) {
-					$emit('sessionExpired');
-				}
-				if (data.post_not_found) {
-					router.push({ name: 'Home' });
-				}
 					this.getPosts();
+				} else {
+					alert('Σφάλμα')
+					console.error(data.message)
+				}
 		 	}
 		},
 		async reEditPost(param) {
