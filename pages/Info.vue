@@ -8,7 +8,7 @@
     <div class="carousel-inner">
       <div data-bs-interval="10000" class="carousel-item active">
         <img src="~assets/images/NewLogoPNG.png" style="height: 100vh;" class="d-block w-100" alt="...">
-        <div class="carousel-caption bg-light py-4 rounded text-black">
+        <div class="carousel-caption bg-op-5-light py-4 rounded text-black">
           <h1>Καλωσορίσατε στο Ανταλλαξέτο.gr <br> Την κοινότητα όπου η ανταλλαγή γίνεται πραγματικότητα!</h1>
           <p class="lead" style="font-size:0.9rem">
             {{ `Στο Ανταλλαξέτο.gr, προσφέρουμε έναν χώρο όπου μπορείτε να ανακαλύψετε τον θησαυρό σας ή να μοιραστείτε 
@@ -20,7 +20,7 @@
       <div data-bs-interval="10000" class="carousel-item">
         <img src="~assets/images/bg.jpg" style="height: 100vh;" class="d-block w-100" alt="...">
         <div class="carousel-caption">
-          <div class="container bg-light py-4 rounded text-black">
+          <div class="container bg-op-5-light py-4 rounded text-black">
             <h1>Πως Λειτουργεί:</h1>
             <p class="lead" style="font-size: 0.9rem;">
               Είναι πολύ απλό: δημιουργήστε μια αγγελία για το αντικείμενο που θέλετε να ανταλλάξετε ή αυτό που ψάχνετε.
@@ -39,7 +39,7 @@
       <div data-bs-interval="10000" class="carousel-item">
         <img src="~assets/images/sigmund-UorPU70_D60-unsplash.jpg" style="height: 100vh;" class="d-block w-100" alt="...">
         <div class="carousel-caption">
-          <div class="container bg-light py-4 rounded text-black">
+          <div class="container bg-op-5-light py-4 rounded text-black">
             <p style="font-size: 0.8rem;" class="fw-bold">Η ανταλλαγή αγαθών και προϊόντων είναι πολύ περισσότερο από απλά μια διαδικτυακή δραστηριότητα - είναι ένας τρόπος ζωής 
               που φέρνει μαζί ανθρώπους, δημιουργεί δεσμούς, και επιδρά θετικά στην κοινότητα και τον πλανήτη μας.
             </p>
@@ -71,7 +71,18 @@
     </button>
   </div>
 </template>
+<style scoped>
+  .carousel-item > div {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 
+  .bg-op-5-light {
+    background-color: rgba(256, 256, 256, 0.7);
+  }
+</style>
 <script>
 export default {
   props: {
