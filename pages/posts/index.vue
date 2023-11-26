@@ -246,10 +246,11 @@
     // console.log(useRoute().query)
     if (useRoute().query.category) {
       searchCategory.value = useRoute().query.category;
-      
+      showFilters.value = true;
     }
     if (useRoute().query.search) {
       searchTitle.value = useRoute().query.search;
+      showFilters.value = true;
     }
   };
   watch(
