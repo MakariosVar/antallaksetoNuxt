@@ -52,6 +52,11 @@
         </div>
       </div>
     </div>
+    <div class="row">
+      <div class="col-12">
+          <Adsbygoogle id="ca-pub-5907299200218208" style="height:200px; width: 100%;"/>
+      </div>
+    </div>
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
       <nuxt-link v-for="post in posts.data" :key="post.id" :to="{ path: '/posts/view', query: { id: post.id } }" class="col post">
         <div class="card h-100">

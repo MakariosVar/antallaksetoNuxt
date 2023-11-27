@@ -41,6 +41,13 @@ export default defineNuxtConfig({
     "~/assets/styles/main.scss",
     '@fortawesome/fontawesome-svg-core/styles.css'
   ],
+  modules: [
+    ['@nuxtjs/google-adsense']
+  ],
+
+  googleAdsense: {
+    id: 'ca-pub-5907299200218208',
+  },
   script: [
     {
       src: 'bootstrap/dist/js/bootstrap.bundle.min.js'
