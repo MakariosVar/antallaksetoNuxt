@@ -8,8 +8,8 @@
         </div>
         <div class="row justify-content-center py-5">
             <div class="col-md-8 py-5">
-                <div class="card">
-                    <div class="card-header text-center">Σύνδεση</div>
+                <div class="card shadow bg-body">
+                    <div class="card-header bg-white text-center"><strong>Σύνδεση</strong></div>
                     <div class="card-body">
                         <div v-if="showLoginError" class="alert alert-danger d-flex align-items-center" role="alert">
                             <font-awesome-icon :icon="['fas', 'triangle-exclamation']" class="me-2" size="2x" />

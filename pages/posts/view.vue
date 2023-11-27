@@ -12,7 +12,7 @@
 				<span class="visually-hidden">Loading...</span>
 			</div>
 		</div>
-		<div v-else class="row justify-content-center m-2 bg-light border py-4 rounded pageMinFit">
+		<div v-else class="row justify-content-center m-2 bg-white shadow p-3 mb-5 bg-body border py-4 rounded pageMinFit">
 			<div class="col-md-10 col-12">
 				<p class="font-italic text-center alert alert-warning p-0" style="font-size:0.8rem">
 					* Προτείνουμε οι ανταλλαγές να γίνονται έπειτα από αρκετή συνεννόηση

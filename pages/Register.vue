@@ -7,9 +7,9 @@
     <div v-else class="container py-5" style="height:700px;">
         <div class="row justify-content-center py-5">
             <div class="col-md-8 py-5">
-                <div class="card">
-                    <div class="card-header text-center">
-                        {{ 'Εγγραφή' }}
+                <div class="card hadow bg-body">
+                    <div class="card-header bg-white text-center">
+                        <strong>{{ 'Εγγραφή' }}</strong>
                     </div>
                     <div class="card-body">
                         <div v-if="incorectPasswordRepeatError" class="alert alert-danger d-flex align-items-center" role="alert">

@@ -12,20 +12,20 @@
                 <ProfileInfo v-if="profile && profileUser" :profile="profile" :profileUser="profileUser" :user="user"
                     :isMine="isMine" @sessionExpired="sessionExpired" @updateProfileImage="updateProfileImage"
                     @followClick="followClick" :profileImage="profileAvatar" />
-                <div v-if="user && user.id !== profile.user_id" class="card text-center my-2">
+                <div class="card shadow p-3 mb-5 bg-body text-center my-2">
                     <div class="card-body">
-                        <h1>Αφήστε Σχόλιο</h1>
-                        <form @submit.prevent="addComment" id="Comment">
-                            <div class="form-group">
-                                <input v-model="commentInput" id="comment" type="text" class="form-control" name="comment"
-                                    autocomplete="comment" autofocus>
+                        <h1>Σχόλια</h1>
+                        <form  v-if="user && user.id !== profile.user_id" @submit.prevent="addComment" id="Comment">
+                            <div class="input-group">
+                                <textarea v-model="commentInput" id="comment" type="text" rows="1" class="form-control" name="comment"
+                                    autocomplete="comment" autofocus placeholder="Αφήστε σχόλιο...">
+                                </textarea>
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ message }}</strong>
                                 </span>
-                                <div class="mt-3">
-                                    <button type="submit" class="btn btn-dark">Εκχώρηση</button>
-                                </div>
+                                <button class="btn btn-outline-dark" type="submit">Εκχώρηση</button>
                             </div>
+                            
                         </form>
                         <div v-if="commentExists" class="alert alert-warning d-flex align-items-center" role="alert">
                             <font-awesome-icon :icon="['fas', 'triangle-exclamation']" class="me-2" size="2x" />
@@ -33,70 +33,72 @@
                                 Μπορείτε να αφήσετε ένα σχόλιο σε κάθε προφίλ.
                             </div>
                         </div>
+                        <div v-for="comment in comments" :key="comment.id" class="card mb-3 py-2 text-center my-2">
+                            <nuxt-link :to="'/profile?id=' + comment.user_id">
+                                <h3 class="blue">{{ comment.commentersname }}</h3>
+                            </nuxt-link>
+                            <p>
+                                <span>{{ comment.comment }}</span>
+                            </p>
+                            <span style="font-size:13px;">{{ comment.date }}</span>
+                            <form @submit.prevent="deletecomment(comment.id)" v-if="user">
+                                <button v-if="user.id === comment.user_id || user.id === profile.user_id" type="submit"
+                                    class="btn btn-link">Delete</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-            <ProfileDescription v-if="profile && profileUser" @sessionExpired="sessionExpired" :profileUser="profileUser"
-                :profile="profile" :isMine="isMine" :user="user" />
-        </div>
-        <div v-if="comments && comments.length" class="mt-4 text-center">
-            <h1><strong>Σχόλια</strong></h1>
-            <hr>
-        </div>
-        <div v-for="comment in comments" :key="comment.id" class="card mb-3 text-center">
-            <nuxt-link :to="'/profile?id=' + comment.user_id">
-                <h3 class="blue">{{ comment.commentersname }}</h3>
-            </nuxt-link>
-            <p>
-                <span>{{ comment.comment }}</span>
-            </p>
-            <span style="font-size:13px;">{{ comment.date }}</span>
-            <form @submit.prevent="deletecomment(comment.id)" v-if="user">
-                <button v-if="user.id === comment.user_id || user.id === profile.user_id" type="submit"
-                    class="btn btn-link">Delete</button>
-            </form>
-        </div>
-        <div class="mt-4 text-center">
-            <h1><strong>Αγγελίες</strong></h1>
-            <hr>
-        </div>
-        <div v-if="posts.length > 0" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
-            <div v-for="post in sortedFilteredPosts" :key="post.id" class="col-lg-3 col-md-6 col-sm-12 mb-4">
-                <div class="card h-100">
-                    <nuxt-link :to="`/posts/view?id=${post.id}`">
-                        <img v-if="post.imageURL" :src="post.imageURL" class="card-img-top" style="height: 300px;"
-                            alt="Post Image">
-                        <div v-else class="d-flex justify-content-center align-items-center"
-                            style="width: 100%; height: 300px;">
-                            <div class="spinner-grow" style="color: #e4e3e3; width: 150px; height: 150px;" role="status">
-                                <span class="visually-hidden">Loading...</span>
+            <div class="col-md-8">
+                <ProfileDescription v-if="profile && profileUser" @sessionExpired="sessionExpired" :profileUser="profileUser"
+                    :profile="profile" :isMine="isMine" :user="user"
+                />
+                <div class="card shadow p-3 mb-5 bg-body">
+                    <div class="mt-4 text-center">
+                        <h1><strong>Αγγελίες</strong></h1>
+                        <hr>
+                    </div>
+                    <div v-if="posts.length > 0" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+                        <div v-for="post in sortedFilteredPosts" :key="post.id" class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                            <div class="card shadow p-3 mb-5 bg-body h-100">
+                                <nuxt-link :to="`/posts/view?id=${post.id}`">
+                                    <img v-if="post.imageURL" :src="post.imageURL" class="card-img-top" style="height: 250px;"
+                                        alt="Post Image">
+                                    <div v-else class="d-flex justify-content-center align-items-center"
+                                        style="width: 100%; height: 300px;">
+                                        <div class="spinner-grow" style="color: #e4e3e3; width: 150px; height: 150px;" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-body pb-0">
+                                        <h5 class="card-title text-black">{{ post.title }}</h5>
+                                        <span v-if="post.done" class="card-text badge bg-success">ΟΛΟΚΛΗΡΩΜΕΝΗ</span>
+                                        <p v-if="!(post.verified === 1)" class="card-text text-danger">ΠΡΟΣ ΕΓΚΡΙΣΗ</p>
+                                    </div>
+                                </nuxt-link>
                             </div>
                         </div>
-                        <div class="card-body">
-                            <h5 class="card-title text-black">{{ post.title }}</h5>
-                            <span v-if="post.done" class="card-text badge bg-success">ΟΛΟΚΛΗΡΩΜΕΝΗ</span>
-                            <p v-if="!(post.verified === 1)" class="card-text text-danger">ΠΡΟΣ ΕΓΚΡΙΣΗ</p>
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-4" v-if="user && user.id === profileUser.id">
+                            <div class="card shadow p-3 mb-5 bg-body h-100">
+                                <nuxt-link to="/posts/create">
+                                    <img src="~assets/images/default.png" class="card-img-top" style="height: 250px;" alt="Default Post Image">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Προσθήκη Νέας Αγγελίας</h5>
+                                    </div>
+                                </nuxt-link>
+                            </div>
                         </div>
-                    </nuxt-link>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 mb-4" v-if="user && user.id === profileUser.id">
-                <div class="card h-100">
-                    <nuxt-link to="/posts/create">
-                        <img src="~assets/images/default.png" class="card-img-top" alt="Default Post Image">
-                        <div class="card-body">
-                            <h5 class="card-title">Προσθήκη Νέας Αγγελίας</h5>
+                    </div>
+                    <div v-else class="text-center">
+                        <h3>Καμία αγγελία.</h3>
+                        <div v-if="user && user.id === profile.user_id">
+                            <nuxt-link to="/posts/create">Δημιουργήστε την πρώτη σας αγγελία.</nuxt-link>
                         </div>
-                    </nuxt-link>
+                    </div>
                 </div>
             </div>
         </div>
-        <div v-else class="text-center">
-            <h3>Καμία αγγελία.</h3>
-            <div v-if="user && user.id === profile.user_id">
-                <nuxt-link to="/posts/create">Δημιουργήστε την πρώτη σας αγγελία.</nuxt-link>
-            </div>
-        </div>
+
     </div>
 </template>
 

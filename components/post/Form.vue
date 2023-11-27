@@ -5,7 +5,7 @@
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
-    <div v-else class="container bg-light border my-3 py-3 border rounded">
+    <div v-else class="container shadow mb-5 bg-body bg-light border my-3 py-3 border rounded">
         <h1 class="text-center">
             Προσθέστε νέα αγγελία
         </h1>

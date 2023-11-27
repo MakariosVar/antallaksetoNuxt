@@ -25,7 +25,7 @@
                 <h2 class="display-4">Κορυφαίες Κατηγορίες</h2>
                 <CategoriesHorizontalList v-if="categories" :categories="categories" />
                 <div class="text-center my-3">
-                    <nuxt-link to="/posts/" class="btn btn-outline-secondary">ΔΕΙΤΕ ΟΛΕΣ ΤΙΣ ΑΓΓΕΛΙΕΣ</nuxt-link>
+                    <nuxt-link to="/posts/" class="btn btn-lg pulse btn-outline-dark constant-tilt-shake">ΔΕΙΤΕ ΟΛΕΣ ΤΙΣ ΑΓΓΕΛΙΕΣ</nuxt-link>
                 </div>
             </div>
         </section>
@@ -40,7 +40,7 @@
                 <div class="row">
                     <div v-for="post in premiumPosts" :key="post.id" class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
                         <nuxt-link :to="{ path: '/posts/view', query: { id: post.id } }" class="text-decoration-none">
-                            <div class="card h-100">
+                            <div class="card shadow mb-5 bg-body h-100">
                                 <img v-if="post.imageURL" :src="post.imageURL" class="card-img-top" style="height: 300px;" alt="Post Image">
                                 <div v-else class="d-flex justify-content-center align-items-center" style="width: 100%; height: 300px;">
                                     <div class="spinner-grow" style="color: #e4e3e3; width: 150px; height: 150px;" role="status">
@@ -84,6 +84,19 @@
 
 .home-container {
     padding: 6% 0 6% 0;
+}
+
+@keyframes tilt-shaking {
+  0% { transform: rotate(0deg); }
+  10% { transform: rotate(0deg); }
+  20% { transform: rotate(1deg); }
+  30% { transform: rotate(0eg); }
+  40% { transform: rotate(-1deg); }
+  50% { transform: rotate(0deg); }
+  100% { transform: rotate(0deg); }
+}
+.constant-tilt-shake {
+  animation: tilt-shaking 1s infinite;
 }
 </style>
 

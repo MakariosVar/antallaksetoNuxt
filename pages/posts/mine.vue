@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="card shadow p-3 mb-5 bg-body container mt-2">
         <div v-if="!posts" class="pageMinFit text-center">
             <div class="d-flex justify-content-center">
                 <img src="~assets/images/NewLogoPNG.svg" class="imageNotFound">
@@ -7,7 +7,7 @@
             <div style="font-size: 40px;">
                 <strong>Δεν έχετε καταχωρήσει αγγελίες ακόμη</strong>
                 <br>
-                <nuxt-link to="/posts/create" class="btn btn-primary mt-3">Προώθηση Αγγελίας</nuxt-link>
+                <nuxt-link to="/posts/create" class="btn btn-outline-dark mt-3">Προσθήκη Αγγελίας</nuxt-link>
             </div>
         </div>
         <div v-else>
@@ -15,13 +15,13 @@
                 <h1 class="display-4">Οι Αγγελίες μου</h1>
             </div>
             <div class="mt-3 text-center p-3">
-                <nuxt-link to="/posts/create" class="btn btn-primary btn-lg">Προώθηση Αγγελίας</nuxt-link>
+                <nuxt-link to="/posts/create" class="btn btn-outline-dark">Προσθήκη Αγγελίας</nuxt-link>
             </div>
             <div class="container">
                 <div class="row">
                     <nuxt-link v-for="post in sortedPosts" :key="post.id" :to="{ path: '/posts/view', query: { id: post.id } }"
                         class="col-md-4 col-lg-3 col-sm-6 col-xs-12 mb-4">
-                        <div class="card">
+                        <div class="card shadow mb-5 bg-body">
                             <img :src="post.imageURL" class="card-img-top" style="height: 300px;" alt="Post Image">
                             <div class="card-body">
                                 <p class="card-text">

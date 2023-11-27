@@ -1,7 +1,7 @@
 <template>
   <div>
-    <span class="d-flex flex-column" style="min-height: 100vh;">
-      <LayoutHeaderVue :loggedin="loggedin" :user="user" />
+    <span class="d-flex flex-column bg-light" style="min-height: 100vh;">
+      <LayoutHeaderVue :loggedin="loggedin" :user="user"  class="sticky-top"/>
       <NuxtPage 
         @userLogged="setUser($event)"
         @sessionExpired="sessionExpired"

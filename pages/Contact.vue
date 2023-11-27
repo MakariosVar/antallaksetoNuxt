@@ -1,6 +1,6 @@
 <template>
   <section class="bg-light bg-gradient">
-    <div class="container">
+    <div class="container card shadow mb-5 mt-3 py-2 bg-body">
       <h1 class="text-center">Επικοινωνήστε μαζί μας</h1>
       <div class="row justify-content-center">
         <div class="col-lg-6">

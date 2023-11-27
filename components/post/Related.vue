@@ -4,7 +4,7 @@
             <h5 class="text-decoration-underline">Σχετικές Αγγελίες</h5>
         </div>
         <nuxt-link v-for="post in posts" :key="post.id" :to="{ path: '/posts/view', query: { id: post.id } }" class="col-lg-3 col-sm-6">
-            <div class="card h-100">
+            <div class="card shadow p-3 mb-5 bg-body h-100">
                 <img v-if="post.imageURL" :src="post.imageURL" class="card-img-top" style="height: 300px; width: auto;" alt="Post Image">
                 <div v-else class="d-flex justify-content-center align-items-center" style="width: 100%; height: 300px;">
                     <div class="spinner-grow" style="color: #e4e3e3; width: 150px; height: 150px;" role="status">

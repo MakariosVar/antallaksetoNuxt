@@ -1,5 +1,5 @@
 <template>
-    <div class="card text-center">
+    <div class="card text-center shadow p-3 mb-4 bg-body">
         <div class="card-body">
             <input type="file" ref="imageInput" class="d-none" @change="handleImageUpload">
             <span v-if="isMine" @click="selectImageToUpload" class="profile-image-container">
