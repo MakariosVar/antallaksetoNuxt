@@ -19,9 +19,9 @@
                                     <div class="card shadow p-3 mb-5 bg-body h-100 d-flex flex-column align-items-center py-2">
                                         <span class="text-primary card-img-top" style="max-width:  5vw;"
                                             v-html="category.svg"></span>
-                                        <div class="card-body flex-grow-1">
+                                        <div class="card-body" style="height:100px">
+                                            <p class="card-text text-muted" style="font-size:0.8rem">{{ category.count }} Αγγελίες</p>
                                             <h5 class="card-title">{{ category.title }}</h5>
-                                            <p class="card-text">{{ category.count }} Αγγελίες</p>
                                         </div>
                                     </div>
                                 </nuxt-link>
