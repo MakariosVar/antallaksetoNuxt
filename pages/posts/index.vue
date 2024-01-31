@@ -54,28 +54,26 @@
     </div>
     <div class="row">
       <div class="col-12">
-          <Adsbygoogle id="ca-pub-5907299200218208" style="height:200px; width: 100%;"/>
+          <Adsbygoogle id="ca-pub-5907299200218208" style="max-height:200px; width: 100%;"/>
       </div>
     </div>
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-      <div v-for="(item, index) in combinedPostsAndAds" :key="index" class="col post">
-        <Adsbygoogle v-if="item.isAd" :id="'ca-pub-5907299200218208'" class="card shadow p-3 mb-5 bg-body h-100" style="height: 300px; width: 100%;" />
-        <template v-else>
-          <nuxt-link :to="{ path: '/posts/view', query: { id: item.post.id } }" class="h-100">
-            <div class="card shadow bg-body h-100">
-              <img v-if="item.post.imageURL" :src="item.post.imageURL" class="card-img-top" style="height: 300px;" alt="Post Image">
-              <div v-else class="d-flex justify-content-center align-items-center" style="width: 100%; height: 300px;">
-                  <div class="spinner-grow" style="color: #e4e3e3; width: 150px; height: 150px;" role="status">
-                      <span class="visually-hidden">Loading...</span>
-                  </div>
-              </div>
-              <div class="card-body">
-                <h5 class="card-title">{{ item.post.title }}</h5>
-                <p class="card-text">Περιοχή: {{ `${item.post.fullAddress.locality}, ${item.post.fullAddress.country}` }}</p>
-              </div>
+      <div v-for="(post, index) in combinedPostsAndAds" :key="index" class="col post">
+        <!-- <Adsbygoogle v-if="post.isAd" :id="'ca-pub-5907299200218208'" class="card shadow p-3 mb-5 bg-body h-100" style="height: 300px; width: 100%;" /> -->
+        <nuxt-link :to="{ path: '/posts/view', query: { id: post.id } }" class="h-100">
+          <div class="card shadow bg-body h-100">
+            <img v-if="post.imageURL" :src="post.imageURL" class="card-img-top" style="height: 300px;" alt="Post Image">
+            <div v-else class="d-flex justify-content-center align-items-center" style="width: 100%; height: 300px;">
+                <div class="spinner-grow" style="color: #e4e3e3; width: 150px; height: 150px;" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
             </div>
-          </nuxt-link>
-        </template>
+            <div class="card-body">
+              <h5 class="card-title">{{ post.title }}</h5>
+              <p class="card-text">Περιοχή: {{ `${post.fullAddress.locality}, ${post.fullAddress.country}` }}</p>
+            </div>
+          </div>
+        </nuxt-link>
       </div>
     </div>
   </div>
@@ -119,20 +117,22 @@
   }
 
   const combinedPostsAndAds = computed(() => {
-    const combined = [];
-    const adFrequency = 5; // Display ad every 5 posts
-    let postCounter = 0;
+    return posts.value.data;
 
-    for (let i = 0; i < posts.value.data.length; i++) {
-      if (postCounter === adFrequency) {
-        combined.push({ isAd: true });
-        postCounter = 0;
-      }
-      combined.push({ isAd: false, post: posts.value.data[i] });
-      postCounter++;
-    }
+    // const combined = [];
+    // const adFrequency = 5; // Display ad every 5 posts
+    // let postCounter = 0;
 
-    return combined;
+    // for (let i = 0; i < posts.value.data.length; i++) {
+    //   if (postCounter === adFrequency) {
+    //     combined.push({ isAd: true });
+    //     postCounter = 0;
+    //   }
+    //   combined.push({ isAd: false, post: posts.value.data[i] });
+    //   postCounter++;
+    // }
+
+    // return combined;
   });
 
   const search = async () => {
@@ -154,6 +154,7 @@
       if (searchTitle.value) {
         url = url+`&q=${searchTitle.value}`
       }
+      console.log(placeObject.value)
       if (placeObject.value) {
         url = url+`&place=${JSON.stringify(placeObject.value)}`
       }

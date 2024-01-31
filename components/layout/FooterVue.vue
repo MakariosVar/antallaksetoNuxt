@@ -12,8 +12,7 @@
           <p class="text-center my-1">
             {{ new Date().getFullYear() }}  All Rights Reserved ©  Antallakseto.gr
           </p>
-          <p class="text-center my-1" style="font-size: 0.9rem;"><nuxt-link to="/terms" class="text-black">Όροι και Προϋποθέσεις</nuxt-link></p>
-          <p class="text-center my-1" style="font-size: 0.9rem;"><nuxt-link to="/privacyPolicy" class="text-black">Πολιτική Απορρήτου</nuxt-link></p>
+          <p class="text-center my-1" style="font-size: 0.9rem;"><nuxt-link to="/terms" class="text-black">Όροι χρήσης και πολιτική απορρήτου</nuxt-link></p>
         </div>
 
         <div class="col-lg-3 mx-auto mb-4 text-center">

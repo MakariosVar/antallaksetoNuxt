@@ -22,7 +22,7 @@
         props: ['postLocation', 'required', 'isIndexPage'],
         data() {
             return {
-                selectedPlace: {},
+                selectedPlace: null,
                 googleLoaded: false,
             }
         },
@@ -39,11 +39,15 @@
                 if (val == "") {
                     this.$emit('clearSearch');
                 }
+                if (!(typeof this.selectedPlace === 'object')) {
+                    this.$emit('placeSelected', {locality: this.selectedPlace});
+                }
             }
         },
         methods: {
             onPlaceChanged(place) {
                 this.selectedPlace = place;
+                console.log(place)
                 this.$emit('placeSelected', place);
             },
         },

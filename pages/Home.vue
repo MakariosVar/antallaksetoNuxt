@@ -31,7 +31,7 @@
         </section>
         <div class="row">
             <div class="col-12">
-                <Adsbygoogle :id="'ca-pub-5907299200218208'" style="height:200px; width: 100%;"/>
+                <Adsbygoogle :id="'ca-pub-5907299200218208'" style="max-height:200px; width: 100%;"/>
             </div>
         </div>
         <section>
