@@ -1,4 +1,4 @@
-<template>
+comments<template>
     <div v-if="!profileUser">
         <div class="d-flex justify-content-center align-items-center" style="width: 100%; height: 300px;">
             <div class="spinner-grow" style="color: #e4e3e3; width: 150px; height: 150px;" role="status">
@@ -198,6 +198,10 @@ export default {
             }
         },
         async addComment() {
+            if (this.user && this.user.email_verified_at == null) {
+                alert('Επαληθεύστε το Email σας για να προσθέσετε σχόλια')
+                return;
+            }
             if (this.commentInput != '') {
                 try {
 
