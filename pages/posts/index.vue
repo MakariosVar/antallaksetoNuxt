@@ -40,7 +40,7 @@
               </div>
             </div>
             <div class="my-2 text-center">
-              <button type="submit" class="btn btn-sm btn-primary">Αναζήτηση</button>
+              <button type="submit" class="btn btn-sm btn-outline-secondary">Αναζήτηση</button>
             </div>
           </form>
         </div>
@@ -48,12 +48,17 @@
     </div>
     <div class="row">
       <div class="col-12">
-          <!-- <Adsbygoogle id="ca-pub-5907299200218208" style="max-height:200px; width: 100%;"/> -->
+          <Adsbygoogle id="ca-pub-5907299200218208" style="max-height:200px; width: 100%;"/>
       </div>
     </div>
-    <div class="row" v-if="noResultsFlag">
-      <div class="col-12">
-        <h3>No result</h3>
+    <div class="d-flex" style="height: 100%;" v-if="noResultsFlag">
+      <div class="m-auto text-center">
+          <img style="max-height: 150px;" src="~assets/images/NewLogoPNG.png" alt="Logo">
+          <h2>Ούπς!</h2>
+          <h4>
+              Δέν βρέθηκαν αγγελίες
+          </h4>
+        <a href="#" class="btn btn-outline-secondary" @click.prevent="resetSearchQuery">Αφαίρεση φίλτρων</a>
       </div>
     </div>
     <div v-else class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
@@ -220,6 +225,12 @@
     search();
   }
 
+  const resetSearchQuery = () => {
+    placeObject.value = ""
+    searchTitle.value = ""
+    searchCategory.value = null
+    search();
+  }
 
   const getImage = async (path) => {
     try {

@@ -47,6 +47,7 @@ export default defineNuxtConfig({
 
   googleAdsense: {
     id: 'ca-pub-5907299200218208',
+    test: true
   },
   script: [
     {

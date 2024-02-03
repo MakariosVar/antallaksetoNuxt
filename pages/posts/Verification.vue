@@ -28,8 +28,7 @@
 									<h5 class="card-title">{{ post.title }}</h5>
 								</nuxt-link>
 								<p class="card-text m-0"><strong>Περιγραφή :</strong> {{ post.description }}</p>
-								<p class="card-text m-0"><strong>Περιοχή:</strong> {{ `${post.fullAddress.locality},
-																	${post.fullAddress.country}` }}</p>
+								<p class="card-text m-0"><strong>Περιοχή:</strong> {{ post.fullAddress.name_el }}</p>
 								<p class="card-text m-0"><strong>Κατηγορία:</strong> {{ post.category }}</p>
 								<p class="card-text m-0"><strong>Κατάσταση:</strong> {{ post.condition }}</p>
 								<p class="card-text m-0"><strong>Ανταλλαγή για:</strong> {{ post.transferPref }}</p>
@@ -83,6 +82,7 @@ export default {
 	},
 	methods: {
 		async getPosts() {
+			this.loaded = false;
 			let response = await $fetch(`/api/postsToVerificate?token=${this.user.auth_token}`);
 			if (response && response.post) {
 				for (const post of response.post) {

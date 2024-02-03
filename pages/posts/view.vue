@@ -1,12 +1,12 @@
 <template>
-	<div v-if="post && (post.reEdit || !post.verified) && user && user.id != post.user_id" :key="post.id"
+	<div v-if="!post" :key="post.id"
 		class="pageMinFit  d-flex flex-column align-items-center my-5 py-5">
 		<p class="h2 loadingText"> Φόρτωση</p>
 		<div class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
 			<span class="visually-hidden">Loading...</span>
 		</div>
 	</div>
-	<div v-else-if="post" class="container">
+	<div v-else class="container">
 		<div v-if="!loaded" class="pageMinFit d-flex flex-column text-center">
 			<div class="spinner-border text-dark" role="status">
 				<span class="visually-hidden">Loading...</span>
@@ -135,11 +135,6 @@
 		<PostRelated :post="post" :key="post.id" />
 	</div>
 </template>
-<script>
-export default {
-	props: ['loggedin', 'user'],
-}
-</script>
 <script setup>
 
 const config = useRuntimeConfig();
@@ -147,6 +142,18 @@ const post = ref({});
 const loaded = ref(false);
 const route = useRoute();
 const router = useRouter();
+
+const props = defineProps({
+	user: {
+		type: Object,
+	},
+	loggedin: {
+		type: Number
+	},
+	loaded: {
+		type: Boolean
+	}
+})
 
 const getImage = async (path) => {
 	try {
@@ -226,6 +233,10 @@ const deletePost = async (id, user) => {
 		}
 	}
 };
+
+if (props.user && post.value && (post.value.reEdit || !post.value.verified) && (props.user.id !== post.value.user_id)) {
+	console.log('Not Auth')
+}
 
 // Watch for changes in route.query.id and trigger getPostData accordingly
 watch(() => route.query.id, async () => {

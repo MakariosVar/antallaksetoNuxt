@@ -363,8 +363,8 @@ export default defineNuxtComponent({
                 console.error(data)
 
                 console.error(response_data.errors)
+                this.submit = false;
             }
-            this.submit = false;
 
             e.preventDefault();
         },

@@ -13,7 +13,7 @@
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">{{ post.title }}</h5>
-                    <p class="card-text">Περιοχή: {{ `${post.fullAddress.locality}, ${post.fullAddress.country}` }}</p>
+                    <p class="card-text">{{post.fullAddress.name_el }}</p>
                 </div>
             </div>
         </nuxt-link>
@@ -44,9 +44,12 @@
 
     // Fetch related posts
     const { data: postsData } = await useFetch(`/api/relatedPosts?id=${route.query.id}`);
-    const response = postsData.value.posts;
-    if (response.status === 'success'){
-        posts.value = response.posts;
+    if (postsData && postsData.value && postsData.value.posts) {
+
+        const response = postsData.value.posts;
+        if (response.status === 'success'){
+            posts.value = response.posts;
+        }
     }
     onMounted(() => {
         if(posts.value) {
