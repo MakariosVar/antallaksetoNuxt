@@ -1,18 +1,6 @@
 <template>
-	<div v-if="!post" :key="post.id"
-		class="pageMinFit  d-flex flex-column align-items-center my-5 py-5">
-		<p class="h2 loadingText"> Φόρτωση</p>
-		<div class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
-			<span class="visually-hidden">Loading...</span>
-		</div>
-	</div>
-	<div v-else class="container">
-		<div v-if="!loaded" class="pageMinFit d-flex flex-column text-center">
-			<div class="spinner-border text-dark" role="status">
-				<span class="visually-hidden">Loading...</span>
-			</div>
-		</div>
-		<div v-else class="row justify-content-center m-2 bg-white shadow p-3 mb-5 bg-body border py-4 rounded pageMinFit">
+	<div v-if="loaded || post" class="container">
+		<div class="row justify-content-center m-2 bg-white shadow p-3 mb-5 bg-body border py-4 rounded pageMinFit">
 			<div class="col-md-10 col-12">
 				<p class="font-italic text-center alert alert-warning p-0" style="font-size:0.8rem">
 					* Καλή προηγούμενη ενημέρωση μεταξύ των χρηστών και φυσική παρουσία κατά την ανταλλαγή των αντικειμένων διασφαλίζει την ικανοποίηση όλων.
@@ -139,9 +127,9 @@
 
 const config = useRuntimeConfig();
 const post = ref({});
-const loaded = ref(false);
 const route = useRoute();
 const router = useRouter();
+
 
 const props = defineProps({
 	user: {
@@ -172,7 +160,6 @@ const getPostData = async () => {
 	const data = response.post;
 	if (data.status == "success") {
 		post.value = data.post;
-		loaded.value = true;
 	}
 };
 await getPostData();
@@ -234,8 +221,8 @@ const deletePost = async (id, user) => {
 	}
 };
 
-if (props.user && post.value && (post.value.reEdit || !post.value.verified) && (props.user.id !== post.value.user_id)) {
-	console.log('Not Auth')
+if (post.value && (post.value.reEdit || !post.value.verified) && (!props.user || (props.user.id !== post.value.user_id))) {
+	await navigateTo({name:'Home'})
 }
 
 // Watch for changes in route.query.id and trigger getPostData accordingly
