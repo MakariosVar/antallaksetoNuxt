@@ -148,17 +148,18 @@ export default {
                 if (response && typeof response === 'undefined' && process.client) {
                     location.replace('/home');
                 }
-
-                const data = response.profileResponse;
-                if (data.status === 'success') {
-                    this.profile = data.profile[0];
-                    this.profileUser = data.profileUser;
-
-                    if (this.profile.image === null) {
-                        this.profile.image = '/profile/default.png';
+                if (response && response.profileResponse) {
+                    const data = response.profileResponse;
+                    if (data.status === 'success') {
+                        this.profile = data.profile[0];
+                        this.profileUser = data.profileUser;
+    
+                        if (this.profile.image === null) {
+                            this.profile.image = '/profile/default.png';
+                        }
+                        this.Loaded = true;
                     }
-                    this.Loaded = true;
-                }
+                } 
             } catch (error) {
                 console.error(error)
             }

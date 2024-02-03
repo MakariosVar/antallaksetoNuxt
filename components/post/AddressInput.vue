@@ -1,84 +1,57 @@
 <template>
     <div>
         <label v-if="!isIndexPage" for="location">Τοποθεσία</label>
-        <vue-google-autocomplete
-            :class="{'form-control-sm': isIndexPage }"
-            class="form-control"
-            v-if="googleLoaded"
-            id="location"
-            @placechanged="onPlaceChanged"
+        <v-select 
             v-model="selectedPlace"
-            :placeholder="placeholder"
-            :options="autocompleteOptions"
-            :country="['gr']"
-            :required="required"
-            ref="address"
-            types="(cities)"
+            placeholder="Στην πόλη..."
+            label="text"
+            :options="formatedPlaces"
         />
     </div>
-  </template>
+</template>
+
 <script>
     export default defineNuxtComponent({
-        props: ['postLocation', 'required', 'isIndexPage'],
+        props: ['postLocation', 'required', 'isIndexPage', 'places'],
         data() {
             return {
                 selectedPlace: null,
                 googleLoaded: false,
             }
         },
+        async setup() {
+            // Fetch places
+            const { data: placesData } = await useFetch('/api/places');
+            const places = placesData.value?.places ?? [];
+            return {places}
+        },
         computed: {
-            placeholder(){
-                if (this.postLocation) {
-                    return `${this.postLocation.locality}, ${this.postLocation.country}`
-                }
-                return 'Διαλέξτε Περιοχή';
+            formatedPlaces() {
+                let places = [];
+                Object.entries(this.places).forEach(([id, place]) => {
+                    places.push({ id: id, text: place });
+                });
+                return places;
             }
         },
         watch: {
             selectedPlace: function (val) {
-                if (val == "") {
-                    this.$emit('clearSearch');
+                if (val && val.id) {
+                    this.$emit('placeSelected', val.id);
+                    return;
                 }
-                if (!(typeof this.selectedPlace === 'object')) {
-                    this.$emit('placeSelected', {locality: this.selectedPlace});
-                }
+                this.$emit('placeSelected', '');
             }
         },
         methods: {
             onPlaceChanged(place) {
                 this.selectedPlace = place;
-                console.log(place)
                 this.$emit('placeSelected', place);
             },
         },
         mounted() {
-            if (typeof google === 'undefined') {
-                // Wait for it to load
-                var self = this;
-                const script = document.createElement('script');
-                script.src = `https://maps.googleapis.com/maps/api/js?key=${this.$config.public.googleApiKey}&libraries=places`;
-                script.async = true;
-                script.defer = true;
-
-                script.onload = () => {
-                    if (self.postLocation) {
-                        var savedLocation = {
-                            locality: self.postLocation.locality,
-                            country: self.postLocation.country,
-                            latitude: parseFloat(self.postLocation.latitude),
-                            longitude: parseFloat(self.postLocation.longitude)
-                        };
-                        self.onPlaceChanged(savedLocation);
-                        self.$refs.address.update(`${savedLocation.locality}, ${savedLocation.country}`);
-                    }
-                    this.googleLoaded = true;
-
-                };
-                if (process.client) {
-                    document.head.appendChild(script);
-                }
-            } else {
-                this.googleLoaded = true;
+            if (this.postLocation) {
+                this.selectedPlace = {id: this.postLocation.id, text: this.postLocation.name_el}
             }
         }
     });

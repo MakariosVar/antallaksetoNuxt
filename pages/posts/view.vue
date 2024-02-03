@@ -15,9 +15,7 @@
 		<div v-else class="row justify-content-center m-2 bg-white shadow p-3 mb-5 bg-body border py-4 rounded pageMinFit">
 			<div class="col-md-10 col-12">
 				<p class="font-italic text-center alert alert-warning p-0" style="font-size:0.8rem">
-					* Προτείνουμε οι ανταλλαγές να γίνονται έπειτα από αρκετή συνεννόηση
-					και με φυσική παρουσία από εσάς ή κάποιον έμπιστο εκπρόσωπό σας ώστε να
-					υπάρξει σωστή αξιολόγηση των αντικειμένων προτού προβείτε σε ανταλλαγή.
+					* Καλή προηγούμενη ενημέρωση μεταξύ των χρηστών και φυσική παρουσία κατά την ανταλλαγή των αντικειμένων διασφαλίζει την ικανοποίηση όλων.
 				</p>
 			</div>
 			<div class="col-12 row">
@@ -71,8 +69,7 @@
 						<small><strong> Περιγραφή : </strong>{{ post.description }}</small>
 					</p>
 					<p class="postText">
-						<small><strong>Περιοχή:</strong> {{ `${post.fullAddress.locality}, ${post.fullAddress.country}`
-						}}</small>
+						<small><strong>Περιοχή:</strong> {{ post.fullAddress.name_el }}</small>
 					</p>
 					<p class="postText">
 						<small><strong>Κατηγορία:</strong> {{ post.category }}</small>
