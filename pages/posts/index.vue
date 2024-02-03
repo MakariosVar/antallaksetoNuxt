@@ -105,7 +105,7 @@
     page.value++;
 
       try {
-        const { data: postData } = await useFetch(`/api/posts?page=${page.value}&category=${searchCategory?.value?.id}&q=${searchTitle.value}`);
+        const { data: postData } = await useFetch(`/api/posts?page=${page.value}&category=${searchCategory.value}&q=${searchTitle.value}`);
         const response = postData.value.posts_all;
 
         if (response && response.length === 0) {
@@ -170,7 +170,7 @@
     const router = useRouter();
     const queryParams = {
       page: page.value,
-      category: searchCategory?.value?.id,
+      category: searchCategory.value,
       search: searchTitle.value,
       place: place_id.value
     };
@@ -179,8 +179,8 @@
     // Reset page value to 1 when performing a new search.
     try {
       let url = `/api/posts?page=${page.value}`;
-      if (searchCategory?.value?.id) {
-        url = url+`&category=${searchCategory?.value?.id}`
+      if (searchCategory.value) {
+        url = url+`&category=${searchCategory.value}`
       }
       if (searchTitle.value) {
         url = url+`&q=${searchTitle.value}`
@@ -317,7 +317,7 @@
 
   const queryCaught = () => {
     if (useRoute().query.category) {
-      searchCategory.value = {id: useRoute().query.category, text: useRoute().query.category};
+      searchCategory.value = useRoute().query.category;
 
       showFilters.value = true;
     }
