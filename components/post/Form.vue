@@ -173,7 +173,7 @@ export default defineNuxtComponent({
                 title: '',
                 description: '',
                 adlocation: '',
-                fullPlace: {},
+                location_id: {},
                 category: 'Διάφορα',
                 condition: 'Μεταχειρισμένο',
                 phone: '',
@@ -222,7 +222,7 @@ export default defineNuxtComponent({
     },
     methods: {
         onPlaceSelected(place) {
-            this.form.fullPlace = place
+            this.form.location_id = place
         },
         async checkSession() {
             if (this.user) {
@@ -333,10 +333,7 @@ export default defineNuxtComponent({
             data.append('transferPref', this.form.transferPref);
             data.append('premium', this.form.premium);
 
-            data.append('address_locality', this.form.fullPlace.locality);
-            data.append('address_country', this.form.fullPlace.country);
-            data.append('address_latitude', this.form.fullPlace.latitude);
-            data.append('address_longitude', this.form.fullPlace.longitude);
+            data.append('location_id', this.form.location_id);
             
             if (this.form.image0 != null || !this.isUpdate) { data.append('image0', this.form.image0); }
 
@@ -359,6 +356,7 @@ export default defineNuxtComponent({
                 body: data,
             })
             const response_data = await response.json();
+
             if (response_data.status === 'success') {
                 this.$router.push({ path: '/posts/mine', query: { id: this.user.id } });
             } else {
