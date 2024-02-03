@@ -35,7 +35,10 @@ export default defineNuxtConfig({
       },
     }
   },
-  plugins: [{ src: "~/plugins/google-autocomplete.js", ssr: false } ],
+  plugins: [
+    '~/plugins/VueViewer.ts',
+    { src: "~/plugins/google-autocomplete.js", ssr: false } 
+  ],
   css: [
     "bootstrap/dist/css/bootstrap.min.css",
     "~/assets/styles/main.scss",

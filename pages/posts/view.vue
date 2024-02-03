@@ -7,28 +7,37 @@
 				</p>
 			</div>
 			<div class="col-12 row">
-				<div class="col-md-12 col-lg-5 text-center">
-					<img v-if="post.image0_loaded" :src="post.image0_loaded" style="height: auto; width: 299px" />
-					<div v-else-if="post.image0" class="d-flex justify-content-center align-items-center" style="width: 100%; height: 300px;">
-						<div class="spinner-grow" style="color: #e4e3e3; width: 150px; height: 150px;" role="status">
+				<div class="col-md-12 col-lg-4 text-center">
+					<div v-if="!isImagesLoaded" class="d-flex justify-content-center align-items-center" style="width: 100%; height: 150px;">
+						<div class="spinner-grow" style="color: #e4e3e3; width: 75px; height: 75px;" role="status">
 							<span class="visually-hidden">Loading...</span>
 						</div>
 					</div>
-					<div>
-						<img v-if="post.image2_loaded" :src="post.image2_loaded" style="height: auto; width: 147px" />
-						<div v-else-if="post.image2" class="d-flex justify-content-center align-items-center" style="width: 100%; height: 150px;">
-							<div class="spinner-grow" style="color: #e4e3e3; width: 75px; height: 75px;" role="status">
-								<span class="visually-hidden">Loading...</span>
-							</div>
-						</div>
-						<img v-if="post.image1_loaded" :src="post.image1_loaded" style="height: auto; width: 147px" />
-					</div>
-					<div>
-						<img v-if="post.image3_loaded" :src="post.image3_loaded" style="height: auto; width: 147px" />
-						<img v-if="post.image4_loaded" :src="post.image4_loaded" style="height: auto; width: 147px" />
+					<div v-else class="my-2">
+						<viewer :images="post_images"
+							@inited="inited"
+							:options="viewerOptions"
+							class="viewer"
+							ref="viewer"
+						>
+							<template #default>
+								<div class="row justify-content-center my-2">
+									<div class="row justify-content-center">
+										<div class="col-12 border rounded" v-if="post_images.length > 0">
+											<img :key="post_images[0]" :src="post_images[0]" style="max-height: auto; width: 100%" />
+										</div>
+									</div>
+									<div class="row justify-content-center my-2">
+										<div v-for="image in post_images.slice(1, 5)" :key="image" class="col-3 border rounded">
+											<img :src="image" style="height: auto; width: 100%" />
+										</div>
+									</div>
+								</div>
+							</template>
+						</viewer>
 					</div>
 				</div>
-				<div class="col-md-12 col-lg-7 text-center text-lg-start">
+				<div class="col-md-12 col-lg-8 text-center text-lg-start">
 					<p class="postText">
 						<strong>{{ post.title }}</strong>
 						<span v-if="post.done" class="badge bg-success">ΟΛΟΚΛΗΡΩΜΕΝΗ</span>
@@ -123,13 +132,14 @@
 		<PostRelated :post="post" :key="post.id" />
 	</div>
 </template>
-<script setup>
+<script  setup>
 
-const config = useRuntimeConfig();
 const post = ref({});
+const isImagesLoaded = ref(false);
 const route = useRoute();
 const router = useRouter();
 
+const post_images = ref([]);
 
 const props = defineProps({
 	user: {
@@ -165,23 +175,48 @@ const getPostData = async () => {
 await getPostData();
 
 const loadImages = async () => {
+	post_images.value = []
+	isImagesLoaded.value = false;
 	if (post.value) {
 		const imageKeys = ['image0', 'image1', 'image2', 'image3', 'image4', 'userimage'];
 
 		const imagePromises = imageKeys.map(async (key) => {
 			if (post.value[key]) {
 				post.value[key+"_loaded"] = await getImage(post.value[key]);
-
+				post_images.value.push(post.value[key+"_loaded"])
 			}
 		});
 		// Wait for all image loading Promises to complete
 		await Promise.all(imagePromises);
+		isImagesLoaded.value = true;
 	}
 }
 
 onMounted(async () => {
 	await loadImages();
 })
+const viewerOptions = ref({
+	toolbar: {
+    zoomIn: 0,
+    zoomOut: 0,
+    oneToOne: 0,
+    reset: 0,
+    prev: 4,
+    play: {
+      show: 0,
+      size: 'large',
+    },
+    next: 4,
+    rotateLeft: 0,
+    rotateRight: 0,
+    flipHorizontal: 0,
+    flipVertical: 0,
+  },
+});
+let $viewer = null
+const inited = (viewer) => {
+	$viewer = viewer
+}
 
 const postCompleted = async (id, user) => {
 	if (confirm("Πατόντας ΟΚ η αγγελία θα επισημοποιηθεί ως ολοκληρωμένη, είστε σίγουροι;") == true) {
