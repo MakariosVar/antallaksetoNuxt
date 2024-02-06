@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" :key="useRouter().query">
     <div class="row">
       <div class="col-12 py-2">
         <div class="d-flex flex-column align-items-center border bg-white shadow-sm mb-5 bg-body p-2">
@@ -74,7 +74,7 @@
             </div>
             <div class="card-body">
               <h5 class="card-title">{{ post.title }}</h5>
-              <p class="card-text">{{ `${post.fullAddress.name_el}` }}</p>
+              <nuxt-link :to="{path:`/posts`, query: {place: post.fullAddress.id}}" @click.prevent.stop class="card-text link-secondary">{{ `${post.fullAddress.name_el}` }}</nuxt-link>
             </div>
           </div>
         </nuxt-link>
@@ -169,7 +169,6 @@
     page.value = 1;
     const router = useRouter();
     const queryParams = {
-      page: page.value,
       category: searchCategory.value,
       search: searchTitle.value,
       place: place_id.value
@@ -338,8 +337,14 @@
     (newQuery) => {
       if (newQuery.search) {
         searchTitle.value = newQuery.search;
-        search();
       }
+      if (newQuery.place) {
+        place_id.value = newQuery.place;
+      }
+      if (newQuery.category) {
+        searchCategory.value = newQuery.category;
+      }
+      search();
     }
   );
   
