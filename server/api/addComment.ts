@@ -8,16 +8,16 @@ export default defineEventHandler(async (event) => {
 
   try {
     const response = await axios.post(`${config.apiUrl}/c/store`,{
-        comment,
+        comment: comment,
         auth_token: token,
-        profile_id
+        profile_id: profile_id
       });
     const commentsResponse = response.data;
     return {
         commentsResponse: commentsResponse,
     };  
   } catch (error) {
-    console.error(error);
+    return error.response.data
   }
 });
 

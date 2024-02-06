@@ -21,14 +21,16 @@
         </section>
 
         <section class="text-center">
-            <div class="container">
-                <h2 class="display-4">Κορυφαίες Κατηγορίες</h2>
+            <div class="container my-3">
+                <h2 >Κορυφαίες Κατηγορίες</h2>
                 <CategoriesHorizontalList v-if="categories" :categories="categories" />
-                <div class="text-center my-3">
-                    <nuxt-link to="/posts/" class="btn btn-lg pulse btn-outline-dark constant-tilt-shake">ΔΕΙΤΕ ΟΛΕΣ ΤΙΣ ΑΓΓΕΛΙΕΣ</nuxt-link>
-                </div>
             </div>
         </section>
+        <div class="text-center">
+            <div class="text-center my-3">
+                <nuxt-link to="/posts/" class="btn btn-lg pulse btn-outline-dark constant-tilt-shake">ΔΕΙΤΕ ΟΛΕΣ ΤΙΣ ΑΓΓΕΛΙΕΣ</nuxt-link>
+            </div>
+        </div>
         <div class="row">
             <div class="col-12">
                 <Adsbygoogle :id="'ca-pub-5907299200218208'" style="max-height:200px; width: 100%;"/>

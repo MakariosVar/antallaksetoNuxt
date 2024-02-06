@@ -174,6 +174,10 @@ const getPostData = async () => {
 };
 await getPostData();
 
+useHead({
+	title: post.value.title ?? ''
+})
+
 const loadImages = async () => {
 	post_images.value = []
 	isImagesLoaded.value = false;

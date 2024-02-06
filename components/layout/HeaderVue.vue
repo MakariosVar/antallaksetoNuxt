@@ -18,8 +18,8 @@
                             <span class="text-dark">Αγγελίες</span>
                         </nuxt-link>
                     </li>
-                    <li class="nav-item d-flex align-items-center justify-content-center dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="about-dropdown" role="button"
+                    <li class="nav-item dropdown">
+                        <a class="nav-link d-flex align-items-center justify-content-center dropdown-toggle" href="#" id="about-dropdown" role="button"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <em class="text-dark">Σχετικά με εμάς</em>
                         </a>

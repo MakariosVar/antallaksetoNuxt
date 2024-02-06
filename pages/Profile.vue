@@ -14,7 +14,7 @@ comments<template>
                     @followClick="followClick" :profileImage="profileAvatar" />
                 <div class="card shadow p-3 mb-5 bg-body text-center my-2">
                     <div class="card-body">
-                        <h1>Σχόλια</h1>
+                        <h3>Σχόλια</h3>
                         <form  v-if="user && user.id !== profile.user_id" @submit.prevent="addComment" id="Comment">
                             <div class="input-group">
                                 <textarea v-model="commentInput" id="comment" type="text" rows="1" class="form-control" name="comment"
@@ -23,9 +23,12 @@ comments<template>
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ message }}</strong>
                                 </span>
-                                <button class="btn btn-outline-dark" type="submit">Εκχώρηση</button>
+                                <button class="btn btn-outline-dark rounded d-none d-lg-block" type="submit">Εκχώρηση</button>
+                                <button class="btn btn-outline-dark rounded d-lg-none" type="submit">
+                                    <font-awesome-icon :icon="['fas', 'paper-plane']" />
+                                </button>
                             </div>
-                            
+                    
                         </form>
                         <div v-if="commentExists" class="alert alert-warning d-flex align-items-center" role="alert">
                             <font-awesome-icon :icon="['fas', 'triangle-exclamation']" class="me-2" size="2x" />
@@ -35,7 +38,7 @@ comments<template>
                         </div>
                         <div v-for="comment in comments" :key="comment.id" class="card mb-3 py-2 text-center my-2">
                             <nuxt-link :to="'/profile?id=' + comment.user_id">
-                                <h3 class="blue">{{ comment.commentersname }}</h3>
+                                <p class="blue">{{ comment.commentersname }}</p>
                             </nuxt-link>
                             <p>
                                 <span>{{ comment.comment }}</span>
@@ -55,7 +58,7 @@ comments<template>
                 />
                 <div class="card shadow p-3 mb-5 bg-body">
                     <div class="mt-4 text-center">
-                        <h1><strong>Αγγελίες</strong></h1>
+                        <h3><strong>Αγγελίες</strong></h3>
                         <hr>
                     </div>
                     <div v-if="posts.length > 0" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
@@ -205,17 +208,15 @@ export default {
             }
             if (this.commentInput != '') {
                 try {
-
                     const response = await $fetch(`/api/addComment?comment=${this.commentInput}&token=${this.user.auth_token}&profile_id=${this.$route.query.id}`);
 
-                    const data = response.commentsResponse;
-                    if (data.status === 'success') {
+                    if (response && response.commentsResponse && response.commentsResponse.status === 'success') {
                         this.commentInput = ''
                         this.commentExists = false
                         this.getComments();
-                    } else if (data.expired) {
+                    } else if (response && response.commentsResponse && response.commentsResponse.expired) {
                         this.sessionExpired();
-                    } else if (data.commentExist) {
+                    } else if (response && response.commentsResponse && response.commentsResponse.commentExist) {
                         this.commentExists = true
                     } else {
                         alert('Προσπαθήστε ξανά');

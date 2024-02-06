@@ -24,9 +24,6 @@
 </style>
 <script>
 export default defineNuxtComponent({
-    head: {
-        title: 'Αντάλλαξέ το',
-    },
     methods: {
         sessionExpired() {
             this.user = null;
@@ -52,6 +49,11 @@ export default defineNuxtComponent({
                 }
             }
         };
+        useHead( {
+            titleTemplate: ( titleChunk ) => {
+                return titleChunk ? `${ titleChunk } - Αντάλλαξέ Το` : 'Αντάλλαξέ Το'
+            }
+        })
         const asyncData = async () => {
             try {
                 loaded.value = false;
@@ -90,6 +92,12 @@ export default defineNuxtComponent({
         };
         useHead({ script: { src: "https://www.googletagmanager.com/gtag/js?id=G-H6SJD5S37R", async: true }, });
 
+
+        const nuxtApp = useNuxtApp()
+
+        nuxtApp.hook("page:finish", () => {
+            window.scrollTo(0, 0)
+        })
 
         const googleApiKey = config.public.googleApiKey;
         onMounted(() => {

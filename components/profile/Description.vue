@@ -1,10 +1,10 @@
 <template>
     <div class="card shadow bg-body mb-3 text-center">
-        <h1 class="m-3 pt-3">{{ profileUser.name }}</h1>
+        <h3 class="m-3 pt-3">{{ profileUser.name }}</h3>
         <div class="card-body">
             <div class="row">
                 <div class="col-md-3">
-                    <h5>Περιγραφή:</h5>
+                    <p>Περιγραφή:</p>
                 </div>
                 <div class="col-md-9 text-secondary">
                     <span v-if="!showDescriptionInput">
@@ -39,7 +39,7 @@
             <hr>
             <div class="row">
                 <div class="col-md-3">
-                    <h5>Εmail:</h5>
+                    <p>Εmail:</p>
                 </div>
                 <div class="col-md-9 text-secondary">
                     {{ profileUser.email }}
