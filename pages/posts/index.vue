@@ -28,7 +28,7 @@
             </div>
             <div class="row">
               <div class="col-12 col-md-6 mb-2">
-                <PostAddressInput @placeSelected="onPlaceSelected" @clearSearch="clearSearchPlace" :postLocation="addressInput" :isIndexPage="true"/>
+                <PostAddressInput @placeSelected="onPlaceSelected" @clearSearch="clearSearchPlace" :placeId="place_id" :postLocation="addressInput" :isIndexPage="true"/>
               </div>
               <div class="col-12 col-md-6 mb-2">
                 <v-select 
@@ -319,6 +319,11 @@
     if (useRoute().query.category) {
       searchCategory.value = useRoute().query.category;
 
+      showFilters.value = true;
+    }
+
+    if (useRoute().query.place) {
+      place_id.value = useRoute().query.place;
       showFilters.value = true;
     }
     if (useRoute().query.search) {

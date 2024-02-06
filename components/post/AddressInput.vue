@@ -5,14 +5,14 @@
             v-model="selectedPlace"
             placeholder="Στην πόλη..."
             label="text"
-            :options="formatedPlaces"
+            :options="formattedPlaces"
         />
     </div>
 </template>
 
 <script>
     export default defineNuxtComponent({
-        props: ['postLocation', 'required', 'isIndexPage', 'places'],
+        props: ['postLocation', 'required', 'isIndexPage', 'places', 'placeId'],
         data() {
             return {
                 selectedPlace: null,
@@ -26,7 +26,7 @@
             return {places}
         },
         computed: {
-            formatedPlaces() {
+            formattedPlaces() {
                 let places = [];
                 Object.entries(this.places).forEach(([id, place]) => {
                     places.push({ id: id, text: place });
@@ -38,9 +38,18 @@
             selectedPlace: function (val) {
                 if (val && val.id) {
                     this.$emit('placeSelected', val.id);
-                    return;
+                } else {
+                    this.$emit('placeSelected', '');
                 }
-                this.$emit('placeSelected', '');
+            },
+            placeId(placeId) {
+                let placeObj = this.formattedPlaces.find(obj => obj.id === placeId);
+                if (placeObj) {
+                    this.selectedPlace = { id: placeObj.id, text: placeObj.text };
+                } else {
+                    // Handle case where placeObj is not found
+                    console.error('Place not found:', placeId);
+                }
             }
         },
         methods: {
