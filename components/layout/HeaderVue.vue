@@ -13,12 +13,12 @@
 
             <div class="collapse navbar-collapse" id="nav-collapse">
                 <ul class="navbar-nav">
-                    <li class="nav-item">
+                    <li class="nav-item d-flex align-items-center justify-content-center">
                         <nuxt-link to="/posts/" class="nav-link">
                             <span class="text-dark">Αγγελίες</span>
                         </nuxt-link>
                     </li>
-                    <li class="nav-item dropdown">
+                    <li class="nav-item d-flex align-items-center justify-content-center dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="about-dropdown" role="button"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <em class="text-dark">Σχετικά με εμάς</em>
@@ -35,7 +35,7 @@
                 </ul>
                 <!-- Right-aligned nav items -->
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item" v-if="!isPostPage">
+                    <li class="nav-item d-flex align-items-center justify-content-center me-2" v-if="!isPostPage">
                         <form class="form-inline my-2 my-lg-0" @submit.prevent="handleSubmit">
                             <input v-model="headerSearchInputValue" class="form-control mr-sm-2 d-sm-none d-lg-block "
                                 type="search" placeholder="Αναζήτηση..." aria-label="Search">
@@ -43,10 +43,10 @@
                     </li>
 
                     <li class="nav-item dropdown" v-if="user && (user.role_id == 1 || user.role_id == 3)">
-                        <a class="nav-link dropdown-toggle" href="#" id="admin-dropdown" role="button"
+                        <a class="nav-link d-flex align-items-center justify-content-center dropdown-toggle " href="#" id="admin-dropdown" role="button"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <ClientOnly>
-                                <font-awesome-icon icon="fa fa-gear" size="2x" />
+                                <font-awesome-icon icon="fa fa-gear"/>
                             </ClientOnly>
                             <span v-if="user.role_id == 1" class="ml-1">
                                 Admin
@@ -72,25 +72,18 @@
                         </div>
                     </li>
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle d-flex align-items-center gap-1" href="#" id="user-dropdown"
+                    <li v-if="user" class="nav-item dropdown">
+                        <a class="nav-link  dropdown-toggle d-flex align-items-center justify-content-center gap-1" href="#" id="user-dropdown"
                             role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span v-if="profileImage.length">
                                 <img style="max-width: 35px;" :src="profileImage" alt="User" class="rounded-circle" />
                             </span>
-                            <span v-else>
-                                <ClientOnly>
-                                    <font-awesome-icon icon="fa-solid fa-circle-user" size="2x" />
-                                </ClientOnly>
-                            </span>
-                            <span v-if="user" class="ml-1">
+                            <span class="ml-1">
                                 {{ user.name }}
                             </span>
-                            <span v-else class="ml-1">
-                                Προφίλ
-                            </span>
+                           
                         </a>
-                        <div v-if="user" class="dropdown-menu dropdown-menu-end" aria-labelledby="user-dropdown">
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="user-dropdown">
                             <nuxt-link :to="{ name: 'Profile', query: { id: user.id } }" class="dropdown-item">
                                 <span class="text-dark">Προφίλ / {{ user.name }}</span>
                             </nuxt-link>
@@ -102,11 +95,22 @@
                             </nuxt-link>
                             <a class="dropdown-item" @click="logout">Αποσύνδεση</a>
                         </div>
-                        <div v-else class="dropdown-menu dropdown-menu-end" aria-labelledby="user-dropdown">
-                            <nuxt-link to="/login" class="dropdown-item">
-                                <span class="text-dark">Σύνδεση</span>
-                            </nuxt-link>
-                            <nuxt-link to="/register" class="dropdown-item">Εγγραφή</nuxt-link>
+                    </li>
+                    <li class="nav-item" v-else>
+                        <div class="d-flex flex-column align-items-center justify-content-center">
+                            <NuxtLink to="/login" class="btn btn-outline-dark">
+                                <span>
+                                    <ClientOnly>
+                                        <font-awesome-icon icon="fa-solid fa-circle-user" class="mr-2" />
+                                    </ClientOnly>
+                                    <span class="font-semibold">Σύνδεση</span>
+                                </span>
+                            </NuxtLink>
+                            <NuxtLink to="/register" class="btn btn-sm mt-1 btn-outline-secondary">
+                                <span>
+                                    <span class="font-semibold">Εγγραφή</span>
+                                </span>
+                            </NuxtLink>
                         </div>
                     </li>
                 </ul>
@@ -229,5 +233,43 @@ export default {
 
 v-tab {
     text-transform: none !important;
+}
+
+.nav-item {
+    list-style: none;
+}
+
+.btn {
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(107, 107, 107, 0.1);
+}
+
+.btn-outline-dark {
+    color: #333;
+    border: 1.5px solid #333;
+}
+
+.btn-outline-dark:hover {
+    color: #fff;
+    background-color: #333;
+}
+
+.btn span {
+    display: flex;
+    align-items: center;
+}
+
+.font-awesome-icon {
+    font-size: 1.2rem;
+}
+
+.font-semibold {
+    font-weight: 600;
 }
 </style>
