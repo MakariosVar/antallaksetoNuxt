@@ -61,7 +61,7 @@
         <a href="#" class="btn btn-outline-secondary" @click.prevent="resetSearchQuery">Αφαίρεση φίλτρων</a>
       </div>
     </div>
-    <div v-else class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
       <div v-for="(post, index) in combinedPostsAndAds" :key="index" class="col post">
         <!-- <Adsbygoogle v-if="post.isAd" :id="'ca-pub-5907299200218208'" class="card shadow p-3 mb-5 bg-body h-100" style="height: 300px; width: 100%;" /> -->
         <nuxt-link :to="{ path: '/posts/view', query: { id: post.id } }" class="h-100">
@@ -92,20 +92,19 @@
   const route = useRoute();
   
   const showFilters = ref(true);
-  const noResultsFlag = ref(true);
+  const noResultsFlag = ref(false);
   const loadingMorePosts = ref(false);
   const searchTitle = ref(route?.query?.search ?? '');
   const addressInput = ref('');
-  const place_id = ref(null);
+  const place_id = ref(route?.query?.place ?? '');
   const placeObject = ref(route?.query?.place ?? '');
-  const searchCategory = ref(route?.query?.category ?? null);
+  const searchCategory = ref(route?.query?.category ?? '');
   const page = ref(0);
   
   const fetchPosts = async () => {
     page.value++;
-
       try {
-        const { data: postData } = await useFetch(`/api/posts?page=${page.value}&category=${searchCategory.value}&q=${searchTitle.value}`);
+        const { data: postData } = await useFetch(`/api/posts?page=${page.value}&category=${searchCategory.value}&q=${searchTitle.value}&place=${place_id.value}`);
         const response = postData.value.posts_all;
 
         if (response && response.length === 0) {
@@ -121,6 +120,7 @@
         console.error(error);
       }
   };
+  await fetchPosts();
 
   const onPlaceSelected = (place) => {
     place_id.value = place
@@ -266,8 +266,8 @@
         if (searchTitle.value) {
           url = url+`&q=${searchTitle.value}`
         }
-        if (placeObject.value) {
-          url = url+`&place=${JSON.stringify(placeObject.value)}`
+        if (place_id.value) {
+          url = url+`&place=${place_id.value}`
         }
         const { data: postData } = await useFetch(url);
         const response = postData.value ? postData.value.posts_all : null;
@@ -298,7 +298,6 @@
       loadingMorePosts.value = false;
     }
   };
-  await fetchPosts();
   onMounted(() => {
     if(posts.value) {
       posts.value.data.forEach(async (post) => {
@@ -318,19 +317,21 @@
   const queryCaught = () => {
     if (useRoute().query.category) {
       searchCategory.value = useRoute().query.category;
-
       showFilters.value = true;
-    }
+      search()
 
+    }
     if (useRoute().query.place) {
       place_id.value = useRoute().query.place;
       showFilters.value = true;
+      search()
     }
     if (useRoute().query.search) {
       searchTitle.value = useRoute().query.search;
       showFilters.value = true;
+      search()
+
     }
-    search()
   };
   watch(
     () => route.query,

@@ -62,6 +62,12 @@
             if (this.postLocation) {
                 this.selectedPlace = {id: this.postLocation.id, text: this.postLocation.name_el}
             }
+            if (this.placeId) {
+                let placeObj = this.formattedPlaces.find(obj => obj.id === this.placeId);
+                if (placeObj) {
+                    this.selectedPlace = { id: placeObj.id, text: placeObj.text };
+                }
+            }
         }
     });
 </script>
