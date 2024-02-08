@@ -129,7 +129,6 @@
   await fetchPosts();
 
   const onPlaceSelected = (place) => {
-    console.log('onPlaceSelected')
     place_id.value = place
     search()
     // addressInput.value = place.fullAddress
@@ -176,7 +175,6 @@
 
   const search = async () => {
     page.value = 1;
-    console.log('opa')
     const router = useRouter();
     const queryParams = {
       category: searchCategory.value,
@@ -234,8 +232,6 @@
   }
 
   const resetSearchQuery = () => {
-    console.log('resetSearchQuery')
-
     place_id.value = ""
     searchTitle.value = ""
     searchCategory.value = null
@@ -325,7 +321,6 @@
     // console.log(categories);
 
   const queryCaught = () => {
-    console.log('queryCaught')
     var filterSet = false;
     if (useRoute().query.category && useRoute().query.category != searchCategory.value) {
       searchCategory.value = useRoute().query.category;
