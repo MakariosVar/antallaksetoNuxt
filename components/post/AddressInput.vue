@@ -47,8 +47,7 @@
                 if (placeObj) {
                     this.selectedPlace = { id: placeObj.id, text: placeObj.text };
                 } else {
-                    // Handle case where placeObj is not found
-                    console.error('Place not found:', placeId);
+                    this.selectedPlace = null
                 }
             }
         },

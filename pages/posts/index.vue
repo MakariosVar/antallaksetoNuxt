@@ -160,7 +160,12 @@
   watch(
     () => searchCategory.value,
     (value) => {
-        searchCategory.value = value;
+        if (value && value.id) {
+          searchCategory.value = value.id;
+          search();
+          return;
+        }
+        searchCategory.value = null;
         search();
     }
   );
@@ -191,7 +196,6 @@
       // if (placeObject.value) {
       //   url = url+`&place=${JSON.stringify(placeObject.value)}`
       // }
-
       const { data: postData } = await useFetch(url);
       const response = postData.value.posts_all;
       if (response && response.data.length === 0) {
@@ -225,7 +229,7 @@
   }
 
   const resetSearchQuery = () => {
-    placeObject.value = ""
+    place_id.value = ""
     searchTitle.value = ""
     searchCategory.value = null
     search();
@@ -259,8 +263,8 @@
 
       try {
         let url = `/api/posts?page=${page.value}`;
-        if (searchCategory?.value?.id) {
-          url = url+`&category=${searchCategory?.value?.id}`
+        if (searchCategory.value) {
+          url = url+`&category=${searchCategory.value}`
         }
         if (searchTitle.value) {
           url = url+`&q=${searchTitle.value}`
@@ -314,37 +318,48 @@
     // console.log(categories);
 
   const queryCaught = () => {
-    if (useRoute().query.category) {
+    var filterSet = false;
+    if (useRoute().query.category && useRoute().query.category != searchCategory.value) {
       searchCategory.value = useRoute().query.category;
       showFilters.value = true;
-      search()
+      filterSet = true;
 
     }
-    if (useRoute().query.place) {
+    if (useRoute().query.place && useRoute().query.place != place_id.value) {
       place_id.value = useRoute().query.place;
       showFilters.value = true;
-      search()
+      filterSet = true;
     }
-    if (useRoute().query.search) {
+    if (useRoute().query.search && useRoute().query.search != searchTitle.value) {
       searchTitle.value = useRoute().query.search;
       showFilters.value = true;
-      search()
+      filterSet = true;
+    }
 
+    if (filterSet) {
+      search();
     }
   };
   watch(
     () => route.query,
     (newQuery) => {
-      if (newQuery.search) {
+      var filterSet = false;
+
+      if (newQuery.search && newQuery.search != searchTitle.value) {
         searchTitle.value = newQuery.search;
+        filterSet = true;
       }
-      if (newQuery.place) {
+      if (newQuery.place && newQuery.place != place_id.value) {
         place_id.value = newQuery.place;
+        filterSet = true;
       }
-      if (newQuery.category) {
+      if (newQuery.category && newQuery.category != searchCategory.value) {
         searchCategory.value = newQuery.category;
+        filterSet = true;
       }
-      search();
+      if (filterSet) {
+        search();
+      }
     }
   );
   

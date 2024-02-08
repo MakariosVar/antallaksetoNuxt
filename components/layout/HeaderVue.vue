@@ -103,7 +103,7 @@
                                     <ClientOnly>
                                         <font-awesome-icon icon="fa-solid fa-circle-user" class="mr-2" />
                                     </ClientOnly>
-                                    <span class="font-semibold">Σύνδεση</span>
+                                    <span class="ms-1 font-semibold">Σύνδεση</span>
                                 </span>
                             </NuxtLink>
                             <NuxtLink to="/register" class="btn btn-sm mt-1 btn-outline-secondary">
