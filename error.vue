@@ -1,3 +1,11 @@
+<script setup lang="ts">
+    import type { NuxtError } from '#app'
+
+    const props = defineProps({
+        error: Object as () => NuxtError
+    })
+    console.error(props.error?.message)
+</script>
 <template>
     <div class="d-flex" style="height: 100vh;">
         <div class="m-auto text-center">

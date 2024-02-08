@@ -138,7 +138,7 @@ const post = ref({});
 const isImagesLoaded = ref(false);
 const route = useRoute();
 const router = useRouter();
-
+const emit = defineEmits(['metaImageSet', 'sessionExpired'])
 const post_images = ref([]);
 
 const props = defineProps({
@@ -172,11 +172,9 @@ const getPostData = async () => {
 		post.value = data.post;
 	}
 };
-await getPostData();
 
-useHead({
-	title: post.value.title ?? ''
-})
+
+
 
 const loadImages = async () => {
 	post_images.value = []
@@ -195,10 +193,15 @@ const loadImages = async () => {
 		isImagesLoaded.value = true;
 	}
 }
-
-onMounted(async () => {
-	await loadImages();
+await getPostData();
+await loadImages();
+useSeoMeta({
+	title: post.value.title ?? '',
+  	ogImage: post_images.value[0],
+	ogTitle: `${post.value.title} - Αντάλλαξέ Το`,
+	ogDescription: post.value.description
 })
+
 const viewerOptions = ref({
 	toolbar: {
     zoomIn: 0,
@@ -230,10 +233,10 @@ const postCompleted = async (id, user) => {
 			router.push({ name: 'Profile', query: { id: user.id } });
 		}
 		if (data.unauthorized) {
-			$emit('sessionExpired');
+			emit('sessionExpired');
 		}
 		if (data.expired) {
-			$emit('sessionExpired');
+			emit('sessionExpired');
 		}
 		if (data.post_not_found) {
 			router.push({ name: 'Home' });
@@ -249,10 +252,10 @@ const deletePost = async (id, user) => {
 			router.push({ name: 'Profile', query: { id: user.id } });
 		}
 		if (data.unauthorized) {
-			$emit('sessionExpired');
+			emit('sessionExpired');
 		}
 		if (data.expired) {
-			$emit('sessionExpired');
+			emit('sessionExpired');
 		}
 		if (data.post_not_found) {
 			router.push({ name: 'Home' });

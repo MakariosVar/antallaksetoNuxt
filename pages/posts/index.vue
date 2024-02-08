@@ -66,7 +66,7 @@
         <!-- <Adsbygoogle v-if="post.isAd" :id="'ca-pub-5907299200218208'" class="card shadow p-3 mb-5 bg-body h-100" style="height: 300px; width: 100%;" /> -->
         <nuxt-link :to="{ path: '/posts/view', query: { id: post.id } }" class="h-100">
           <div class="card shadow bg-body h-100">
-            <img v-if="post.imageURL" :src="post.imageURL" class="card-img-top" style="height: 300px;" alt="Post Image">
+            <img v-if="post.imageURL" :src="post.imageURL" class="card-img-top responsive-image" alt="Post Image">
             <div v-else class="d-flex justify-content-center align-items-center" style="width: 100%; height: 300px;">
                 <div class="spinner-grow" style="color: #e4e3e3; width: 150px; height: 150px;" role="status">
                     <span class="visually-hidden">Loading...</span>
@@ -82,7 +82,13 @@
     </div>
   </div>
 </template>
-
+<style>
+.responsive-image {
+    height: 300px;
+    width: 100%;
+    object-fit: cover; /* or object-fit: contain; depending on your preference */
+}
+</style>
 <script setup>
   const posts = ref({
     data: [],
@@ -123,6 +129,7 @@
   await fetchPosts();
 
   const onPlaceSelected = (place) => {
+    console.log('onPlaceSelected')
     place_id.value = place
     search()
     // addressInput.value = place.fullAddress
@@ -159,19 +166,17 @@
 
   watch(
     () => searchCategory.value,
-    (value) => {
-        if (value && value.id) {
-          searchCategory.value = value.id;
-          search();
-          return;
-        }
-        searchCategory.value = null;
+    (newVal, oldVal) => {
+      if (newVal != oldVal) {
+        searchCategory.value = (newVal && newVal.id) ? newVal.id : newVal;
         search();
+      }  
     }
   );
 
   const search = async () => {
     page.value = 1;
+    console.log('opa')
     const router = useRouter();
     const queryParams = {
       category: searchCategory.value,
@@ -229,6 +234,8 @@
   }
 
   const resetSearchQuery = () => {
+    console.log('resetSearchQuery')
+
     place_id.value = ""
     searchTitle.value = ""
     searchCategory.value = null
@@ -318,6 +325,7 @@
     // console.log(categories);
 
   const queryCaught = () => {
+    console.log('queryCaught')
     var filterSet = false;
     if (useRoute().query.category && useRoute().query.category != searchCategory.value) {
       searchCategory.value = useRoute().query.category;
