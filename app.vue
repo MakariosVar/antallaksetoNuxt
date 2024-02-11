@@ -53,12 +53,12 @@ export default defineNuxtComponent({
             titleTemplate: ( titleChunk ) => {
                 return titleChunk ? `${ titleChunk } - Αντάλλαξέ Το` : 'Αντάλλαξέ Το'
             },
-            description: 'Antallakseto.gr - Νο1 site για ανταλλαγές'
         });
 
         useSeoMeta({
             ogImage: 'https://antallakseto.gr/default.png',
             ogTitle: 'Αντάλλαξέ Το',
+            description: 'Antallakseto.gr - Νο1 site για ανταλλαγές',
             ogDescription: 'Antallakseto.gr - Νο1 site για ανταλλαγές'
         })
 
