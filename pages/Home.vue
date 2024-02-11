@@ -31,21 +31,21 @@
                 <nuxt-link to="/posts/" class="btn btn-lg pulse btn-outline-dark constant-tilt-shake">ΔΕΙΤΕ ΟΛΕΣ ΤΙΣ ΑΓΓΕΛΙΕΣ</nuxt-link>
             </div>
         </div>
-\        <section>
+        <section>
             <div class="container">
                 <h2 class="text-center">Προωθημένες Αγγελίες</h2>
                 <div class="row">
                     <div v-for="post in premiumPosts" :key="post.id" class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
                         <nuxt-link :to="{ path: '/posts/view', query: { id: post.id } }" class="text-decoration-none">
                             <div class="card shadow mb-5 bg-body h-100">
-                                <img v-if="post.imageURL" :src="post.imageURL" class="card-img-top" style="height: 300px;" alt="Post Image">
+                                <img v-if="post.imageURL" :src="post.imageURL" class="card-img-top responsive-image" alt="Post Image">
                                 <div v-else class="d-flex justify-content-center align-items-center" style="width: 100%; height: 300px;">
                                     <div class="spinner-grow" style="color: #e4e3e3; width: 150px; height: 150px;" role="status">
                                         <span class="visually-hidden">Loading...</span>
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <h5 class="card-title">{{ post.title }}</h5>
+                                    <p class="card-title h5">{{ post.title }}</p>
                                     <p class="card-text">
                                         {{ truncatedDescription(post.description) }}
                                     </p>
@@ -53,17 +53,6 @@
                             </div>
                         </nuxt-link>
                     </div>
-                    <!-- <div class="col-md-3 mb-4">
-            <nuxt-link to="#" class="text-decoration-none">
-              <div class="card h-100">
-                <img src="~assets/images/premium.png" class="card-img-top" alt="Post Image">
-                <div class="card-body">
-                  <h5 class="card-title">ΠΡΟΩΘΗΣΕ ΤΗΝ ΑΓΓΕΛΙΑ ΣΟΥ</h5>
-                  <p class="card-text">Πατήστε εδώ για να επιλέξετε ή να προσθεσετε μια νέα</p>
-                </div>
-              </div>
-            </nuxt-link>
-          </div> -->
                 </div>
             </div>
         </section>
