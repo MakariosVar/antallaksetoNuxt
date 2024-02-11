@@ -31,12 +31,7 @@
                 <nuxt-link to="/posts/" class="btn btn-lg pulse btn-outline-dark constant-tilt-shake">ΔΕΙΤΕ ΟΛΕΣ ΤΙΣ ΑΓΓΕΛΙΕΣ</nuxt-link>
             </div>
         </div>
-        <div class="row">
-            <div class="col-12">
-                <Adsbygoogle :id="'ca-pub-5907299200218208'" style="max-height:200px; width: 100%;"/>
-            </div>
-        </div>
-        <section>
+\        <section>
             <div class="container">
                 <h2 class="text-center">Προωθημένες Αγγελίες</h2>
                 <div class="row">

@@ -53,6 +53,9 @@ export default defineNuxtComponent({
             titleTemplate: ( titleChunk ) => {
                 return titleChunk ? `${ titleChunk } - Αντάλλαξέ Το` : 'Αντάλλαξέ Το'
             },
+            htmlAttrs: {
+                lang: 'el',
+            },
         });
 
         useSeoMeta({

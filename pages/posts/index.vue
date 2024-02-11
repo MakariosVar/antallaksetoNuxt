@@ -46,11 +46,6 @@
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-12">
-          <Adsbygoogle id="ca-pub-5907299200218208" style="max-height:200px; width: 100%;"/>
-      </div>
-    </div>
     <div class="d-flex" style="height: 100%;" v-if="noResultsFlag">
       <div class="m-auto text-center">
           <img style="max-height: 150px;" src="~assets/images/NewLogoPNG.png" alt="Logo">
@@ -63,7 +58,6 @@
     </div>
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
       <div v-for="(post, index) in combinedPostsAndAds" :key="index" class="col post">
-        <!-- <Adsbygoogle v-if="post.isAd" :id="'ca-pub-5907299200218208'" class="card shadow p-3 mb-5 bg-body h-100" style="height: 300px; width: 100%;" /> -->
         <nuxt-link :to="{ path: '/posts/view', query: { id: post.id } }" class="h-100">
           <div class="card shadow bg-body h-100">
             <img v-if="post.imageURL" :src="post.imageURL" class="card-img-top responsive-image" alt="Post Image">
