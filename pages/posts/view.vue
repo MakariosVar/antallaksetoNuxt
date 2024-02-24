@@ -84,7 +84,7 @@
 									style="width: 50px; height: auto" /></router-link></small>
 					</p>
 					<p class="postText">
-						<small><strong>Email:</strong> {{ post.email }}</small>
+						<small><strong>Email:</strong> <a :href="`mailto:${ post.email }`">{{ post.email }}</a></small>
 					</p>
 					<p class="postText">
 						<small><strong>Τηλέφωνο:</strong> {{ post.phone }}</small>
