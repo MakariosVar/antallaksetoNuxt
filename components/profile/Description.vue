@@ -2,47 +2,49 @@
     <div class="card shadow bg-body mb-3 text-center">
         <h3 class="m-3 pt-3">{{ profileUser.name }}</h3>
         <div class="card-body">
-            <div class="row">
-                <div class="col-md-3">
-                    <p>Περιγραφή:</p>
-                </div>
-                <div class="col-md-9 text-secondary">
-                    <span v-if="!showDescriptionInput">
-                        <div v-if="!profile.description">
-                            <div v-if="isMine">
-                                <a href="#" @click="openDescriptionInput">Προσθέστε Πληροφοριές</a>
+            <span v-if="profile.description || isMine">
+                <div class="row">
+                    <div class="col-md-3">
+                        <p>Περιγραφή:</p>
+                    </div>
+                    <div class="col-md-9 text-secondary">
+                        <span v-if="!showDescriptionInput">
+                            <div v-if="!profile.description">
+                                <div v-if="isMine">
+                                    <a href="#" @click="openDescriptionInput">Προσθέστε Πληροφοριές</a>
+                                </div>
                             </div>
-                        </div>
-                        <div v-else>
-                            {{ profile.description }}
-                            <font-awesome-icon
-                                v-if="isMine"
-                                @click="openDescriptionInput"
-                                :icon="['fas', 'edit']" class="me-2 text-primary"
-                            />
-                        </div>
-                    </span>
-                    <span v-else>
-                        <form @submit.prevent="updateDescription" class="mb-3">
-                            <textarea
-                                v-model="descriptionInput"
-                                @input="onDescriptionInput"
-                                class="form-control"
-                                rows="2"
-                            >
-                            </textarea>
-                            <button class="btn btn-primary">Αποθήκευση</button>
-                        </form> 
-                    </span>
+                            <div v-else>
+                                {{ profile.description }}
+                                <font-awesome-icon
+                                    v-if="isMine"
+                                    @click="openDescriptionInput"
+                                    :icon="['fas', 'edit']" class="me-2 text-primary"
+                                />
+                            </div>
+                        </span>
+                        <span v-else>
+                            <form @submit.prevent="updateDescription" class="mb-3">
+                                <textarea
+                                    v-model="descriptionInput"
+                                    @input="onDescriptionInput"
+                                    class="form-control"
+                                    rows="2"
+                                >
+                                </textarea>
+                                <button class="btn btn-primary">Αποθήκευση</button>
+                            </form> 
+                        </span>
+                    </div>
                 </div>
-            </div>
-            <hr>
+                <hr>
+            </span>
             <div class="row">
                 <div class="col-md-3">
                     <p>Εmail:</p>
                 </div>
                 <div class="col-md-9 text-secondary">
-                    {{ profileUser.email }}
+                    <a :href="`mailto:${ profileUser.email }`">{{ profileUser.email }}</a>
                 </div>
             </div>
         </div>
