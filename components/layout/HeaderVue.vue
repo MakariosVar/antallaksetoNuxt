@@ -98,19 +98,23 @@
                     </li>
                     <li class="nav-item" v-else>
                         <div class="d-flex flex-column align-items-center justify-content-center">
-                            <NuxtLink to="/login" class="btn btn-outline-dark">
-                                <span>
-                                    <ClientOnly>
-                                        <font-awesome-icon icon="fa-solid fa-circle-user" class="mr-2" />
-                                    </ClientOnly>
-                                    <span class="ms-1 font-semibold">Σύνδεση</span>
-                                </span>
-                            </NuxtLink>
-                            <NuxtLink to="/register" class="btn btn-sm mt-1 btn-outline-secondary">
-                                <span>
-                                    <span class="font-semibold">Εγγραφή</span>
-                                </span>
-                            </NuxtLink>
+                            <div class="row justify-content-center align-items-center">
+                                <div class="col-lg-6 d-flex justify-content-center justify-content-lg-start">
+                                    <NuxtLink to="/login" class="btn btn-outline-dark">
+                                        <span>
+                                            <ClientOnly>
+                                                <font-awesome-icon icon="fa-solid fa-circle-user" class="mr-2" />
+                                            </ClientOnly>
+                                            <span class="ms-1 font-semibold">Σύνδεση</span>
+                                        </span>
+                                    </NuxtLink>
+                                </div>
+                                <div class="col-lg-6 mt-1 d-flex justify-content-center justify-content-lg-start">
+                                    <NuxtLink to="/register" class="btn btn-sm btn-outline-secondary">
+                                        <span class="font-semibold">Εγγραφή</span>
+                                    </NuxtLink>
+                                </div>
+                            </div>
                         </div>
                     </li>
                 </ul>
