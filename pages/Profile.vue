@@ -12,7 +12,7 @@ comments<template>
                 <ProfileInfo v-if="profile && profileUser" :profile="profile" :profileUser="profileUser" :user="user"
                     :isMine="isMine" @sessionExpired="sessionExpired" @updateProfileImage="updateProfileImage"
                     @followClick="followClick" :profileImage="profileAvatar" />
-                <div class="card shadow p-3 mb-5 bg-body text-center my-2">
+                <div v-if="comments.length || (user && user.id !== profile.user_id)" class="card shadow p-3 mb-5 bg-body text-center my-2">
                     <div class="card-body">
                         <h3>Σχόλια</h3>
                         <form  v-if="user && user.id !== profile.user_id" @submit.prevent="addComment" id="Comment">
@@ -46,7 +46,7 @@ comments<template>
                             <span style="font-size:13px;">{{ comment.date }}</span>
                             <form @submit.prevent="deletecomment(comment.id)" v-if="user">
                                 <button v-if="user.id === comment.user_id || user.id === profile.user_id" type="submit"
-                                    class="btn btn-link">Delete</button>
+                                    class="btn btn-link link-danger" style="font-size:13px;">Διαγραφή</button>
                             </form>
                         </div>
                     </div>
