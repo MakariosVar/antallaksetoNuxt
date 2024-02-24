@@ -5,6 +5,15 @@ export default defineNuxtConfig({
     meta: {
       title: 'Αντάλλαξέ το',
     },
+    head: {
+      script: [
+        {
+          crossorigin: "anonymous",
+          async:true,
+          src:"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5907299200218208"
+        }
+      ],
+    },
   },
   devtools: { enabled: true },
   runtimeConfig: {
@@ -49,13 +58,6 @@ export default defineNuxtConfig({
     "~/assets/styles/main.scss",
     '@fortawesome/fontawesome-svg-core/styles.css'
   ],
-  modules: [
-    ['@nuxtjs/google-adsense']
-  ],
-
-  googleAdsense: {
-    id: 'ca-pub-5907299200218208',
-  },
   script: [
     {
       src: 'bootstrap/dist/js/bootstrap.bundle.min.js'

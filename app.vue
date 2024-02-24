@@ -53,6 +53,12 @@ export default defineNuxtComponent({
             titleTemplate: ( titleChunk ) => {
                 return titleChunk ? `${ titleChunk } - Αντάλλαξέ Το` : 'Αντάλλαξέ Το'
             },
+            meta: [
+                {
+                    name: "google-adsense-account",
+                    content: "ca-pub-5907299200218208"
+                }
+            ],
             htmlAttrs: {
                 lang: 'el',
             },
