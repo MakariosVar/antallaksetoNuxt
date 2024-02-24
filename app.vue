@@ -62,13 +62,25 @@ export default defineNuxtComponent({
             htmlAttrs: {
                 lang: 'el',
             },
+            link: [
+                {
+                rel: 'icon',
+                type: 'image/png',
+                href: '/favicon.ico'
+                }
+            ]
         });
 
         useSeoMeta({
             ogImage: 'https://antallakseto.gr/default.png',
             ogTitle: 'Αντάλλαξέ Το',
             description: 'Antallakseto.gr - Νο1 site για ανταλλαγές',
-            ogDescription: 'Antallakseto.gr - Νο1 site για ανταλλαγές'
+            ogDescription: 'Antallakseto.gr - Νο1 site για ανταλλαγές',
+            ogUrl: 'https://antallakseto.gr',
+            twitterTitle: 'Αντάλλαξέ Το',
+            twitterDescription: 'Antallakseto.gr - Νο1 site για ανταλλαγές',
+            twitterImage: 'https://antallakseto.gr/default.png',
+            twitterCard: 'Πλατφόρμα ανταλλαγών'
         })
 
         const asyncData = async () => {
