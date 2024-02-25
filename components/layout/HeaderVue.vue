@@ -109,7 +109,7 @@
                                         </span>
                                     </NuxtLink>
                                 </div>
-                                <div class="col-lg-6 mt-1 d-flex justify-content-center justify-content-lg-start">
+                                <div class="col-lg-6 mt-lg-0 mt-1 d-flex justify-content-center justify-content-lg-start">
                                     <NuxtLink to="/register" class="btn btn-sm btn-outline-secondary">
                                         <span class="font-semibold">Εγγραφή</span>
                                     </NuxtLink>
