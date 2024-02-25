@@ -28,7 +28,7 @@
                 <font-awesome-icon :icon="['fab', 'twitter']" class="me-2" />
               </ClientOnly>
             </a>
-            <a title="instagram" target="_blank" class="text-dark" href="https://www.instagram.com/antallaxeto.gr/">
+            <a title="instagram" target="_blank" class="text-dark" href="https://www.instagram.com/antallakseto.gr/">
               <ClientOnly>
                 <font-awesome-icon :icon="['fab', 'instagram']" class="me-2" />
               </ClientOnly>
