@@ -199,9 +199,10 @@ const loadImages = async () => {
 }
 await getPostData();
 await loadImages();
+
 useSeoMeta({
 	title: post.value.title ?? '',
-  	ogImage: post_images.value[0],
+  	ogImage: `https://b.antallakseto.gr/storage/${post.value.image0}`,
 	ogTitle: `${post.value.title} - Αντάλλαξέ Το`,
 	ogDescription: post.value.description,
 	ogUrl: `https://antallakseto.gr${route.fullPath}`,
