@@ -203,7 +203,8 @@ useSeoMeta({
 	title: post.value.title ?? '',
   	ogImage: post_images.value[0],
 	ogTitle: `${post.value.title} - Αντάλλαξέ Το`,
-	ogDescription: post.value.description
+	ogDescription: post.value.description,
+	ogUrl: `https://antallakseto.gr${route.fullPath}`,
 })
 
 const viewerOptions = ref({
