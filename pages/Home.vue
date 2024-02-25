@@ -22,7 +22,7 @@
 
         <section class="text-center">
             <div class="container my-3">
-                <h2 >Κορυφαίες Κατηγορίες</h2>
+                <h2 class="my-3">Κορυφαίες Κατηγορίες</h2>
                 <CategoriesHorizontalList v-if="categories" :categories="categories" />
             </div>
         </section>
@@ -33,7 +33,7 @@
         </div>
         <section>
             <div class="container">
-                <h2 class="text-center">Προωθημένες Αγγελίες</h2>
+                <h2 class="text-center mb-3">Προωθημένες Αγγελίες</h2>
                 <div class="row">
                     <div v-for="post in premiumPosts" :key="post.id" class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
                         <nuxt-link :to="{ path: '/posts/view', query: { id: post.id } }" class="text-decoration-none">
@@ -56,6 +56,99 @@
                 </div>
             </div>
         </section>
+        <section class="bg-light py-5">
+            <div class="container">
+                <h2 class="text-center mb-4">Πώς δουλεύει;</h2>
+                <div class="row">
+                    <div class="col-md-4 py-2">
+                        <div class="card card-hover h-100 border-0 rounded-3 shadow-lg p-4">
+                            <div class="text-center mb-3">
+                                <ClientOnly>
+                                    <font-awesome-icon icon="fa fa-user-plus" class="fa-3x mb-3" />
+                                </ClientOnly>
+                                <h5 class="mb-3">Δημιουργία δωρεάν λογαριασμού</h5>
+                            </div>
+                            <p class="text-muted text-center">
+                                Αρχικά, δημιουργείτε έναν δωρεάν λογαριασμό στο Antallakseto.gr.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 py-2">
+                        <div class="card card-hover h-100 border-0 rounded-3 shadow-lg p-4">
+                            <div class="text-center mb-3">
+                                <ClientOnly>
+                                    <font-awesome-icon icon="fa fa-search" class="fa-3x mb-3" />
+                                </ClientOnly>
+                                <h5 class="mb-3">Δημιουργία αγγελίας ή αναζήτηση</h5>
+                            </div>
+                            <p class="text-muted text-center">
+                                Στη συνέχεια, μπορείτε να δημιουργήσετε μια αγγελία ή να αναζητήσετε αντικείμενα που σας ενδιαφέρουν.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 py-2">
+                        <div class="card card-hover h-100 border-0 rounded-3 shadow-lg p-4">
+                            <div class="text-center mb-3">
+                                <ClientOnly>
+                                    <font-awesome-icon icon="fa fa-comments" class="fa-3x mb-3" />
+                                </ClientOnly>
+                                <h5 class="mb-3">Αναμονή επικοινωνίας</h5>
+                            </div>
+                            <p class="text-muted text-center">
+                                Τέλος, απλά περιμένετε για επικοινωνία από άλλα μέλη ή επικοινωνήστε εσείς αν υπάρχει ενδιαφέρον για κάποιο αντικείμενο.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="bg-light py-5">
+            <div class="container">
+                <h2 class="text-center mb-3">Γιατί να επιλέξετε το Antallakseto.gr;</h2>
+                <div class="row">
+                    <div class="col-md-4 py-2">
+                        <div class="card card-hover h-100 border-0 rounded-3 shadow-lg p-4">
+                            <div class="text-center mb-3">
+                                <ClientOnly>
+                                    <font-awesome-icon icon="fa fa-recycle" class="fa-3x mb-3" />
+                                </ClientOnly>
+                                <h5 class="mb-3">Προστασία του περιβάλλοντος</h5>
+                            </div>
+                            <p class="text-muted text-center">
+                                Μειώνοντας τα απορρίμματα και προωθώντας την ανακύκλωση, συμβάλλουμε στην προστασία του περιβάλλοντος.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 py-2">
+                        <div class="card card-hover h-100 border-0 rounded-3 shadow-lg p-4">
+                            <div class="text-center mb-3">
+                                <ClientOnly>
+                                    <font-awesome-icon icon="fa fa-handshake" class="fa-3x mb-3" />
+                                </ClientOnly>
+                                <h5 class="mb-3">Ενίσχυση κοινωνικών δεσμών</h5>
+                            </div>
+                            <p class="text-muted text-center">
+                                Μέσω των ανταλλαγών αντικειμένων, ενισχύουμε τις σχέσεις μεταξύ των ανθρώπων και δημιουργούμε ένα πιο ενωμένο κοινωνικό περιβάλλον.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 py-2">
+                        <div class="card card-hover h-100 border-0 rounded-3 shadow-lg p-4">
+                            <div class="text-center mb-3">
+                                <ClientOnly>
+                                    <font-awesome-icon icon="fa fa-lightbulb" class="fa-3x mb-3" />
+                                </ClientOnly>
+                                <h5 class="mb-3">Προώθηση δημιουργικότητας</h5>
+                            </div>
+                            <p class="text-muted text-center">
+                                Ανακαλύπτοντας νέους τρόπους αξιοποίησης των αντικειμένων που αποκτάτε, ενθαρρύνετε τη δημιουργικότητά σας και συνεισφέρετε στη διατήρηση του περιβάλλοντος.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </div>
 </template>
 
@@ -66,6 +159,11 @@
     background-size: cover;
     background-position: center center;
     height: 100%;
+}
+
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
 .home-container {
