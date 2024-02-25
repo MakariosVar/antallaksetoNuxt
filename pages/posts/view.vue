@@ -78,10 +78,14 @@
 						<small><strong>Ανταλλαγή για:</strong> {{ post.transferPref }}</small>
 					</p>
 					<p class="postText">
-						<small><strong>Του Χρήστη:</strong><router-link :to="'/profile?id=' + post.user_id">
-								{{ post.username
-								}}<img v-if="post.userimage_loaded" :src="post.userimage_loaded" class="rounded-circle ml-2"
-									style="width: 50px; height: auto" /></router-link></small>
+						<small>
+							<strong>
+								Του Χρήστη:
+							</strong>
+								<router-link :to="'/profile?id=' + post.user_id">
+								{{ post.username}}
+							</router-link>
+						</small>
 					</p>
 					<p class="postText">
 						<small><strong>Email:</strong> <a :href="`mailto:${ post.email }`">{{ post.email }}</a></small>
@@ -180,7 +184,7 @@ const loadImages = async () => {
 	post_images.value = []
 	isImagesLoaded.value = false;
 	if (post.value) {
-		const imageKeys = ['image0', 'image1', 'image2', 'image3', 'image4', 'userimage'];
+		const imageKeys = ['image0', 'image1', 'image2', 'image3', 'image4'];
 
 		const imagePromises = imageKeys.map(async (key) => {
 			if (post.value[key]) {
