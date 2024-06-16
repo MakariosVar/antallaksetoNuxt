@@ -65,7 +65,7 @@ comments<template>
                         <div v-for="post in sortedFilteredPosts" :key="post.id" class="col-lg-4 col-md-6 col-sm-12 mb-4">
                             <div class="card shadow p-3 mb-5 bg-body h-100">
                                 <nuxt-link :to="`/posts/view?id=${post.id}`">
-                                    <img v-if="post.imageURL" :src="post.imageURL" class="card-img-top" style="height: 250px;"
+                                    <img v-if="post.image0" :src="`https://b.antallakseto.gr/storage/${post.image0}`" class="card-img-top responsive-image" style="height: 250px;"
                                         alt="Post Image">
                                     <div v-else class="d-flex justify-content-center align-items-center"
                                         style="width: 100%; height: 300px;">
@@ -189,12 +189,6 @@ export default {
 
                     if (response.status === 'success') {
                         this.posts = response.posts;
-                        this.posts.forEach(async (post) => {
-                            if (post.image0) {
-                                const imageURL = await this.getImage(post.image0);
-                                post.imageURL = imageURL
-                            }
-                        })
                     }
                 } catch (error) {
                     console.error('An error occurred:', error);

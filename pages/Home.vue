@@ -38,7 +38,7 @@
                     <div v-for="post in premiumPosts" :key="post.id" class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
                         <nuxt-link :to="{ path: '/posts/view', query: { id: post.id } }" class="text-decoration-none">
                             <div class="card shadow mb-5 bg-body h-100">
-                                <img v-if="post.imageURL" :src="post.imageURL" class="card-img-top responsive-image" alt="Post Image">
+                                <img v-if="post.image0" :src="`https://b.antallakseto.gr/storage/${post.image0}`" class="card-img-top responsive-image" alt="Post Image">
                                 <div v-else class="d-flex justify-content-center align-items-center" style="width: 100%; height: 300px;">
                                     <div class="spinner-grow" style="color: #e4e3e3; width: 150px; height: 150px;" role="status">
                                         <span class="visually-hidden">Loading...</span>
@@ -217,14 +217,15 @@
     // Fetch premiumPosts
     const { data: premiumPostsData } = await useFetch('/api/premiumPosts');
     const premiumPosts = premiumPostsData.value?.posts ?? [];
-    onMounted(() => {
-        premiumPosts.forEach(async (post) => {
-            if (post.image0) {
-                const imageURL = await getImage(post.image0);
-                post.imageURL = imageURL
-            }
-        })
-    })
+    // onMounted(() => {
+    //     premiumPosts.forEach(async (post) => {
+    //         if (post.image0) {
+    //             const imageURL = await getImage(post.image0);
+    //             // console.log(post.image0)
+    //             post.imageURL = imageURL
+    //         }
+    //     })
+    // })
     // console.log(premiumPosts);
 
     // Fetch categories

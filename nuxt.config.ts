@@ -15,6 +15,9 @@ export default defineNuxtConfig({
       ],
     },
   },
+  modules: [
+    '@nuxt/image',
+  ],
   devtools: { enabled: true },
   runtimeConfig: {
     // The private keys which are only available server-side

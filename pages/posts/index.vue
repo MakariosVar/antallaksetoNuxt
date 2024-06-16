@@ -60,7 +60,7 @@
       <div v-for="(post, index) in combinedPostsAndAds" :key="index" class="col post">
         <nuxt-link :to="{ path: '/posts/view', query: { id: post.id } }" class="h-100">
           <div class="card shadow bg-body h-100">
-            <img v-if="post.imageURL" :src="post.imageURL" class="card-img-top responsive-image" alt="Post Image">
+            <NuxtImg v-if="post.image0" :src="`https://b.antallakseto.gr/storage/${post.image0}`" loading="lazy" class="card-img-top responsive-image" alt="Post Image" />
             <div v-else class="d-flex justify-content-center align-items-center" style="width: 100%; height: 300px;">
                 <div class="spinner-grow" style="color: #e4e3e3; width: 150px; height: 150px;" role="status">
                     <span class="visually-hidden">Loading...</span>
@@ -298,16 +298,6 @@
       loadingMorePosts.value = false;
     }
   };
-  onMounted(() => {
-    if(posts.value) {
-      posts.value.data.forEach(async (post) => {
-        if (post.image0) {
-            const imageURL = await getImage(post.image0);
-            post.imageURL = imageURL 
-        }
-      })
-    }
-  }) 
 
   // Fetch categories
   const { data: categoriesData } = await useFetch('/api/categories');

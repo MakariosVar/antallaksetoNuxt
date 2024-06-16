@@ -24,12 +24,12 @@
 								<div class="row justify-content-center my-2">
 									<div class="row justify-content-center">
 										<div class="col-12 border rounded" v-if="post_images.length > 0">
-											<img :key="post_images[0]" :src="post_images[0]" style="max-height: auto; width: 100%" />
+											<img :key="post_images[0]" :src="`https://b.antallakseto.gr/storage/${post_images[0]}`" style="max-height: auto; width: 100%" />
 										</div>
 									</div>
 									<div class="row justify-content-center my-2">
 										<div v-for="image in post_images.slice(1, 5)" :key="image" class="col-3 border rounded">
-											<img :src="image" style="height: auto; width: 100%" />
+											<img :src="`https://b.antallakseto.gr/storage/${image}`" style="height: auto; width: 100%" />
 										</div>
 									</div>
 								</div>
@@ -37,7 +37,7 @@
 						</viewer>
 					</div>
 				</div>
-				<div class="col-md-12 col-lg-8 text-center text-lg-start">
+				<div class="col-md-12 col-lg-8 text--start">
 					<p class="postText">
 						<strong>{{ post.title }}</strong>
 						<span v-if="post.done" class="badge bg-success">ΟΛΟΚΛΗΡΩΜΕΝΗ</span>
@@ -90,7 +90,7 @@
 					<p class="postText">
 						<small><strong>Email:</strong> <a :href="`mailto:${ post.email }`">{{ post.email }}</a></small>
 					</p>
-					<p class="postText">
+					<p class="postText" v-if="post.phone">
 						<small><strong>Τηλέφωνο:</strong> {{ post.phone }}</small>
 					</p>
 					<p class="postText">
@@ -186,9 +186,9 @@ const loadImages = async () => {
 	if (post.value) {
 		const imageKeys = ['image0', 'image1', 'image2', 'image3', 'image4'];
 
-		const imagePromises = imageKeys.map(async (key) => {
+		const imagePromises = imageKeys.map((key) => {
 			if (post.value[key]) {
-				post.value[key+"_loaded"] = await getImage(post.value[key]);
+				post.value[key+"_loaded"] = post.value[key];
 				post_images.value.push(post.value[key+"_loaded"])
 			}
 		});
